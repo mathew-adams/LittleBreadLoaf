@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="Description" content="A Wellington/Lower Hutt based Polish style bread company">
+    <meta name="theme-color" content="#317EFB" />
+
+    <title>Little Bread Loaf - @ViewData["Title"]</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="~/lib/jqueryui/jquery-ui.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        asp-fallback-href="~/lib/bootstrap/css/bootstrap.min.css"
+        asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="~/lib/jqueryui/jquery-ui.min.css" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#">Little Bread Loaf</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" asp-page="/Index"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+                <li class="nav-item"><a class="nav-link" asp-page="/About"><i class="fa fa-question-circle" aria-hidden="true"></i> About</a></li>
+                <li class="nav-item"><a class="nav-link" asp-page="/Products/ProductList"><i class="fa fa-shopping-bag" aria-hidden="true"></i> Products</a></li>
+                <li class="nav-item"><a class="nav-link" asp-page="/Cart/Address"><i class="fa fa-location-arrow" aria-hidden="true"></i> Address</a></li>
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <li class="nav-item"><a class="nav-link" asp-page="/Contact">Contact</a></li>
+                }
+            </ul>
+
+            <ul class="navbar-nav flex-row mr-lg-2 mt-1">
+                <li class="nav-item">
+                    <a class="btn btn-light" asp-page="/Cart/CartView">
+                        <i class="fa fa-cart-arrow-down"></i> Cart
+                        <span id="cartItemCount" class="badge badge-pill badge-dark">@await Component.InvokeAsync("CartCount", Model.HttpContext.Request.Cookies["CartID"])</span>
+                    </a>
+                </li>
+            </ul>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <ul class="navbar-nav flex-row mr-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle mr-3 mr-lg-0" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user"></i><span class="caret"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href=""><i class="fa fa-cog" aria-hidden="true"></i> Settings</a>
+                            <a class="dropdown-item" asp-page="/Users/LogOut"><i class="fa fa-unlock" aria-hidden="true"></i> Sign out</a>
+                        </div>
+                    </li>
+                </ul>
+            }
+            <partial name="_LoginPartial" />
+        </div>
+    </nav>
+
+    <main role="main" class="container" style="margin-top:75px; margin-bottom:40px;">
+
+        @RenderBody()
+
+        
+
+    </main>
+    <partial name="_Footer" />
+    <partial name="_CookieConsentPartial" />
+
+    <environment include="Development">
+        <script src="~/lib/jquery/jquery.min.js"></script>
+        <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+        <script src="~/lib/jquery.blockUI/jquery.blockUI.min.js"></script>
+        <script src="~/lib/popper.js/umd/popper.min.js"></script>
+        <script src="~/lib/twitter-bootstrap/js/bootstrap.min.js"></script>
+        <script src="~/lib/blazy/blazy.min.js"></script>
+        <script src="~/lib/ekko-lightbox/ekko-lightbox.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
+        </script>
+        <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+        <script src="~/lib/jquery.blockUI/jquery.blockUI.min.js"></script>
+        <script src="~/lib/popper.js/umd/popper.min.js"></script>
+        <script src="~/lib/blazy/blazy.min.js"></script>
+        <script src="~/lib/ekko-lightbox/ekko-lightbox.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

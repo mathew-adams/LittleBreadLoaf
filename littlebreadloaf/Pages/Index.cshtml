@@ -1,0 +1,13 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Login page";
+    ViewData["ReturnUrl"] = "/Index";
+
+    if (User.Identity.IsAuthenticated)
+    {
+        ViewData["Title"] = "You are authenticated!!!";
+    }
+}
+
+<h1 class="mb-4">@ViewData["Title"]</h1>

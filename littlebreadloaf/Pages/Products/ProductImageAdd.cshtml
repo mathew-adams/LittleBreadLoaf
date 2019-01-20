@@ -1,0 +1,41 @@
+﻿@page
+@model ProductImageAddModel
+@{
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Products/ProductList">Products</a></li>
+        <li class="breadcrumb-item"><a asp-page="/Products/ProductView" asp-route-ProductID="@Model.ProductID">@Model.ProductName</a></li>
+        <li class="breadcrumb-item"><a asp-page="/Products/ProductImageList" asp-route-ProductID="@Model.ProductID">Image List</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Add Image</li>
+    </ol>
+</nav>
+
+@using (Html.BeginForm("ProductImageAdd", "ProductImageAdd", FormMethod.Post, new { @class = "form-group-sm", @enctype = "multipart/form-data" }))
+{
+    <div class="form-group row">
+        @Html.LabelFor(m => m.ProductImage.Title, new { @class = "col-2 col-form-label" })
+
+        <div class="col-5">
+            @Html.TextBoxFor(m => m.ProductImage.Title, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
+            @Html.ValidationMessageFor(m => m.ProductImage.Title, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group row">
+        @Html.LabelFor(m => m.FileUpload, new { @class = "col-2 col-form-label" })
+
+        <div class="col-5">
+            <input class="form-control" asp-for="FileUpload" type="file" style="height:auto" />
+            @Html.ValidationMessageFor(m => m.ProductImage.Title, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    @Html.HiddenFor(m => m.ProductID)
+
+    <div>
+        <button type="submit" class="btn btn-success" asp-page-handler="upload"><i class="fa fa-floppy-o"></i> Save</button>
+        <a class="btn btn-danger" asp-page="/Products/ProductImageList" asp-route-ProductID="@Model.ProductID"><i class="fa fa-times"></i> Cancel</a>
+    </div>
+
+}

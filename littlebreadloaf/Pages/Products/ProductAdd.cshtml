@@ -1,0 +1,71 @@
+﻿@page
+@model ProductAddModel
+@{
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Products/ProductList">Products</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Add product</li>
+    </ol>
+</nav>
+
+@using (Html.BeginForm("ProductAdd", "ProductAdd", FormMethod.Post, new { @class = "form-group-sm" }))
+{
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(m => m.Product.Name)
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-pencil fa-fw"></i></div>
+                </div>
+                @Html.TextBoxFor(m => m.Product.Name, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
+            </div>
+            @Html.ValidationMessageFor(m => m.Product.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(m => m.Product.Unit)
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-balance-scale fa-fw"></i></div>
+                </div>
+                @Html.TextBoxFor(m => m.Product.Unit, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
+            </div>
+            @Html.ValidationMessageFor(m => m.Product.Unit, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(m => m.Product.Price)
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-usd fa-fw"></i></div>
+                </div>
+                @Html.TextBoxFor(m => m.Product.Price, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
+            </div>
+            @Html.ValidationMessageFor(m => m.Product.Price, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(m => m.Product.Description)
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-newspaper-o fa-fw"></i></div>
+                </div>
+                @Html.TextAreaFor(m => m.Product.Description, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
+            </div>
+            @Html.ValidationMessageFor(m => m.Product.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save</button>
+        <a class="btn btn-danger" asp-page="/Products/ProductList"><i class="fa fa-times"></i> Cancel</a>
+    </div>
+}

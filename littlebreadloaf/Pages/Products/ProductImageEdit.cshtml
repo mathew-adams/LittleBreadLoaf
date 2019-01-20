@@ -1,0 +1,45 @@
+﻿@page
+@model ProductImageEditModel
+@{
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Products/ProductList">Products</a></li>
+        <li class="breadcrumb-item"><a asp-page="/Products/ProductView" asp-route-ProductID="@Model.ProductImage.ProductID">@Model.ProductName</a></li>
+        <li class="breadcrumb-item"><a asp-page="/Products/ProductImageList" asp-route-ProductID="@Model.ProductImage.ProductID">Image List</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Edit Image</li>
+    </ol>
+</nav>
+
+@using (Html.BeginForm("ProductImageEdit", "ProductImageEdit", FormMethod.Post, new { @class = "form-group-sm" }))
+{
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(m => m.ProductImage.Title)
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-pencil fa-fw"></i></div>
+                </div>
+                @Html.TextBoxFor(m => m.ProductImage.Title, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
+            </div>
+            @Html.ValidationMessageFor(m => m.ProductImage.Title, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <a href="@Model.ProductImage.FileLocation" data-toggle="lightbox" data-title="@Model.ProductImage.Title">
+                <img src="@Model.ProductImage.FileLocation" class="img-thumbnail" style="width:250px; height:250px;" alt="@Model.ProductImage.Title" title="@Model.ProductImage.Title" />
+            </a>
+        </div>
+    </div>
+    @Html.HiddenFor(m => m.ProductImage.ProductImageID)
+    @Html.HiddenFor(m => m.ProductImage.ProductID)
+    @Html.HiddenFor(m => m.ProductImage.FileLocation)
+    @Html.HiddenFor(m => m.ProductImage.PrimaryImage)
+    <div>
+        <button type="submit" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save</button>
+        <a class="btn btn-danger" asp-page="/Products/ProductImageList" asp-route-ProductID="@Model.ProductImage.ProductID"><i class="fa fa-times"></i> Cancel</a>
+    </div>
+}

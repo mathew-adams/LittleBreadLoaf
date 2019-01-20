@@ -1,0 +1,70 @@
+﻿@page
+@model ProductListModel
+@{
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Products</li>
+    </ol>
+</nav>
+
+<div id="cartItemAdded" class="alert alert-success" role="alert" style="display: none;">
+</div>
+
+@if (User.Identity.IsAuthenticated) //&& User.IsInRole("Admin")) //TODO: Figure out role based security. 
+{
+    <div class="alert alert-secondary border-0" role="alert" style="background-color:#e9ecef">
+        <div class="text-muted mb-1">Admin</div>
+        <a class="btn btn-outline-secondary" asp-page="/Products/ProductAdd"><i class="fa fa-plus" aria-hidden="true"></i> Add Product</a>
+        <a class="btn btn-outline-secondary" asp-page="/Reports/ProductsReport"><i class="fa fa-bar-chart" aria-hidden="true"></i> View Reports</a>
+    </div>
+}
+
+<div class="row justify-content-center">
+    @foreach (var product in Model.Products)
+    {
+        <div class="col-sm-4 ">
+            <div class="product-grid">
+                <div class="product-image">
+                    @{
+                        var productImage = Model.ProductImages.FirstOrDefault(m => m.ProductID == product.ProductID);
+                        string source, title;
+                    }
+                    @if (productImage == null)
+                    {
+                        source = "https://dummyimage.com/350x350/000/fff"; //TODO: Do not make a referal out to another domain??
+                        title = "350X350";
+                    }
+                    else
+                    {
+                        source = @productImage.FileLocation.Replace("{1}","350");
+                        title = @productImage.Title;
+                    }
+                    <a asp-page="/Products/ProductView" asp-route-ProductID="@product.ProductID" class="darken">
+                        <img class="b-lazy"
+                             src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                             data-src="@source"
+                             asp-append-version="true"
+                             alt="@title">
+                    </a>
+                    <form name="add_cart" asp-page-handler="cartadd" asp-route-ProductID="@product.ProductID" method="post">
+                        <button class="add-to-cart" type="submit">
+                            <i class="fa fa-cart-plus" aria-hidden="true"></i> Add to cart
+                        </button>
+                    </form>
+                </div>
+                <div class="product-content">
+                    <h3 class="title"><a asp-page="/Products/ProductView" asp-route-ProductID="@product.ProductID"> @product.Name</a></h3>
+                    <div class="price">
+                        $@product.Price
+                        @if (!String.IsNullOrEmpty(product.Unit))
+                        {
+                            <span class="text-muted"> / @product.Unit</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

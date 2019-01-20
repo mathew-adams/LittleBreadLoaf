@@ -1,0 +1,51 @@
+﻿@page
+@model ProductBadgeListModel
+@{
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Products/ProductList">Products</a></li>
+        <li class="breadcrumb-item"><a asp-page="/Products/ProductView" asp-route-ProductID="@Model.Product.ProductID">@Model.Product.Name</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Badge List</li>
+    </ol>
+</nav>
+
+<a class="btn btn-outline-secondary" asp-page="/Products/ProductBadgeAdd" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-plus"></i> Create a new badge</a>
+<div class="mb-3"></div>
+
+@if (Model.ProductBadges.Count > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Badge</th>
+                <th>Popup Display</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var badge in Model.ProductBadges)
+            {
+                <tr>
+                    <td>@badge.Title</td>
+                    <td>@badge.Description</td>
+                    <td>
+                        <form class="input-group" asp-page-handler="delete" asp-route-ProductBadgeID="@badge.ProductBadgeID" asp-route-ProductID="@Model.Product.ProductID" method="post">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fa fa-trash" aria-hidden="true"></i> Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    //No Badges
+    <div class="alert alert-info" role="alert">
+        @Model.Product.Name has no badges.
+    </div>
+}

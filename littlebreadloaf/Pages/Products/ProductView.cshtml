@@ -1,0 +1,157 @@
+﻿@page
+@model ProductViewModel
+@{
+
+    var productImage = Model.Images.FirstOrDefault(m => m.PrimaryImage == true);
+
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Products/ProductList">Products</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.Product.Name</li>
+    </ol>
+</nav>
+
+<div id="cartItemAdded" class="alert alert-success" role="alert" style="display: none;">
+</div>
+
+@if (!ModelState.IsValid)
+{
+    <div class="alert alert-danger" role="alert">
+        @Model.ModelState.FirstOrDefault(m => m.Key == "NO_ZERO").Value.Errors[0].ErrorMessage
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-6 d-flex">
+        <div class="card bg-light mb-3">
+            <div class="card-body">
+
+                @if (productImage == null)
+                {
+                    <img class="img-fluid" src="https://dummyimage.com/500x500/000/fff" />
+                }
+                else
+                {
+                    <a href="@productImage.FileLocation.Replace("{1}","500")" data-toggle="lightbox" data-title="@productImage.Title">
+                        <img class="img-fluid" src="@productImage.FileLocation.Replace("{1}","500")" alt="@productImage.Title" />
+                    </a>
+                }
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 add_to_cart_block">
+        <div class="card bg-light mb-3">
+            <div class="card-body">
+                <h6 class="product-name">
+                    @Model.Product.Name
+                </h6>
+                <p class="price">
+                    @Model.Product.Price
+                    @if (!String.IsNullOrEmpty(Model.Product.Unit))
+                    {
+                        <small class="text-muted">/ @Model.Product.Unit</small>
+                    }
+                </p>
+                <div class="text-center mt-3">
+                    @foreach (var badge in Model.ProductBadges)
+                    {
+                        <span class="badge badge-info" data-toggle="tooltip" data-placement="Top" title="@badge.Description">@badge.Title</span>
+                    }
+                </div>
+                <hr />
+                <p class="lead mt-3">
+                    @Model.Product.Description
+                </p>
+                <div class="row mb-3">
+
+                    @if (Model.ProductIngredients.Count > 0)
+                    {
+                        <div class="col-6 mt-3">
+                            <h6><i class="fa fa-birthday-cake" aria-hidden="true"></i> Ingredients</h6>
+                            <ul class="list-group">
+                                @foreach (var ingredient in Model.ProductIngredients)
+                                {
+                                    <li class="list-group-item">@ingredient.Description</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+
+                    @if (Model.ProductSuggestions.Count > 0)
+                    {
+                        <div class="col-6 mt-3">
+                            <h6><i class="fa fa-lightbulb-o" aria-hidden="true"></i> Suggestions</h6>
+                            <ul class="list-group">
+                                @foreach (var suggestion in Model.ProductSuggestions)
+                                {
+                                    <li class="list-group-item">@suggestion.Description</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+                <form name="add_cart" class="add-cart" asp-page-handler="cartadd" asp-route-ProductID="@Model.Product.ProductID" method="post">
+                    <button class="btn btn-success btn-lg btn-block text-uppercase add-to-cart" type="submit">
+                        <i class="fa fa-cart-plus" aria-hidden="true"></i> Add to cart
+                    </button>
+                    @Html.HiddenFor(m => m.Product.ProductID)
+                    @Html.HiddenFor(m => m.Product.Price)
+                    @Html.HiddenFor(m => m.Product.Name, new { @id = "productName" })
+                    @Html.HiddenFor(m => m.Product.Description)
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+@if (Model.Images != null && Model.Images.Count > 0)
+{
+    <div class="row">
+        <!-- Gallery -->
+        <div class="col-12">
+            <div class="card border-light mb-3">
+                <div class="card-header bg-light border text-uppercase"><i class="fa fa-align-justify"></i> Gallery</div>
+                <div class="card-body border-right border-left border-bottom text-center">
+                    @foreach (var img in Model.Images)
+                    {
+                        <a href="@img.FileLocation.Replace("{1}","500")" data-toggle="lightbox" data-title="@img.Title">
+                            <img class="b-lazy img-thumbnail mb-1" 
+                                 src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                                 data-src="@img.FileLocation.Replace("{1}","200")"
+                                 asp-append-version="true"
+                                 alt="@img.Title">
+                        </a>
+                        @*<a href="@img.FileLocation" data-toggle="lightbox" data-title="@img.Title">
+                            <img src="@img.FileLocation" class="img-thumbnail mb-1" style="width:200px; height:200px;" alt="@img.Title" title="@img.Title" />
+                        </a>*@
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (User.Identity.IsAuthenticated) // && User.IsInRole("Admin")) TODO: Figure out role based security.
+{
+    <div class="row">
+        <div class="col-12">
+            <div class="card bg-light mb-3">
+                <div class="card-body">
+                    <div class="text-muted mb-1">Admin</div>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductEdit" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Product</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductDelete" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-trash" aria-hidden="true"></i> Delete Product</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductBadgeList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-flag-o" aria-hidden="true"></i> Edit Badges</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductIngredientList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-birthday-cake" aria-hidden="true"></i> Edit Ingredients</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductSuggestionList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-lightbulb-o" aria-hidden="true"></i> Edit Suggestions</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductImageList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-picture-o" aria-hidden="true"></i> Edit Images</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductReport" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-bar-chart" aria-hidden="true"></i> Product Reports</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

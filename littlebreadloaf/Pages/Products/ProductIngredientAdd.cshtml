@@ -1,0 +1,27 @@
+﻿@page
+@model ProductIngredientAddModel
+@{
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Products/ProductList">Products</a></li>
+        <li class="breadcrumb-item"><a asp-page="/Products/ProductView" asp-route-ProductID="@Model.ProductID">@Model.ProductName</a></li>
+        <li class="breadcrumb-item"><a asp-page="/Products/ProductIngredientList" asp-route-ProductID="@Model.ProductID">Ingredient List</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Add Ingredient</li>
+    </ol>
+</nav>
+
+@using (Html.BeginForm("ProductIngredientAdd", "ProductIngredientAdd", FormMethod.Post, new { @class = "form-group-sm" }))
+{
+    <div class="form-group row">
+        @Html.LabelFor(m => m.ProductIngredient.Description, new { @class = "col-2 col-form-label" })
+
+        <div class="col-5">
+            @Html.TextBoxFor(m => m.ProductIngredient.Description, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
+            @Html.ValidationMessageFor(m => m.ProductIngredient.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success" asp-route-ProductID="@Model.ProductID"><i class="fa fa-floppy-o"></i> Save</button>
+    <a class="btn btn-danger" asp-page="/Products/ProductIngredientList" asp-route-ProductID="@Model.ProductID"><i class="fa fa-times"></i> Cancel</a>
+}
