@@ -10,3 +10,4 @@ A Polish Bread company based in Wellington, NZ
 - Blazy.js - https://github.com/dinbror/blazy
 - Ekko-lighthbox.js - http://ashleydw.github.io/lightbox/
 - JQuery BlockUI - http://malsup.com/jquery/block/
+- Popper.js - https://popper.js.org/
