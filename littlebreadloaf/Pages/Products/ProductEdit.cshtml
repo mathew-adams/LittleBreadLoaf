@@ -1,6 +1,7 @@
 ﻿@page
 @model ProductEditModel
 @{
+    ViewData["Title"] = "Edit Product";
 }
 
 <nav aria-label="breadcrumb">
@@ -18,7 +19,7 @@
             @Html.LabelFor(m => m.Product.Name)
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <div class="input-group-text"><i class="fa fa-pencil fa-fw"></i></div>
+                    <div class="input-group-text"><i class="fa fa-pencil fa-fw" aria-hidden="true" title="Name"></i></div>
                 </div>
                 @Html.TextBoxFor(m => m.Product.Name, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
             </div>
@@ -31,7 +32,7 @@
             @Html.LabelFor(m => m.Product.Price)
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <div class="input-group-text"><i class="fa fa-usd fa-fw"></i></div>
+                    <div class="input-group-text"><i class="fa fa-usd fa-fw" aria-hidden="true" title="Price"></i></div>
                 </div>
                 @Html.TextBoxFor(m => m.Product.Price, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
             </div>
@@ -44,7 +45,7 @@
             @Html.LabelFor(m => m.Product.Unit)
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <div class="input-group-text"><i class="fa fa-balance-scale fa-fw"></i></div>
+                    <div class="input-group-text"><i class="fa fa-balance-scale fa-fw" aria-hidden="true" title="Unit"></i></div>
                 </div>
                 @Html.TextBoxFor(m => m.Product.Unit, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
             </div>
@@ -57,7 +58,7 @@
             @Html.LabelFor(m => m.Product.Description)
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <div class="input-group-text"><i class="fa fa-newspaper-o fa-fw"></i></div>
+                    <div class="input-group-text"><i class="fa fa-newspaper-o fa-fw" aria-hidden="true" title="Description"></i></div>
                 </div>
                 @Html.TextAreaFor(m => m.Product.Description, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
             </div>
@@ -69,7 +70,7 @@
     @Html.HiddenFor(m => m.Product.Created)
     @Html.HiddenFor(m => m.Product.LastUpdated)
     <div>
-        <button type="submit" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save</button>
-        <a class="btn btn-danger" asp-page="/Products/ProductView" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-times"></i> Cancel</a>
+        <button type="submit" class="btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true" title="Save"></i> Save</button>
+        <a class="btn btn-danger" asp-page="/Products/ProductView" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
     </div>
 }

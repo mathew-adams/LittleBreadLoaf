@@ -3,7 +3,7 @@
 @{
 
     var productImage = Model.Images.FirstOrDefault(m => m.PrimaryImage == true);
-
+    ViewData["Title"] = @Model.Product.Name;
 }
 
 <nav aria-label="breadcrumb">
@@ -24,7 +24,7 @@
 }
 
 <div class="row">
-    <div class="col-md-6 d-flex">
+    <div class="col-md-6">
         <div class="card bg-light mb-3">
             <div class="card-body">
 
@@ -35,7 +35,11 @@
                 else
                 {
                     <a href="@productImage.FileLocation.Replace("{1}","500")" data-toggle="lightbox" data-title="@productImage.Title">
-                        <img class="img-fluid" src="@productImage.FileLocation.Replace("{1}","500")" alt="@productImage.Title" />
+                        <img class="img-fluid" 
+                             src="@productImage.FileLocation.Replace("{1}","500")" 
+                             alt="@productImage.Title"
+                             title="@productImage.Title"
+                             />
                     </a>
                 }
 
@@ -71,7 +75,7 @@
                     @if (Model.ProductIngredients.Count > 0)
                     {
                         <div class="col-6 mt-3">
-                            <h6><i class="fa fa-birthday-cake" aria-hidden="true"></i> Ingredients</h6>
+                            <h6><i class="fa fa-birthday-cake" aria-hidden="true" title="Ingredients"></i> Ingredients</h6>
                             <ul class="list-group">
                                 @foreach (var ingredient in Model.ProductIngredients)
                                 {
@@ -84,7 +88,7 @@
                     @if (Model.ProductSuggestions.Count > 0)
                     {
                         <div class="col-6 mt-3">
-                            <h6><i class="fa fa-lightbulb-o" aria-hidden="true"></i> Suggestions</h6>
+                            <h6><i class="fa fa-lightbulb-o" aria-hidden="true" title="Suggestions"></i> Suggestions</h6>
                             <ul class="list-group">
                                 @foreach (var suggestion in Model.ProductSuggestions)
                                 {
@@ -96,7 +100,7 @@
                 </div>
                 <form name="add_cart" class="add-cart" asp-page-handler="cartadd" asp-route-ProductID="@Model.Product.ProductID" method="post">
                     <button class="btn btn-success btn-lg btn-block text-uppercase add-to-cart" type="submit">
-                        <i class="fa fa-cart-plus" aria-hidden="true"></i> Add to cart
+                        <i class="fa fa-cart-plus" aria-hidden="true" title="Add to cart"></i> Add to cart
                     </button>
                     @Html.HiddenFor(m => m.Product.ProductID)
                     @Html.HiddenFor(m => m.Product.Price)
@@ -107,28 +111,30 @@
             </div>
         </div>
     </div>
-
 </div>
+
 @if (Model.Images != null && Model.Images.Count > 0)
 {
     <div class="row">
         <!-- Gallery -->
         <div class="col-12">
             <div class="card border-light mb-3">
-                <div class="card-header bg-light border text-uppercase"><i class="fa fa-align-justify"></i> Gallery</div>
+                <div class="card-header bg-light border text-uppercase"><i class="fa fa-align-justify" aria-hidden="true" title="Gallery"></i> Gallery</div>
                 <div class="card-body border-right border-left border-bottom text-center">
                     @foreach (var img in Model.Images)
                     {
-                        <a href="@img.FileLocation.Replace("{1}","500")" data-toggle="lightbox" data-title="@img.Title">
-                            <img class="b-lazy img-thumbnail mb-1" 
-                                 src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                        <a href="@img.FileLocation.Replace("{1}","500")"
+                           data-toggle="lightbox"
+                           data-title="@img.Title">
+
+                            <img class="b-lazy mb-1"
+                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAQAAAAHUWYVAAABKUlEQVR42u3RMQEAAAjDsM2/aDDBwZFKaJqJHlUgQAQEiIAAERAgAgJEQAQEiIAAERAgAgJEQAQEiIAAERAgAgJEQAQEiIAAERAgAgJEQAQEiIAAERAgAgJEQAQEiIAAERAgAgJEQAQEiIAAERAgAgJEQAQEiIAAERAgAgJEQAQEiIAAERAgAgJEQAQEiIAAERAgAgJEQICYAERAgAgIEAEBIiBABERAgAgIEAEBIiBABERAgAgIEAEBIiBABERAgAgIEAEBIiBABERAgAgIEAEBIiBABERAgAgIEAEBIiBABERAgAgIEAEBIiBABERAgAgIEAEBIiBABERAgAgIEAEBIiBABAQIECACAkRAgAgIEAEBIiACAkRAgAgIEAEBIiACAkRAgOiyBaQFyAGZGIZQAAAAAElFTkSuQmCC"
                                  data-src="@img.FileLocation.Replace("{1}","200")"
                                  asp-append-version="true"
-                                 alt="@img.Title">
+                                 alt="@img.Title"
+                                 title="@img.Title"
+                                 />
                         </a>
-                        @*<a href="@img.FileLocation" data-toggle="lightbox" data-title="@img.Title">
-                            <img src="@img.FileLocation" class="img-thumbnail mb-1" style="width:200px; height:200px;" alt="@img.Title" title="@img.Title" />
-                        </a>*@
                     }
                 </div>
             </div>
@@ -143,13 +149,13 @@
             <div class="card bg-light mb-3">
                 <div class="card-body">
                     <div class="text-muted mb-1">Admin</div>
-                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductEdit" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Product</a>
-                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductDelete" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-trash" aria-hidden="true"></i> Delete Product</a>
-                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductBadgeList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-flag-o" aria-hidden="true"></i> Edit Badges</a>
-                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductIngredientList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-birthday-cake" aria-hidden="true"></i> Edit Ingredients</a>
-                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductSuggestionList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-lightbulb-o" aria-hidden="true"></i> Edit Suggestions</a>
-                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductImageList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-picture-o" aria-hidden="true"></i> Edit Images</a>
-                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductReport" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-bar-chart" aria-hidden="true"></i> Product Reports</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductEdit" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-pencil" aria-hidden="true" title="Edit product"></i> Edit product</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductDelete" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-trash" aria-hidden="true" title="Delete product"></i> Delete product</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductBadgeList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-flag-o" aria-hidden="true" title="Edit badges"></i> Edit badges</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductIngredientList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-birthday-cake" aria-hidden="true" title="Edit ingredients"></i> Edit ingredients</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductSuggestionList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-lightbulb-o" aria-hidden="true" title="Edit suggestions"></i> Edit suggestions</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductImageList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-picture-o" aria-hidden="true" title="Edit images"></i> Edit images</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductReport" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-bar-chart" aria-hidden="true" title="Product reports"></i> Product reports</a>
                 </div>
             </div>
         </div>

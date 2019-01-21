@@ -30,7 +30,7 @@ namespace littlebreadloaf.Pages.Cart
         
         public IActionResult OnGet() 
         {
-            var cartId = HttpContext.Request.Cookies["CartID"];
+            var cartId = HttpContext.Request.Cookies[CartHelper.CartCookieName];
 
             if (cartId == null || !Guid.TryParse(cartId, out Guid parsedCartID))
             {

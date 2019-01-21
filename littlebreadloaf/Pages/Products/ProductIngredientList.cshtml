@@ -1,6 +1,7 @@
 ﻿@page
 @model ProductIngredientListModel
 @{
+    ViewData["Title"] = "Ingredients";
 }
 
 <nav aria-label="breadcrumb">
@@ -11,7 +12,7 @@
     </ol>
 </nav>
 
-<a class="btn btn-outline-secondary" asp-page="/Products/ProductIngredientAdd" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-plus"></i> Create a new ingredient</a>
+<a class="btn btn-outline-secondary" asp-page="/Products/ProductIngredientAdd" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-plus" aria-hidden="true" title="Create a new ingredient"></i> Create a new ingredient</a>
 <div class="mb-3"></div>
 
 @if (Model.ProductIngredients.Count > 0)
@@ -31,7 +32,7 @@
                     <td>
                         <form class="input-group" asp-page-handler="delete" asp-route-ProductIngredientID="@ingredient.ProductIngredientID" asp-route-ProductID="@Model.Product.ProductID" method="post">
                             <button type="submit" class="btn btn-danger">
-                                <i class="fa fa-trash" aria-hidden="true"></i> Delete
+                                <i class="fa fa-trash" aria-hidden="true" title="Delete"></i> Delete
                             </button>
                         </form>
                     </td>

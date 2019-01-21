@@ -1,9 +1,10 @@
 ﻿@page
 @model CartViewModel
 @{
+    ViewData["Title"] = "Shopping cart";
 }
 
-<h1 class="mt-3 mb-3">Cart Checkout</h1>
+<h2 class="mt-3 mb-3">@ViewData["Title"]</h2>
 
 @if (Model.HasCart && Model.CartItems.Count > 0)
 {
@@ -37,7 +38,12 @@
                     <tr>
                         <td>
                             <a href="@productImage.FileLocation.Replace("{1}","500")" data-toggle="lightbox" data-title="@productImage.Title">
-                                <img src="@productImage.FileLocation.Replace("{1}","100")" class="img-thumbnail" style="width:100px; height:100px;" alt="@productImage.Title" title="@productImage.Title" />
+                                <img 
+                                     src="@productImage.FileLocation.Replace("{1}","100")" 
+                                     class="img-thumbnail" 
+                                     style="width:100px; height:100px;" 
+                                     alt="@productImage.Title" 
+                                     title="@productImage.Title" />
                             </a>
                         </td>
                         <td>
@@ -47,7 +53,7 @@
                         <td>
                             <form class="input-group" asp-page-handler="delete" asp-route-CartItemID="@cartItem.CartItemID" method="post">
                                 <button type="submit" class="btn btn-danger">
-                                    <i class="fa fa-trash" aria-hidden="true"></i> Delete
+                                    <i class="fa fa-trash" aria-hidden="true" title="Delete"></i> Delete
                                 </button>
                             </form>
                         </td>
@@ -56,7 +62,7 @@
                                 <div class="col">
                                     <form id="cart-item-increase" class="input-group" asp-page-handler="increase" asp-route-CartItemID="@cartItem.CartItemID" method="post">
                                         <button type="submit" class="btn btn-outline-secondary">
-                                            <i class="fa fa-arrow-up"></i>
+                                            <i class="fa fa-arrow-up" aria-hidden="true" title="Increase quantity"></i>
                                         </button>
                                     </form>
                                 </div>
@@ -65,7 +71,7 @@
                                 <div class="col">
                                     <form id="cart-item-decrease" class="input-group" asp-page-handler="decrease" asp-route-CartItemID="@cartItem.CartItemID" method="post">
                                         <button type="submit" class="btn btn-outline-secondary">
-                                            <i class="fa fa-arrow-down"></i>
+                                            <i class="fa fa-arrow-down" aria-hidden="true" title="Decrease quantity"></i>
                                         </button>
                                     </form>
                                 </div>
@@ -94,9 +100,8 @@
             </tbody>
         </table>
         <div class="text-right float-right">
-            
             <a class="btn btn-success btn-lg" asp-page="/Cart/CartCheckout">
-                <i class="fa fa-shopping-basket fa-fw" aria-hidden="true"></i> Checkout!
+                <i class="fa fa-shopping-basket fa-fw" aria-hidden="true" title="Checkout"></i> Checkout!
             </a>
         </div>
     </div>
@@ -106,6 +111,6 @@ else
 {
     //No cart
     <div class="alert alert-info" role="alert">
-        You do not have any items in your cart.
+        You do not have any items in your cart. <a asp-page="/Products/ProductList">View products</a>
     </div>
 }

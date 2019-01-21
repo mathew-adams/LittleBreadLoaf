@@ -1,6 +1,7 @@
 ﻿@page
 @model ProductImageAddModel
 @{
+    ViewData["Title"] = "Add Image";
 }
 
 <nav aria-label="breadcrumb">
@@ -34,8 +35,8 @@
     @Html.HiddenFor(m => m.ProductID)
 
     <div>
-        <button type="submit" class="btn btn-success" asp-page-handler="upload"><i class="fa fa-floppy-o"></i> Save</button>
-        <a class="btn btn-danger" asp-page="/Products/ProductImageList" asp-route-ProductID="@Model.ProductID"><i class="fa fa-times"></i> Cancel</a>
+        <button type="submit" class="btn btn-success" asp-page-handler="upload"><i class="fa fa-floppy-o" aria-hidden="true" title="Save"></i> Save</button>
+        <a class="btn btn-danger" asp-page="/Products/ProductImageList" asp-route-ProductID="@Model.ProductID"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
     </div>
 
 }

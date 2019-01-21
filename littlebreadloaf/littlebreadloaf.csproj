@@ -14,4 +14,8 @@
     <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Database Schemas\" />
+  </ItemGroup>
+
 </Project>

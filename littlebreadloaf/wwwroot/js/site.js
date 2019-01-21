@@ -56,33 +56,6 @@ $(document).ready(function () {
         });
 });
 
-
-// this is the id of the form
-//$("#cartAddItem").submit(function (e) {
-
-//    var form = $(this);
-//    var url = form.attr('action');
-
-//    $.ajax({
-//        type: "POST",
-//        url: url,
-//        data: form.serialize(), // serializes the form's elements.
-//        success: function (data) {
-//            $("#cartItemAdded").html('<i class="fa fa-plus fa-fw"></i>' + $("#productName").val() + " has been added to the cart!");
-//            $("#cartItemAdded").show();
-//            $("#cartItemCount").html(parseInt($("#cartItemCount").html()) + 1);
-//        },
-//        error: function (data) {
-//            $("#cartItemAdded").html('<i class="fa fa-plus fa-fw"></i>' + $("#productName").val() + " failed!");
-//            $("#cartItemAdded").removeClass('alert alert-success');
-//            $("#cartItemAdded").addClass('alert alert-danger');
-//            $("#cartItemAdded").show();
-//        }
-//    });
-
-//    e.preventDefault(); // avoid to execute the actual submit of the form.
-//});
-
 $(document).ready(function () {
     $("form[name='add_cart']").submit(function (e) {
 
@@ -111,6 +84,6 @@ $(document).ready(function () {
 });
 $(document).ready(function () {
     var bLazy = new Blazy({
-        offset: 1 //Load images at zero pixels from thew view port
+        offset: 10 //Load images at 10 pixels from thew view port
     });
 });

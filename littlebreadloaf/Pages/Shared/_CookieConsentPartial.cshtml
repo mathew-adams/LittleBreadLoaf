@@ -10,16 +10,17 @@
 {
     <div id="cookieConsent" class="fixed-bottom alert alert-info">
         <h5>
-            <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
-            <span class="text-muted">We use cookies</span>
+            <i class="fa fa-exclamation-circle" aria-hidden="true" title="Warning"></i>
+            <span class="text-muted">We are a bakery, so we use cookies</span>
         </h5>
 
         <p>
             We use cookies and other tracking technologies to improve your browsing experience on our website, to show you personalized content and targeted ads, to analyze our website traffic, and to understand where our visitors are coming from. By browsing our website, you consent to our use of cookies and other tracking technologies.
         </p>
         <div class="navbar-right">
-            <a asp-page="/Privacy" class="btn btn-info navbar-btn">Learn More</a>
-            <button type="button" class="btn btn-dark navbar-btn" data-cookie-string="@cookieString">Accept and Close</button>
+            <a asp-page="/Privacy" class="btn btn-info navbar-btn">View our privacy policy</a>
+            <a asp-page="/Cookies" class="btn btn-info navbar-btn">How we use cookies</a>
+            <button type="button" class="btn btn-dark navbar-btn" data-cookie-string="@cookieString">Accept and close</button>
         </div>
     </div>
 

@@ -13,7 +13,9 @@ namespace littlebreadloaf
     public class ImageHelper
     {
         private readonly string _productID;
-        
+
+        #region "Public Functions - Image Upload"
+       
         public ImageHelper(string ProductID)
         {
             _productID = ProductID;
@@ -89,6 +91,9 @@ namespace littlebreadloaf
                 SaveImage(productImageID, size, upload);
             }
         }
+        #endregion
+
+        #region "Private Functions"
 
         private void SaveImage(string productImageID,
                                int size, 
@@ -129,5 +134,7 @@ namespace littlebreadloaf
                 }
             }
         }
+        #endregion
+
     }
 }

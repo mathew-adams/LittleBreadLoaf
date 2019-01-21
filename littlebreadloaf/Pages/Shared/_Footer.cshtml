@@ -1,7 +1,89 @@
 ﻿
-<footer class="fixed-bottom bg-dark text-center p-1" style="color:rgba(255,255,255,.75);">
-    <div>
-        <h6 class="d-inline-block">&copy; @DateTime.Now.Year - Little Bread Loaf</h6>
-        <small class="d-inline-block float-right"><a href="#" class="footer-link">Link</a></small>
+
+<style>
+    /*Footer*/
+    #footer {
+        color: rgba(255,255,255,.75);
+    }
+    #footer a {
+        color: rgba(255,255,255,.5);
+        text-decoration: none;
+    }
+    #footer a:hover {
+        color: rgba(255,255,255,.75);
+    }
+    #footer-social .powered_by i {
+        color: red;
+    }
+</style>
+
+<footer id="footer" class="bg-dark p-3">
+    
+    <div class="container">
+        <div class="row text-center border-bottom">
+            <div class="col-12">
+                <h5>&copy; @DateTime.Now.Year - Little Bread Loaf</h5>
+            </div>
+        </div>
+
+        <div class="row pt-1">
+            <!--COLUMN 1-->
+            <div class="col-md-4 col-sm-6 text-center border-bottom">
+                <h6 class="text-uppercase">Navigation</h6>
+                <ul class="list-unstyled">
+                    <li><a asp-page="/Index"><i class="fa fa-home" aria-hidden="true" title="Home"></i> Home</a></li>
+                    <li><a asp-page="/About"><i class="fa fa-question-circle" aria-hidden="true" title="About"></i> About</a></li>
+                    <li><a asp-page="/Products/ProductList"><i class="fa fa-shopping-bag" aria-hidden="true" title="Products"></i> Products</a></li>
+                </ul>
+            </div>
+
+            <!--COLUMN 2-->
+            <div id="footer-social" class="col-md-4 col-sm-6 text-center border-bottom">
+                <div class="col">
+                    <div class="row d-block border-bottom">
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item">
+                                <h1>
+                                    <a href="https://www.facebook.com/littlebreadloaf/"><i class="fa fa-facebook-official" aria-hidden="true" title="Facebook"></i></a>
+                                </h1>
+                            </li>
+                            <li class="list-inline-item">
+                                <h1>
+                                    <a href="https://www.instagram.com/littlebreadloaf/"><i class="fa fa-instagram" aria-hidden="true" title="Instagram"></i></a>
+                                </h1>
+                            </li>
+                            <li class="list-inline-item">
+                                <h1>
+                                    <a href="mailto:polishbreadinwellington@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true" title="Email"></i></a>
+                                </h1>
+                            </li>
+                        </ul>
+                        <p class="powered_by">Powered by <a href="https://github.com/ZombieFleshEaters"><i class=" fa fa-heart" aria-hidden="true"></i></a></p>
+                    </div>
+
+                    <div class="row d-block mt-2">
+                        <h6 class="text-uppercase">Contact</h6>
+                        <address>
+
+                            <i class="fa fa-phone" aria-hidden="true" title="Phone"></i> 021-261-0008
+                            <br />
+                            <i class="fa fa-map-marker" aria-hidden="true" title="Address"></i> 31a Railway Ave, Lower Hutt, New Zealand
+                        </address>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--COLUMN 3-->
+            <div class="col-md-4 col-sm-6 text-center border-bottom">
+                <h6 class="text-uppercase">Support</h6>
+                <ul class="list-unstyled">
+                    <li><a asp-page="/Privacy"><i class="fa fa-user-secret" aria-hidden="true" title="Privacy"></i> Privacy</a></li>
+                    <li><a asp-page="/Cookies"><i class="fa fa-id-card-o" aria-hidden="true" title="Cookie consent"></i> Cookie Consent</a></li>
+                    <li><a asp-page="/TermsAndConditions"><i class="fa fa-registered" aria-hidden="true" title="Terms and conditions"></i> Terms and Conditions</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
+
 </footer>

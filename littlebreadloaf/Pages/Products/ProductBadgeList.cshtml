@@ -1,6 +1,7 @@
 ﻿@page
 @model ProductBadgeListModel
 @{
+    ViewData["Title"] = "Badges";
 }
 
 <nav aria-label="breadcrumb">
@@ -11,7 +12,7 @@
     </ol>
 </nav>
 
-<a class="btn btn-outline-secondary" asp-page="/Products/ProductBadgeAdd" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-plus"></i> Create a new badge</a>
+<a class="btn btn-outline-secondary" asp-page="/Products/ProductBadgeAdd" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-plus" aria-hidden="true" title="Create new badge"></i> Create a new badge</a>
 <div class="mb-3"></div>
 
 @if (Model.ProductBadges.Count > 0)
@@ -33,7 +34,7 @@
                     <td>
                         <form class="input-group" asp-page-handler="delete" asp-route-ProductBadgeID="@badge.ProductBadgeID" asp-route-ProductID="@Model.Product.ProductID" method="post">
                             <button type="submit" class="btn btn-danger">
-                                <i class="fa fa-trash" aria-hidden="true"></i> Delete
+                                <i class="fa fa-trash" aria-hidden="true" title="Delete"></i> Delete
                             </button>
                         </form>
                     </td>

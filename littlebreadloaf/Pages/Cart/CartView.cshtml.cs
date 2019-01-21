@@ -37,7 +37,7 @@ namespace littlebreadloaf.Pages.Cart
         public IActionResult OnGet()
         {
 
-            if (HttpContext.Request.Cookies["CartID"] == null)
+            if (HttpContext.Request.Cookies[CartHelper.CartCookieName] == null)
             {
                 HasCart = false;
                 return Page();
@@ -45,7 +45,7 @@ namespace littlebreadloaf.Pages.Cart
             else
             {
                 HasCart = true;
-                var cartId = HttpContext.Request.Cookies["CartID"];
+                var cartId = HttpContext.Request.Cookies[CartHelper.CartCookieName];
                 var parsedCartID = Guid.Parse(cartId);
 
                 //Cart is checked out?

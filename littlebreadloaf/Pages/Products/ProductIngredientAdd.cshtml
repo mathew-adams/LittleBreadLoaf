@@ -1,6 +1,7 @@
 ﻿@page
 @model ProductIngredientAddModel
 @{
+    ViewData["Title"] = "Add Ingredient";
 }
 
 <nav aria-label="breadcrumb">
@@ -22,6 +23,6 @@
             @Html.ValidationMessageFor(m => m.ProductIngredient.Description, "", new { @class = "text-danger" })
         </div>
     </div>
-    <button type="submit" class="btn btn-success" asp-route-ProductID="@Model.ProductID"><i class="fa fa-floppy-o"></i> Save</button>
-    <a class="btn btn-danger" asp-page="/Products/ProductIngredientList" asp-route-ProductID="@Model.ProductID"><i class="fa fa-times"></i> Cancel</a>
+    <button type="submit" class="btn btn-success" asp-route-ProductID="@Model.ProductID"><i class="fa fa-floppy-o" aria-hidden="true" title="Save"></i> Save</button>
+    <a class="btn btn-danger" asp-page="/Products/ProductIngredientList" asp-route-ProductID="@Model.ProductID"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
 }

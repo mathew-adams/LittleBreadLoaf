@@ -12,6 +12,8 @@ namespace littlebreadloaf
 {
     public static class CartHelper
     {
+
+        public const string CartCookieName = "LittleBreadLoaf.CartID";
         public static async Task<ObjectResult> AddToCart(ProductContext context, 
                                                          Guid productID,
                                                          ClaimsPrincipal user,
@@ -20,7 +22,7 @@ namespace littlebreadloaf
             Data.Cart cart = null;
             Data.CartItem item = null;
 
-            if (http.Request.Cookies["CartID"] == null)
+            if (http.Request.Cookies[CartCookieName] == null)
             {
                 var userID = user.Claims.FirstOrDefault(u => u.Type == "UserID");
                 Guid? gUserID = null;
@@ -39,11 +41,11 @@ namespace littlebreadloaf
 
                 context.Cart.Add(cart);
 
-                http.Response.Cookies.Append("CartID", cart.CartID.ToString());
+                http.Response.Cookies.Append(CartCookieName, cart.CartID.ToString());
             }
             else
             {
-                var cartID = http.Request.Cookies["CartID"];
+                var cartID = http.Request.Cookies[CartCookieName];
                 var parsedCartId = Guid.Parse(cartID);
                 cart = context.Cart.FirstOrDefault(m => m.CartID == parsedCartId);
                 item = context.CartItem.FirstOrDefault(m => m.CartID == parsedCartId && m.ProductID == productID);

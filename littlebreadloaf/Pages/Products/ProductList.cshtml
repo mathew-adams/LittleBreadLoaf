@@ -1,6 +1,7 @@
 ﻿@page
 @model ProductListModel
 @{
+    ViewData["Title"] = "Products";
 }
 
 <nav aria-label="breadcrumb">
@@ -16,15 +17,15 @@
 {
     <div class="alert alert-secondary border-0" role="alert" style="background-color:#e9ecef">
         <div class="text-muted mb-1">Admin</div>
-        <a class="btn btn-outline-secondary" asp-page="/Products/ProductAdd"><i class="fa fa-plus" aria-hidden="true"></i> Add Product</a>
-        <a class="btn btn-outline-secondary" asp-page="/Reports/ProductsReport"><i class="fa fa-bar-chart" aria-hidden="true"></i> View Reports</a>
+        <a class="btn btn-outline-secondary" asp-page="/Products/ProductAdd"><i class="fa fa-plus" aria-hidden="true" title="Add product"></i> Add product</a>
+        <a class="btn btn-outline-secondary" asp-page="/Reports/ProductsReport"><i class="fa fa-bar-chart" aria-hidden="true" title="View reports"></i> View reports</a>
     </div>
 }
 
 <div class="row justify-content-center">
     @foreach (var product in Model.Products)
     {
-        <div class="col-sm-4 ">
+        <div class="col-md-4 mt-0 px-2">
             <div class="product-grid">
                 <div class="product-image">
                     @{
@@ -46,11 +47,12 @@
                              src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
                              data-src="@source"
                              asp-append-version="true"
-                             alt="@title">
+                             alt="@title"
+                             title="@title" />
                     </a>
                     <form name="add_cart" asp-page-handler="cartadd" asp-route-ProductID="@product.ProductID" method="post">
                         <button class="add-to-cart" type="submit">
-                            <i class="fa fa-cart-plus" aria-hidden="true"></i> Add to cart
+                            <i class="fa fa-cart-plus" aria-hidden="true" title="Add to cart"></i> Add to cart
                         </button>
                     </form>
                 </div>

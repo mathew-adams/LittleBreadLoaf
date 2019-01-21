@@ -39,13 +39,13 @@ namespace littlebreadloaf.Pages.Products
         {
             if (String.IsNullOrEmpty(ProductID) || !Guid.TryParse(ProductID, out Guid parsedID))
             {
-                return new RedirectResult("/Product/ProductList");
+                return new RedirectResult("/Products/ProductList");
             }
 
             Product = _context.Product.FirstOrDefault(m => m.ProductID == parsedID);
             if (Product == null)
             {
-                return new RedirectResult("/Product/ProductList");
+                return new RedirectResult("/Products/ProductList");
             }
             ProductBadges = _context.ProductBadge.Where(m => m.ProductID == parsedID).ToList();
             ProductIngredients = _context.ProductIngredient.Where(m => m.ProductID == parsedID).ToList();
@@ -60,7 +60,7 @@ namespace littlebreadloaf.Pages.Products
         {
             if (String.IsNullOrEmpty(productID) || !Guid.TryParse(productID, out Guid parsedID))
             {
-                return new RedirectResult("/Product/ProductList");
+                return new RedirectResult("/Products/ProductList");
             }
             
             return await CartHelper.AddToCart(_context,

@@ -1,0 +1,60 @@
+﻿@page
+@model littlebreadloaf.Pages.CookiesModel
+@{
+    ViewData["Title"] = "Cookies";
+}
+
+<h2>@ViewData["Title"]</h2>
+<br />
+<h3>What are cookies?</h3>
+<p>Cookies are small pieces of data that are sent from the website's server to the client's browser to track "state" as the user is browsing. They are a reliable mechanism to keep track of a user's experience while using a website. Examples of cookies include tracking when a user wishes to remain logged in, track the status of a web cart, or determine if the user is authenticated.</p>
+
+<br />
+<h3>Why we use cookies</h3>
+<p>We use cookies and other tracking technologies to improve your browsing experience on our website, to show you personalized content and targeted ads, to analyze our website traffic, and to understand where our visitors are coming from.</p>
+
+<div class="alert alert-info">
+    <i class="fa fa-exclamation-circle" aria-hidden="true" title="Alert"></i> By browsing our website, you consent to our use of cookies and other tracking technologies
+</div>
+
+<br />
+<h3>How we use cookies</h3>
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Class</th>
+            <th scope="col">Description of use</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th scope="row">.AspNet.Consent</th>
+            <td>Cookie consent</td>
+            <td class="table-success">Non-essential</td>
+            <td>Used to track whether the user has accepted the cookie consent form</td>
+        </tr>
+        <tr>
+            <th scope="row">.AspNetCore.Antiforgery*</th>
+            <td>Security</td>
+            <td class="table-danger">Essential</td>
+            <td>
+                This is a mechanism to protect against <a target="_blank" href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)">cross site request forgery (CSRF)</a>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">.AspNetCore.Identity.Application</th>
+            <td>Authentication</td>
+            <td class="table-danger">Essential</td>
+            <td>A cookie to track whether a user has successfully authenticated</td>
+        </tr>
+        <tr>
+            <th scope="row">LittleBreadLoaf.CartID</th>
+            <td>Functional</td>
+            <td class="table-danger">Essential</td>
+            <td>A cookie to track a web cart as a customer shops throughout thier session</td>
+        </tr>
+    </tbody>
+</table>
+<br />

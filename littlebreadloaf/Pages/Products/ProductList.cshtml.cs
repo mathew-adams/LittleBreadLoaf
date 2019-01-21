@@ -36,7 +36,7 @@ namespace littlebreadloaf.Pages.Products
         {
             if (String.IsNullOrEmpty(productID) || !Guid.TryParse(productID, out Guid parsedID))
             {
-                return new RedirectResult("/Product/ProductList");
+                return new RedirectResult("/Products/ProductList");
             }
 
             return await CartHelper.AddToCart(_context,
