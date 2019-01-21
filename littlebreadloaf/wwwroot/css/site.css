@@ -1,4 +1,19 @@
 
+main {
+    margin-top:75px;
+    min-height:30em;
+}
+
+.admin_background {
+    background-color:#e9ecef;
+}
+
+#file_upload {
+    height: auto
+}
+
+
+/* PRODUCT BEGIN */
 .product-grid {
     font-family: 'Open Sans',sans-serif;
     position: relative
@@ -77,7 +92,11 @@
     color: #303030;
     font-size: 15px
 }
+/* PRODUCT END */
 
+
+
+/* CART BEGIN */
 .add_to_cart_block .price {
     color: cadetblue;
     text-align: center;
@@ -94,21 +113,22 @@
     font-size: 200%;
     margin-bottom: 0;
 }
+/* CART END */
 
+
+/* BLAZY BEGIN */
 .b-lazy {
     opacity: 0;
-    /*transform: scale(3);*/
     transition: all 500ms;
 }
 
 .b-loaded {
     opacity: 1;
-    /*transform: scale(1);*/
 }
+/* BLAZY END */
 
-/* ******* Service ******* */
 
-
+/* SERVICE BEGIN */
 #service .service-round {
     height: 100px;
     width: 100px;
@@ -122,9 +142,9 @@
     color: #182c39;
 }
 
-    #service .service-round i {
-        color: #182c39;
-    }
+#service .service-round i {
+    color: #182c39;
+}
 
 #service h4 {
     margin: 10px auto;
@@ -141,3 +161,24 @@
     border-color: #ffc266;
     transition: border-color 2s;
 }
+/* SERVICE END */
+
+
+/* FOOTER BEGIN*/
+#footer {
+    color: rgba(255,255,255,.75);
+}
+
+    #footer a {
+        color: rgba(255,255,255,.5);
+        text-decoration: none;
+    }
+
+        #footer a:hover {
+            color: rgba(255,255,255,.75);
+        }
+
+#footer-social .powered_by i {
+    color: red;
+}
+/* FOOTER END*/

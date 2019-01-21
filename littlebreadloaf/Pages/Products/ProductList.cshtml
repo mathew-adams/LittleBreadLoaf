@@ -10,12 +10,12 @@
     </ol>
 </nav>
 
-<div id="cartItemAdded" class="alert alert-success" role="alert" style="display: none;">
+<div id="cartItemAdded" class="alert alert-success d-none" role="alert">
 </div>
 
 @if (User.Identity.IsAuthenticated) //&& User.IsInRole("Admin")) //TODO: Figure out role based security. 
 {
-    <div class="alert alert-secondary border-0" role="alert" style="background-color:#e9ecef">
+    <div class="alert alert-secondary border-0 admin_background" role="alert">
         <div class="text-muted mb-1">Admin</div>
         <a class="btn btn-outline-secondary" asp-page="/Products/ProductAdd"><i class="fa fa-plus" aria-hidden="true" title="Add product"></i> Add product</a>
         <a class="btn btn-outline-secondary" asp-page="/Reports/ProductsReport"><i class="fa fa-bar-chart" aria-hidden="true" title="View reports"></i> View reports</a>

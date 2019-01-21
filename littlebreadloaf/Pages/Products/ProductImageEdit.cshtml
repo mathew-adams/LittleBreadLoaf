@@ -30,8 +30,8 @@
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">
-            <a href="@Model.ProductImage.FileLocation" data-toggle="lightbox" data-title="@Model.ProductImage.Title">
-                <img src="@Model.ProductImage.FileLocation" class="img-thumbnail" style="width:250px; height:250px;" alt="@Model.ProductImage.Title" title="@Model.ProductImage.Title" />
+            <a href="@Model.ProductImage.FileLocation.Replace("{1}","500")" data-toggle="lightbox" data-title="@Model.ProductImage.Title">
+                <img src="@Model.ProductImage.FileLocation.Replace("{1}","200")" class="img-thumbnail" alt="@Model.ProductImage.Title" title="@Model.ProductImage.Title" />
             </a>
         </div>
     </div>

@@ -28,7 +28,7 @@
         @Html.LabelFor(m => m.FileUpload, new { @class = "col-2 col-form-label" })
 
         <div class="col-5">
-            <input class="form-control" asp-for="FileUpload" type="file" style="height:auto" />
+            <input id="file_upload" class="form-control" asp-for="FileUpload" type="file" />
             @Html.ValidationMessageFor(m => m.ProductImage.Title, "", new { @class = "text-danger" })
         </div>
     </div>

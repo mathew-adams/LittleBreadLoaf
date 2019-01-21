@@ -68,14 +68,14 @@ $(document).ready(function () {
             data: form.serialize(), // serializes the form's elements.
             success: function (data) {
                 $("#cartItemAdded").html('<i class="fa fa-plus fa-fw"></i>' + data.productName + " has been added to the cart!");
-                $("#cartItemAdded").show();
+                $("#cartItemAdded").removeClass('d-none');
                 $("#cartItemCount").html(data.cartCount);
             },
             error: function (data) {
                 $("#cartItemAdded").html('<i class="fa fa-plus fa-fw"></i>' + $("#productName").val() + " failed!");
                 $("#cartItemAdded").removeClass('alert alert-success');
+                $("#cartItemAdded").removeClass('d-none');
                 $("#cartItemAdded").addClass('alert alert-danger');
-                $("#cartItemAdded").show();
             }
         });
 
