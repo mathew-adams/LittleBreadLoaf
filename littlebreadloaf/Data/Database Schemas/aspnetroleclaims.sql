@@ -1,4 +1,4 @@
-SELECT * FROM `plex-movie`.aspnetusers;CREATE TABLE `aspnetroleclaims` (
+CREATE TABLE `aspnetroleclaims` (
   `Id` int(11) NOT NULL,
   `RoleId` varchar(255) NOT NULL,
   `ClaimType` longtext,
