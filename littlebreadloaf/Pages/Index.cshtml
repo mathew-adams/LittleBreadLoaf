@@ -1,13 +1,8 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Login page";
+    ViewData["Title"] = "Home";
     ViewData["ReturnUrl"] = "/Index";
-
-    if (User.Identity.IsAuthenticated)
-    {
-        ViewData["Title"] = "You are authenticated!!!";
-    }
 }
 <div id="carouselExampleIndicators" class="carousel slide mt-n4" data-ride="carousel">
     <ol class="carousel-indicators">

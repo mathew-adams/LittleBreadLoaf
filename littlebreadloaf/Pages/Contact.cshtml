@@ -2,6 +2,7 @@
 @model ContactModel
 @{
     ViewData["Title"] = "Contact";
+    ViewData["ReturnURL"] = Url.Page("/Contact");
 }
 <h2>@ViewData["Title"]</h2>
 <h3>@Model.Message</h3>

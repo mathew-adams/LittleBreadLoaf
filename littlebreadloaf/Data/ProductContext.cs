@@ -17,9 +17,20 @@ namespace littlebreadloaf.Data
         public virtual DbSet<ProductIngredient> ProductIngredient { get; set; }
         public virtual DbSet<ProductSuggestion> ProductSuggestion { get; set; }
         public virtual DbSet<ProductImage> ProductImage { get; set; }
+        public virtual DbSet<ProductOrder> ProductOrder { get; set; }
 
         public virtual DbSet<Cart> Cart { get; set; }
         public virtual DbSet<CartItem> CartItem { get; set; }
-        
+        public virtual DbSet<Invoice> Invoice { get; set; }
+        public virtual DbSet<InvoiceTransaction> InvoiceTransaction { get; set; }
+        public virtual DbSet<NzAddressDeliverable> NzAddressDeliverable { get; set; }
+
+        public virtual DbSet<Blog> Blog { get; set; }
+        public virtual DbSet<Tag> Tag { get; set; }
+        public virtual DbSet<SourceToTag> SourceToTag { get; set; }
+        public virtual DbSet<BlogCategory> BlogCategory { get; set; }
+        public virtual DbSet<CategoryToBlog> CategoryToBlog { get; set; }
+
+        public virtual DbSet<UserProfile> UserProfile { get; set; }
     }
 }

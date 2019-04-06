@@ -1,0 +1,176 @@
+﻿@page
+@model littlebreadloaf.Pages.Orders.InvoicePrintModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Print invoice";
+    ViewData["ReturnURL"] = Url.Page("/Orders/InvoicePrint", new { ProductOrderID = Model.ProductOrder.OrderID });
+
+
+    var balance = @Model.InvoiceTransaction.Sum(s => s.Quantity * s.Price);
+
+    var status = (balance == 0) ? "PAID" : "DUE";
+    var statusStyle = (balance == 0) ? "text-success" : "text-danger";
+
+}
+<link rel="stylesheet" type="text/css" href="~/lib/twitter-bootstrap/css/bootstrap.min.css" />
+<style type="text/css" media="print">
+    @@page {
+        margin: 0;
+    }
+
+    @@media print {
+        @@page {
+            margin: 0;
+        }
+
+        body {
+            margin: 1.6cm;
+        }
+    }
+    }
+</style>
+<style>
+    body {
+        font-size: 20px;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-4">
+            <h1 class="display-3 font-weight-bold">Invoice</h1>
+        </div>
+        <div class="col-4 text-center">
+            <img src="~/images/little-bread-loaf-logo-blue.svg" height="200" width="200"/>
+        </div>
+        <div class="col-4">
+            <div class="row mt-2">
+                <div class="col-3">
+                    From
+                </div>
+                <div class="border-left col-9">
+                    <div class="font-weight-bold">Little Bread Loaf</div>
+                    <div>10 ebor street</div>
+                    <div>Te Aro, Wellington</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-1">
+        <div class="col-8">
+            <div class="row pl-3">
+                <table class="table col-4 table-sm">
+                    <tr>
+                        <td>@Html.Label("Invoice ID", "Invoice ID:", new { @class = "m-0" })</td>
+                        <td class="font-weight-bold">@Html.DisplayFor(i => i.ProductOrder.ConfirmationCode)</td>
+                    </tr>
+                    <tr>
+                        <td>@Html.Label("Issued Date", "Issued Date:", new { @class = "m-0" })</td>
+                        <td>@Html.DisplayFor(i => i.Invoice.Created)</td>
+                    </tr>
+                    <tr>
+                        <td>@Html.Label("Due Date", "Due Date:", new { @class = "m-0" })</td>
+                        <td>@Html.DisplayFor(i => i.Invoice.Due)</td>
+                    </tr>
+                    <tr>
+                        <td>@Html.Label("Status", "Status:", new { @class = "m-0" })</td>
+                        <td class="@statusStyle font-weight-bold">@status</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="row">
+                <div class="col-3">
+                    To
+                </div>
+                <div class="border-left col-9">
+                    <div class="font-weight-bold">
+                        @Html.DisplayFor(n => n.ProductOrder.ContactName)
+                    </div>
+                    @if (Model.HasAddress)
+                    {
+                        <div>@Html.DisplayFor(a => a.NzAddressDeliverable.address_number) @Html.DisplayFor(a => a.NzAddressDeliverable.full_road_name)</div>
+                        <div>@Html.DisplayFor(a => a.NzAddressDeliverable.suburb_locality)</div>
+                        <div>@Html.DisplayFor(a => a.NzAddressDeliverable.town_city)</div>
+                    }
+
+                </div>
+            </div>
+    </div>
+</div>
+
+<table class="table mt-5 table-sm">
+    <thead>
+        <tr>
+            <th class="text-left">Type</th>
+            <th class="text-left">Name</th>
+            <th class="text-left">Description</th>
+            <th class="text-left">Unit Price</th>
+            <th class="text-left">Quantity</th>
+            <th class="text-left">Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var invoiceTxn in Model.InvoiceTransaction.Where(w => w.Type == "Debit"))
+        {
+            var sum = invoiceTxn.Price * invoiceTxn.Quantity;
+            <tr>
+                <td>@Html.DisplayFor(o => invoiceTxn.Category)</td>
+                <td>@Html.DisplayFor(o => invoiceTxn.Name)</td>
+                <td>@Html.DisplayFor(o => invoiceTxn.Description)</td>
+                <td>@Html.DisplayFor(o => invoiceTxn.Price)</td>
+                <td>@Html.DisplayFor(o => invoiceTxn.Quantity)</td>
+                <td>@sum</td>
+            </tr>
+        }
+        <tr class="table-active">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><strong>Subtotal:</strong></td>
+            <td><strong>@Model.InvoiceTransaction.Where(w => w.Type == "Debit").Sum(s => s.Quantity * s.Price)</strong></td>
+        </tr>
+        @foreach (var invoiceTxn in Model.InvoiceTransaction.Where(w => w.Type == "Credit" && w.Category == "Discount"))
+        {
+            var sum = invoiceTxn.Price * invoiceTxn.Quantity;
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> - @invoiceTxn.Description</td>
+            <td>@(invoiceTxn.Price * invoiceTxn.Quantity)</td>
+        </tr>
+        }
+        @foreach (var invoiceTxn in Model.InvoiceTransaction.Where(w => w.Type == "Credit" && w.Category == "Payment"))
+        {
+            var sum = invoiceTxn.Price * invoiceTxn.Quantity;
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> - @invoiceTxn.Description</td>
+            <td>@(invoiceTxn.Price * invoiceTxn.Quantity)</td>
+        </tr>
+        }
+        <tr class="table-active">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="border-top"><h5><strong>Balance Due:</strong></h5></td>
+            <td class="border-top"><h5><strong>@balance</strong></h5></td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="card mb-3">
+    <div class="card-header">Header</div>
+    <div class="card-body">
+        <h5 class="card-title">Info card title</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    </div>
+</div>

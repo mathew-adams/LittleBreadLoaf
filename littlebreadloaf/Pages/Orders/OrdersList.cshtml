@@ -1,0 +1,155 @@
+﻿@page
+@model littlebreadloaf.Pages.Orders.OrdersListModel
+@{
+    ViewData["Title"] = "Orders";
+    ViewData["ReturnURL"] = Url.Page("/Orders/OrderList");
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Orders</li>
+    </ol>
+</nav>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="alert alert-secondary border-0 admin_background" role="alert">
+        <div class="text-muted mb-1">Admin</div>
+        <a class="btn btn-outline-secondary" asp-page="/Blog/BlogAdd"><i class="fa fa-plus" aria-hidden="true" title="Add blog"></i> Add blog</a>
+    </div>
+}
+
+@using (Html.BeginForm("OrderList", "Search", FormMethod.Get, new { @class = "form-group-sm" }))
+{
+    <div class="form-row">
+        <div class="col-md-6">
+
+            @Html.Label("Confirmation code:")
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-ticket" aria-hidden="true" title="Confirmation code"></i></div>
+                        </div>
+                        @Html.TextBoxFor(f => f.FilterConfirmationCode, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Confirmation code" })
+                    </div>
+                </div>
+            </div>
+
+            @Html.Label("Delivery:")
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-calendar fa-fw" aria-hidden="true" title="Delivery from"></i></div>
+                        </div>
+                        @Html.TextBoxFor(f => f.FilterDeliveryDateFrom, "{0:yyyy-MM-dd}", new { @id = "delivery_date_from", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Delivery from" })
+                    </div>
+                </div>
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-calendar fa-fw" aria-hidden="true" title="Delivery to"></i></div>
+                        </div>
+                        @Html.TextBoxFor(f => f.FilterDeliveryDateTo, "{0:yyyy-MM-dd}", new { @id = "delivery_date_to", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Delivery to" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            @Html.Label("Contact:")
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-envelope-o fa-fw" aria-hidden="true" title="Customer email"></i></div>
+                        </div>
+                        @Html.TextBoxFor(f => f.FilterEmail, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Customer email" })
+                    </div>
+                </div>
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-mobile fa-fw" aria-hidden="true" tilte="Customer phone"></i></div>
+                        </div>
+                        @Html.TextBoxFor(f => f.FilterPhone, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Customer phone" })
+                    </div>
+                </div>
+            </div>
+
+            @Html.Label("Orders:")
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="form-control">
+                        <div class="form-check">
+                            @Html.CheckBoxFor(f => f.FilterNeedsInvoice, new { @class = "form-check-input", autocomplete = "off", autofocus = "autofocus", @placeholder = "Show all" })
+                            @Html.LabelFor(f => f.FilterNeedsInvoice, "Needs invoice", new { @class = "form-check-label" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col">
+                    <div class="form-control">
+                        <div class="form-check">
+                            @Html.CheckBoxFor(f => f.FilterShowAll, new { @class = "form-check-input", autocomplete = "off", autofocus = "autofocus", @placeholder = "Show all" })
+                            @Html.LabelFor(f => f.FilterShowAll, "Show all orders", new { @class = "form-check-label" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix">
+        <div class="float-right mb-3">
+            <button class="btn btn-outline-secondary"><i class="fa fa-search" aria-hidden="true" title="Search"></i> Search</button>
+        </div>
+    </div>
+}
+
+@if (Model.ProductOrders.Count > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th></th>
+                <th><a asp-route-SortColumnCode="">Code</a></th>
+                <th>Delivery Date</th>
+                <th>Delivery Time</th>
+                <th>Created</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Method</th>
+                <th>Invoice?</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.ProductOrders)
+            {
+                var paid = (order.Payment < new DateTime(9999, 12, 31));
+                var image = paid ? "fa fa-check-circle" : "fa fa-exclamation-circle";
+                var status = paid ? "Paid" : "Payment outstanding";
+                var color = paid ? "text-success" : "text-danger";
+                <tr>
+                    <td class="@color"><i class="@image sr-icons" title="@status"></i></td>
+                    <td>@Html.DisplayFor(o => order.ConfirmationCode)</td>
+                    <td>@order.DeliveryDate.Value.ToString("yyyy-MM-dd")</td>
+                    <td>@Html.DisplayFor(t => order.DeliveryTime)</td>
+                    <td>@order.Created.Value.ToString("yyyy-MM-dd")</td>
+                    <td>@Html.DisplayFor(o => order.ContactPhone)</td>
+                    <td>@Html.DisplayFor(o => order.ContactEmail)</td>
+                    <td>@Html.DisplayFor(o => order.PaymentMethod)</td>
+                    <td>@(order.Invoice ? "Yes" : "No")</td>
+                    <td><a class="btn btn-outline-secondary" asp-page="/Orders/OrderView" asp-route-OrderID="@order.OrderID"><i class="fa fa-shopping-basket" aria-hidden="true"></i> View</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info" role="alert">
+        No orders to display.
+    </div>
+}
+<br />

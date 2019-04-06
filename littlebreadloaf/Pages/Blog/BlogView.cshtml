@@ -1,0 +1,43 @@
+﻿@page
+@model littlebreadloaf.Pages.Blog.BlogViewModel
+@{
+    ViewData["Title"] = Model.Blog.Title;
+    ViewData["ReturnURL"] = Url.Page("/Blog/BlogView", new { Model.Blog.BlogID });
+
+    var published = (Model.Blog.Published < new DateTime(9999, 12, 31));
+
+    var publishLabel = (published) ? "Unpublish" : "Publish";
+    var publishImage = (published) ? "fa fa-low-vision" : "fa fa-podcast";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Blog/BlogList">Blog</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.Blog.Title</li>
+    </ol>
+</nav>
+
+@if (User.Identity.IsAuthenticated) // && User.IsInRole("Admin")) TODO: Figure out role based security.
+{
+    <div class="row">
+        <div class="col-12">
+            <div class="card bg-light mb-3">
+                <div class="card-body">
+                    <div class="text-muted mb-1">Admin</div>
+                    <a class="btn btn-outline-secondary" asp-page="/Blog/BlogEdit" asp-route-blogID="@Model.Blog.BlogID"><i class="fa fa-pencil" aria-hidden="true" title="Edit blog"></i> Edit</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Blog/BlogPublish" asp-route-blogID="@Model.Blog.BlogID"><i class="@publishImage" aria-hidden="true" title="@publishLabel"></i> @publishLabel</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Blog/BlogDelete" asp-route-blogID="@Model.Blog.BlogID"><i class="fa fa-trash" aria-hidden="true" title="Delete"></i> Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (User.Identity.IsAuthenticated && Model.Blog.Published == new DateTime(9999, 12, 31)) // && User.IsInRole("Admin")) TODO: Figure out role based security.
+{
+    <div class="alert alert-warning">
+        <i class="fa fa-exclamation-circle" aria-hidden="true" title="Alert"></i> This Blog is not published, so it is NOT available to the public
+    </div>
+}
+
+@await Component.InvokeAsync("Blog", Model.Blog.BlogID)

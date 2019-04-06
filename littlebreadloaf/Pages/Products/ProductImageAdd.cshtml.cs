@@ -5,10 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using littlebreadloaf.Data;
 
 namespace littlebreadloaf.Pages.Products
 {
+    [Authorize]
     public class ProductImageAddModel : PageModel
     {
         private readonly ProductContext _context;
@@ -30,14 +33,14 @@ namespace littlebreadloaf.Pages.Products
         [BindProperty]
         public ProductImage ProductImage { get; set; }
 
-        public IActionResult OnGet(string productID)
+        public async Task<IActionResult> OnGetAsync(string productID)
         {
             if (String.IsNullOrEmpty(productID) || !Guid.TryParse(productID, out Guid parsedID))
             {
                 return new RedirectToPageResult("/Products/ProductList");
             }
 
-            var product = _context.Product.FirstOrDefault(m => m.ProductID == parsedID);
+            var product = await _context.Product.FirstOrDefaultAsync(m => m.ProductID == parsedID);
 
             if (product == null)
             {
@@ -57,7 +60,7 @@ namespace littlebreadloaf.Pages.Products
                 return new RedirectToPageResult("/Products/ProductBadgeList");
             }
 
-            var product = _context.Product.FirstOrDefault(m => m.ProductID == parsedID);
+            var product = await _context.Product.FirstOrDefaultAsync(m => m.ProductID == parsedID);
 
             if (product == null)
             {
@@ -91,12 +94,12 @@ namespace littlebreadloaf.Pages.Products
             catch (Exception)
             {
                 //Log?
-                ModelState.AddModelError("BadFile", "The file invalid. It must be an image");
+                ModelState.AddModelError("BadFile", "The file is invalid. It must be an image");
                 return Page();
             }
-            var currentPrimary = _context.ProductImage.FirstOrDefault( i => i.ProductID == product.ProductID && i.PrimaryImage == true);
-            bool primary = (currentPrimary == null);
 
+            bool primary = await _context.ProductImage.AnyAsync(a => a.ProductID == product.ProductID && a.PrimaryImage == true);
+            
             ProductImage.ProductImageID = productImageID;
             ProductImage.ProductID = product.ProductID;
             ProductImage.PrimaryImage = primary;

@@ -1,0 +1,37 @@
+﻿@page
+@model littlebreadloaf.Pages.Blog.BlogDeleteModel
+@{
+    ViewData["Title"] = $"Delete blog:{Model.Blog.Title}";
+    ViewData["ReturnURL"] = Url.Page("/Blog/BlogDelete", new { Model.Blog.BlogID });
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Blog/BlogList">Blog</a></li>
+        <li class="breadcrumb-item"><a asp-page="/Blog/BlogView" asp-route-blogID="@Model.Blog.BlogID">@Model.Blog.Title</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Delete</li>
+    </ol>
+</nav>
+
+<div class="alert alert-danger" role="alert">
+    Are you sure you want to delete this blog post? This cannot be undone.
+</div>
+
+@using (Html.BeginForm("BlogDelete", "BlogDelete", FormMethod.Post, new { @class = "form-group-sm" }))
+{
+
+    @Html.HiddenFor(h => h.Blog.BlogID)
+    @Html.HiddenFor(h => h.Blog.UserID)
+    @Html.HiddenFor(h => h.Blog.Title)
+    @Html.HiddenFor(h => h.Blog.Description)
+    @Html.HiddenFor(h => h.Blog.Content)
+    @Html.HiddenFor(h => h.Blog.Created)
+    @Html.HiddenFor(h => h.Blog.Published)
+
+    <div class="my-3">
+        <button type="submit" class="btn btn-success"><i class="fa fa-trash" aria-hidden="true" title="Delete"></i> Yes, please delete</button>
+        <a class="btn btn-danger" asp-page="/Blog/BlogList"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
+    </div>
+}
+
+@await Component.InvokeAsync("Blog", Model.Blog.BlogID)

@@ -1,0 +1,34 @@
+﻿@page
+@model littlebreadloaf.Pages.Blog.BlogCategoryEditModel
+@{
+    ViewData["Title"] = "Edit blog category";
+    ViewData["ReturnURL"] = Url.Page("/Blog/BlogCategoryEdit", new { BlogCategoryID = Model.BlogCategory.BlogCategoryID });
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Blog/BlogList">Blog</a></li>
+        <li class="breadcrumb-item"><a asp-page="/Blog/BlogCategoryList">Blog catgory list</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Edit blog category</li>
+    </ol>
+</nav>
+
+@using (Html.BeginForm("BlogCategoryEdit", "BlogCategoryEdit", FormMethod.Post, new { @class = "form-group-sm" }))
+{
+    <div class="form-row">
+        <div class="form-group col-6">
+            @Html.LabelFor(m => m.BlogCategory.Name)
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-bookmark fa-fw" aria-hidden="true" title="Blog catgories"></i></div>
+                </div>
+                @Html.TextBoxFor(m => m.BlogCategory.Name, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
+            </div>
+            @Html.ValidationMessageFor(m => m.BlogCategory.Name, "", new { @class = "text-danger" })
+            @Html.ValidationMessage("Duplicate", new { @class = "text-danger" })
+        </div>
+    </div>
+    @Html.HiddenFor(h => h.BlogCategory.BlogCategoryID)
+    <button type="submit" class="btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true" title="Save"></i> Save</button>
+    <a class="btn btn-danger" asp-page="/Blog/BlogCategoryList"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
+}

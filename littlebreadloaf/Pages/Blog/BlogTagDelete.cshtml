@@ -1,0 +1,39 @@
+﻿@page
+@model littlebreadloaf.Pages.Blog.BlogTagDeleteModel
+@{
+    ViewData["Title"] = "Delete blog tag";
+    ViewData["ReturnURL"] = Url.Page("/Blog/BlogTagDelete", new { BlogCategoryID = Model.BlogTag.TagID });
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Blog/BlogList">Blog</a></li>
+        <li class="breadcrumb-item"><a asp-page="/Blog/BlogTagList">Blog tag list</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Delete blog tag</li>
+    </ol>
+</nav>
+
+<div class="alert alert-danger" role="alert">
+    Are you sure you want to delete this blog tag?
+</div>
+
+@using (Html.BeginForm("BlogTagDelete", "BlogTagDelete", FormMethod.Post, new { @class = "form-group-sm" }))
+{
+    <div class="form-row">
+        <div class="form-group col-6">
+            @Html.LabelFor(m => m.BlogTag.Name)
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-tag fa-fw" aria-hidden="true" title="Blog tag"></i></div>
+                </div>
+                @Html.TextBoxFor(m => m.BlogTag.Name, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", disabled = "on" })
+            </div>
+            @Html.ValidationMessageFor(m => m.BlogTag.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    @Html.HiddenFor(h => h.BlogTag.TagID)
+    @Html.HiddenFor(h => h.BlogTag.Name)
+
+    <button type="submit" class="btn btn-success"><i class="fa fa-trash" aria-hidden="true" title="Delete"></i> Yes, please delete</button>
+    <a class="btn btn-danger" asp-page="/Blog/BlogTagList"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
+}

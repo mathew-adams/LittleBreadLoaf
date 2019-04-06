@@ -2,6 +2,7 @@
 @model ProductSuggestionAddModel
 @{
     ViewData["Title"] = "Add Suggestion";
+    ViewData["ReturnURL"] = Url.Page("/Products/ProductSuggestionAdd", new { productID = Model.ProductID });
 }
 
 <nav aria-label="breadcrumb">

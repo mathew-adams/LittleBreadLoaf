@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using littlebreadloaf.Data;
 using System.IO;
 
@@ -35,22 +36,23 @@ namespace littlebreadloaf.Pages.Products
         public CartItem CartItem { get; set; }
         public littlebreadloaf.Data.Cart Cart { get; set; }
 
-        public IActionResult OnGet(string ProductID)
+        public async Task<IActionResult> OnGetAsync(string productID)
         {
-            if (String.IsNullOrEmpty(ProductID) || !Guid.TryParse(ProductID, out Guid parsedID))
+            if (String.IsNullOrEmpty(productID) || !Guid.TryParse(productID, out Guid parsedID))
             {
                 return new RedirectResult("/Products/ProductList");
             }
 
-            Product = _context.Product.FirstOrDefault(m => m.ProductID == parsedID);
+            Product = await _context.Product.FirstOrDefaultAsync(m => m.ProductID == parsedID);
             if (Product == null)
             {
                 return new RedirectResult("/Products/ProductList");
             }
-            ProductBadges = _context.ProductBadge.Where(m => m.ProductID == parsedID).ToList();
-            ProductIngredients = _context.ProductIngredient.Where(m => m.ProductID == parsedID).ToList();
-            ProductSuggestions = _context.ProductSuggestion.Where(m => m.ProductID == parsedID).ToList();
-            Images = _context.ProductImage.Where(m => m.ProductID == parsedID).ToList();
+
+            ProductBadges = await _context.ProductBadge.Where(m => m.ProductID == parsedID).ToListAsync();
+            ProductIngredients = await _context.ProductIngredient.Where(m => m.ProductID == parsedID).ToListAsync();
+            ProductSuggestions = await _context.ProductSuggestion.Where(m => m.ProductID == parsedID).ToListAsync();
+            Images = await _context.ProductImage.Where(m => m.ProductID == parsedID).ToListAsync();
 
             return new PageResult();
             

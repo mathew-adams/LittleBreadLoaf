@@ -1,0 +1,25 @@
+﻿@page
+@model littlebreadloaf.Pages.Orders.OrderViewModel
+@{ 
+    ViewData["Title"] = "View Order";
+    ViewData["ReturnURL"] = Url.Page("/Orders/OrderView", new { OrderID = @Model.OrderID });
+
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Orders/OrdersList">Orders</a></li>
+        <li class="breadcrumb-item active" aria-current="page">View order</li>
+    </ol>
+</nav>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="alert alert-secondary border-0 admin_background" role="alert">
+        <div class="text-muted mb-1">Admin</div>
+        <a class="btn btn-outline-secondary" asp-page="/Orders/InvoiceView" asp-route-OrderID="@Model.ProductOrder.OrderID"><i class="fa fa-file-text-o" aria-hidden="true" title="View invoice"></i> View invoice</a>
+        <a class="btn btn-outline-secondary" asp-page="/Orders/BlogAdd"><i class="fa fa-envelope-o" aria-hidden="true" title="Resend confirmatio email"></i> Resend confirmation email</a>
+    </div>
+}
+
+@await Component.InvokeAsync("Order", new { orderID = Model.ProductOrder.OrderID.Value })

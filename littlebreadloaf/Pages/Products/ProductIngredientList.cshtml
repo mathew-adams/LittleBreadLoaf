@@ -2,6 +2,7 @@
 @model ProductIngredientListModel
 @{
     ViewData["Title"] = "Ingredients";
+    ViewData["ReturnURL"] = Url.Page("/Products/ProductIngredientList", new { productID = Model.Product.ProductID });
 }
 
 <nav aria-label="breadcrumb">

@@ -4,10 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using littlebreadloaf.Data;
 
 namespace littlebreadloaf.Pages.Products
 {
+    [Authorize]
     public class ProductIngredientListModel : PageModel
     {
         private readonly ProductContext _context;
@@ -22,21 +25,24 @@ namespace littlebreadloaf.Pages.Products
         [BindProperty]
         public List<ProductIngredient> ProductIngredients { get; set; }
 
-        public IActionResult OnGet(string ProductID)
+        public async Task<IActionResult> OnGetAsync(string productID)
         {
-            if (String.IsNullOrEmpty(ProductID) || !Guid.TryParse(ProductID, out Guid parsedID))
+            if (String.IsNullOrEmpty(productID) || !Guid.TryParse(productID, out Guid parsedID))
             {
                 return new RedirectToPageResult("/Products/ProductList");
             }
 
-            Product = _context.Product.FirstOrDefault(m => m.ProductID == parsedID);
+            Product = await _context.Product.FirstOrDefaultAsync(m => m.ProductID == parsedID);
 
             if (Product == null)
             {
                 return new RedirectToPageResult("/Products/ProductList");
             }
 
-            ProductIngredients = _context.ProductIngredient.Where(m => m.ProductID == parsedID).ToList();
+            ProductIngredients = await _context
+                                        .ProductIngredient
+                                        .Where(m => m.ProductID == parsedID)
+                                        .ToListAsync();
 
             return Page();
         }
@@ -52,14 +58,14 @@ namespace littlebreadloaf.Pages.Products
                 return new RedirectToPageResult("/Products/ProductList");
             }
 
-            Product = _context.Product.FirstOrDefault(m => m.ProductID == parsedProductID);
+            Product = await _context.Product.FirstOrDefaultAsync(m => m.ProductID == parsedProductID);
 
             if (Product == null)
             {
                 return new RedirectToPageResult("/Products/ProductList");
             }
 
-            var ingredient = _context.ProductIngredient.FirstOrDefault(m => m.ProductIngredientID == parsedIngredientID);
+            var ingredient = await _context.ProductIngredient.FirstOrDefaultAsync(m => m.ProductIngredientID == parsedIngredientID);
             if (ingredient != null)
             {
                 _context.ProductIngredient.Remove(ingredient);

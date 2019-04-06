@@ -1,0 +1,52 @@
+﻿@page
+@model littlebreadloaf.Pages.Blog.BlogCategoryListModel
+@{
+    ViewData["Title"] = "Blog category list";
+    ViewData["ReturnURL"] = Url.Page("/Blog/BlogCategoryList");
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Blog/BlogList">Blog</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Blog categories</li>
+    </ol>
+</nav>
+
+<a class="btn btn-outline-secondary mb-3" asp-page="/Blog/BlogCategoryAdd"><i class="fa fa-plus" aria-hidden="true" title="Create new blog category"></i> Create a new blog category</a>
+
+@if (Model.BlogCategories.Count > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Categories</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in Model.BlogCategories)
+            {
+                <tr>
+                    <td>@category.Name</td>
+                    <td>
+                        <a class="btn btn-outline-secondary" asp-page="/Blog/BlogCategoryEdit" asp-route-BlogCategoryID="@category.BlogCategoryID">
+                            <i class="fa fa-pencil" aria-hidden="true" title="Edit"></i> Edit
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" asp-page="/Blog/BlogCategoryDelete" asp-route-BlogCategoryID="@category.BlogCategoryID">
+                            <i class="fa fa-trash" aria-hidden="true" title="Delete"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info" role="alert">
+         No categories to display.
+    </div>
+}

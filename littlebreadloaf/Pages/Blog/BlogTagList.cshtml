@@ -1,0 +1,50 @@
+﻿@page
+@model littlebreadloaf.Pages.Blog.BlogTagListModel
+@{
+    ViewData["Title"] = "Blog tag list";
+    ViewData["ReturnURL"] = Url.Page("/Blog/BlogTagList");
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Blog/BlogList">Blog</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Blog tags</li>
+    </ol>
+</nav>
+
+@if (Model.BlogTags.Count > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Blog Tags</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tag in Model.BlogTags)
+            {
+                <tr>
+                    <td>@tag.Name</td>
+                    <td>
+                        <a class="btn btn-outline-secondary" asp-page="/Blog/BlogTagEdit" asp-route-BlogTagID="@tag.TagID"> 
+                            <i class="fa fa-pencil" aria-hidden="true" title="Edit"></i> Edit
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" asp-page="/Blog/BlogTagDelete" asp-route-BlogTagID="@tag.TagID">
+                            <i class="fa fa-trash" aria-hidden="true" title="Delete"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info" role="alert">
+        No tags to display.
+    </div>
+}

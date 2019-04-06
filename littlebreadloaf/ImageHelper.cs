@@ -1,62 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.IO;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
 
 namespace littlebreadloaf
 {
     public class ImageHelper
     {
-        private readonly string _productID;
+        private readonly string _sourceID;
 
         #region "Public Functions - Image Upload"
        
-        public ImageHelper(string ProductID)
+        public ImageHelper(string sourceID)
         {
-            _productID = ProductID;
+            _sourceID = sourceID;
         }
 
         public void BuildDirectory(int size)
         {
-            string productDirectory = ProductDirectory();
+            string sourceDirectory = SourceDirectory();
 
-            if (!Directory.Exists(productDirectory))
+            if (!Directory.Exists(sourceDirectory))
             {
-                Directory.CreateDirectory(productDirectory);
+                Directory.CreateDirectory(sourceDirectory);
             }
         }
 
         public bool HasDirectory()
         {
-            return Directory.Exists(ProductDirectory());
+            return Directory.Exists(SourceDirectory());
         }
 
-        public string ProductDirectory()
+        public string SourceDirectory()
         {
             return Path.Combine(Environment.CurrentDirectory,
                                 "wwwroot",
                                 "images",
-                                _productID);
+                                _sourceID);
         }
 
-        public string GetNewFileName(int size, string ProductImageID)
+        public string GetNewFileName(int size, string SourceImageID)
         {
-            return Path.ChangeExtension(Path.Combine(ProductDirectory(), String.Concat(ProductImageID,"_",size)),".png");
+            return Path.ChangeExtension(Path.Combine(SourceDirectory(), String.Concat(SourceImageID,"_",size)),".png");
         }
 
-        public string GetDisplayFileName(string ProductImageID)
+        public string GetDisplayFileName(string SourceImageID)
         {
-            return string.Concat("/images/", _productID, "/", ProductImageID,"_{1}.png");
+            return string.Concat("/images/", _sourceID, "/", SourceImageID,"_{1}.png");
         }
 
         public void DeleteAll()
         {
-            var di = new DirectoryInfo(ProductDirectory());
+            var di = new DirectoryInfo(SourceDirectory());
             if(di.Exists)
             {
                 foreach (var file in di.GetFiles())
@@ -70,10 +68,10 @@ namespace littlebreadloaf
             }            
         }
 
-        public void DeleteImage(string ProductImageID)
+        public void DeleteImage(string sourceImageID)
         {
-            var di = new DirectoryInfo(ProductDirectory());
-            foreach(var file in di.GetFiles().Where(f=>f.Name.StartsWith(ProductImageID)))
+            var di = new DirectoryInfo(SourceDirectory());
+            foreach(var file in di.GetFiles().Where(f=>f.Name.StartsWith(sourceImageID)))
             {
                 if(file.Exists)
                 {
@@ -82,20 +80,20 @@ namespace littlebreadloaf
             }
         }
 
-        public void AddImages(string productImageID,
+        public void AddImages(string sourceImageID,
                               int[] sizes,
                               IFormFile upload)
         {
             foreach(var size in sizes)
             {
-                SaveImage(productImageID, size, upload);
+                SaveImage(sourceImageID, size, upload);
             }
         }
         #endregion
 
         #region "Private Functions"
 
-        private void SaveImage(string productImageID,
+        private void SaveImage(string souceImageID,
                                int size, 
                                IFormFile upload)
         {
@@ -126,9 +124,9 @@ namespace littlebreadloaf
                                                GraphicsUnit.Pixel);
                         }
                         
-                        var imgHelper = new ImageHelper(_productID);
+                        var imgHelper = new ImageHelper(_sourceID);
                         imgHelper.BuildDirectory(size);
-                        string fileName = imgHelper.GetNewFileName(size, productImageID);
+                        string fileName = imgHelper.GetNewFileName(size, souceImageID);
                         newImg.Save(fileName, ImageFormat.Jpeg);
                     }
                 }

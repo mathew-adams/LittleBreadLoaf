@@ -2,6 +2,7 @@
 @model ProductImageAddModel
 @{
     ViewData["Title"] = "Add Image";
+    ViewData["ReturnURL"] = Url.Page("/Products/ProductImageAdd", new { productID = Model.ProductID });
 }
 
 <nav aria-label="breadcrumb">

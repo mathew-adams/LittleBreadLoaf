@@ -4,10 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using littlebreadloaf.Data;
 
 namespace littlebreadloaf.Pages.Products
 {
+    [Authorize]
     public class ProductBadgeListModel : PageModel
     {
         private readonly ProductContext _context;
@@ -22,21 +25,24 @@ namespace littlebreadloaf.Pages.Products
         [BindProperty]
         public List<ProductBadge> ProductBadges { get; set; }
 
-        public IActionResult OnGet(string ProductID)
+        public async Task<IActionResult> OnGetAsync(string ProductID)
         {
             if (String.IsNullOrEmpty(ProductID) || !Guid.TryParse(ProductID, out Guid parsedID))
             {
                 return new RedirectToPageResult("/Products/ProductList");
             }
 
-            Product = _context.Product.FirstOrDefault(m => m.ProductID == parsedID);
+            Product = await _context.Product.FirstOrDefaultAsync(m => m.ProductID == parsedID);
 
-            if (Product == null)
+            if(Product == null)
             {
                 return new RedirectToPageResult("/Products/ProductList");
             }
 
-            ProductBadges = _context.ProductBadge.Where(m => m.ProductID == parsedID).ToList();
+            ProductBadges = await _context
+                                    .ProductBadge
+                                    .Where(m => m.ProductID == parsedID)
+                                    .ToListAsync();
 
             return Page();
         }
@@ -52,14 +58,18 @@ namespace littlebreadloaf.Pages.Products
                 return new RedirectToPageResult("/Products/ProductList");
             }
 
-            Product = _context.Product.FirstOrDefault(m => m.ProductID == parsedProductID);
+            Product = await _context
+                            .Product
+                            .FirstOrDefaultAsync(m => m.ProductID == parsedProductID);
 
             if (Product == null)
             {
                 return new RedirectToPageResult("/Products/ProductList");
             }
 
-            var badge = _context.ProductBadge.FirstOrDefault(m => m.ProductBadgeID == parsedBadgeID);
+            var badge = await _context
+                                .ProductBadge
+                                .FirstOrDefaultAsync(m => m.ProductBadgeID == parsedBadgeID);
             if (badge != null)
             {
                 _context.ProductBadge.Remove(badge);

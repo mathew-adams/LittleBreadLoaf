@@ -1,0 +1,50 @@
+﻿@model littlebreadloaf.ViewComponents.OrderViewComponent.ProductOrderAndAddress
+@{
+    var paid = Model.ProductOrder.Payment < new DateTime(9999, 12, 31);
+    var status = paid ? "Paid" : "Payment outstanding";
+    var image = paid ? "fa fa-check-circle" : "fa fa-exclamation-circle";
+    var color = paid ? "text-success" : "text-danger";
+}
+
+<h1 class="display-4 @color"><i class="@image" title="@status"></i> @status</h1>
+
+<table class="table mt-4 table-sm col-6">
+    <tbody>
+        <tr>
+            <td>@Html.LabelFor(p => p.ProductOrder.ConfirmationCode):</td>
+            <td class="font-weight-bold">@Html.DisplayFor(p => p.ProductOrder.ConfirmationCode)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(p => p.ProductOrder.PaymentMethod):</td>
+            <td>@Html.DisplayFor(p => p.ProductOrder.PaymentMethod)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(p => p.ProductOrder.ContactName):</td>
+            <td>@Html.DisplayFor(c => c.ProductOrder.ContactName)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(p => p.ProductOrder.ContactEmail):</td>
+            <td>@Html.DisplayFor(c => c.ProductOrder.ContactEmail)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(p => p.ProductOrder.ContactPhone):</td>
+            <td>@Html.DisplayFor(p => p.ProductOrder.ContactPhone)</td>
+        </tr>
+        <tr>
+            <td>@Html.Label("Needs invoice"):</td>
+            <td>@(Model.ProductOrder.Invoice ? "Yes" : "No")</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(p => p.ProductOrder.ContactAddress):</td>
+            <td>@Html.DisplayFor(a => a.NzAddressDeliverable.full_address)</td>
+        </tr>
+        <tr>
+            <td>@Html.Label("Delivery"):</td>
+            <td>@Html.DisplayFor(d => d.ProductOrder.DeliveryDate) at @Html.DisplayFor(t => t.ProductOrder.DeliveryTime)</td>
+        </tr>
+    </tbody>
+</table>
+
+@await Component.InvokeAsync("Cart", new { cartID = Model.ProductOrder.CartID.ToString() })
+
+<br />

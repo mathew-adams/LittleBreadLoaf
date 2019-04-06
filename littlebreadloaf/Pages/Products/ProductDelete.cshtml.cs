@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
 using littlebreadloaf.Data;
 
 namespace littlebreadloaf.Pages.Products
 {
+    [Authorize]
     public class ProductDeleteModel : PageModel
     {
         private readonly ProductContext _context;

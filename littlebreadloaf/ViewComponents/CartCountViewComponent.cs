@@ -20,12 +20,12 @@ namespace littlebreadloaf.ViewComponents
         {
             List<CartItem> cartItems = new List<CartItem>();
 
-            if(String.IsNullOrEmpty(cartID))
+            if (String.IsNullOrEmpty(cartID) || ! Guid.TryParse(cartID, out Guid parsedCartID))
             {
                 return View(cartItems);
             }
-
-            cartItems = await _context.CartItem.Where(c => c.CartID == Guid.Parse(cartID)).ToListAsync();
+            
+            cartItems = await _context.CartItem.Where(c => c.CartID == parsedCartID).ToListAsync();
             return View(cartItems);
         }
 

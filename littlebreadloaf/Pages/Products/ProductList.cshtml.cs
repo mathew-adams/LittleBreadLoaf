@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using littlebreadloaf.Data;
 
 namespace littlebreadloaf.Pages.Products
@@ -25,11 +26,13 @@ namespace littlebreadloaf.Pages.Products
         [BindProperty]
         public List<ProductImage> ProductImages { get; set; }
 
-        public void OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
-            Products = _context.Product.ToList();
-            ProductBadges = _context.ProductBadge.ToList();
-            ProductImages = _context.ProductImage.Where(m => m.PrimaryImage == true).ToList();
+            Products = await _context.Product.ToListAsync();
+            ProductBadges = await _context.ProductBadge.ToListAsync();
+            ProductImages = await _context.ProductImage.Where(m => m.PrimaryImage == true).ToListAsync();
+
+            return Page();
         }
 
         public async Task<IActionResult> OnPostCartAddAsync(string productID)

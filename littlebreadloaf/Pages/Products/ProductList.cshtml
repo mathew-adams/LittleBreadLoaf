@@ -2,6 +2,7 @@
 @model ProductListModel
 @{
     ViewData["Title"] = "Products";
+    ViewData["ReturnURL"] = Url.Page("/Products/ProductList");
 }
 
 <nav aria-label="breadcrumb">
@@ -10,10 +11,7 @@
     </ol>
 </nav>
 
-<div id="cartItemAdded" class="alert alert-success d-none" role="alert">
-</div>
-
-@if (User.Identity.IsAuthenticated) //&& User.IsInRole("Admin")) //TODO: Figure out role based security. 
+@if (User.Identity.IsAuthenticated)
 {
     <div class="alert alert-secondary border-0 admin_background" role="alert">
         <div class="text-muted mb-1">Admin</div>
@@ -21,6 +19,8 @@
         <a class="btn btn-outline-secondary" asp-page="/Reports/ProductsReport"><i class="fa fa-bar-chart" aria-hidden="true" title="View reports"></i> View reports</a>
     </div>
 }
+
+<div id="cartItemAdded" class="alert alert-success d-none" role="alert"></div>
 
 <div class="row justify-content-center">
     @foreach (var product in Model.Products)
@@ -39,7 +39,7 @@
                     }
                     else
                     {
-                        source = @productImage.FileLocation.Replace("{1}","350");
+                        source = @productImage.FileLocation.Replace("{1}", "350");
                         title = @productImage.Title;
                     }
                     <a asp-page="/Products/ProductView" asp-route-ProductID="@product.ProductID" class="darken">

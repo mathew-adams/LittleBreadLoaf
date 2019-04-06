@@ -4,10 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using littlebreadloaf.Data;
 
 namespace littlebreadloaf.Pages.Products
 {
+    [Authorize]
     public class ProductImageEditModel : PageModel
     {
         private readonly ProductContext _context;
@@ -22,21 +25,21 @@ namespace littlebreadloaf.Pages.Products
         [BindProperty]
         public string ProductName { get; set; }
 
-        public IActionResult OnGet(string productImageID)
+        public async Task<IActionResult> OnGetAsync(string productImageID)
         {
             if (String.IsNullOrEmpty(productImageID) || !Guid.TryParse(productImageID, out Guid parsedID))
             {
                 return new RedirectToPageResult("/Products/ProductList");
             }
 
-            ProductImage = _context.ProductImage.FirstOrDefault(m => m.ProductImageID == parsedID);
+            ProductImage = await _context.ProductImage.FirstOrDefaultAsync(m => m.ProductImageID == parsedID);
 
             if (ProductImage == null)
             {
                 return new RedirectToPageResult("/Products/ProductList");
             }
 
-            var product = _context.Product.FirstOrDefault(m => m.ProductID == ProductImage.ProductID);
+            var product = await _context.Product.FirstOrDefaultAsync(m => m.ProductID == ProductImage.ProductID);
             if(product != null)
             {
                 ProductName = product.Name;
@@ -47,7 +50,7 @@ namespace littlebreadloaf.Pages.Products
         public async Task<IActionResult> OnPostAsync()
         {
           
-            var product = _context.Product.FirstOrDefault(m => m.ProductID == ProductImage.ProductID);
+            var product = await _context.Product.FirstOrDefaultAsync(m => m.ProductID == ProductImage.ProductID);
 
             if (product == null)
             {

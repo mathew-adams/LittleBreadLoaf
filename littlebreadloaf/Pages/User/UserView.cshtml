@@ -1,0 +1,26 @@
+﻿@page
+@using System.Security.Claims;
+@model littlebreadloaf.Pages.User.UserViewModel
+@{
+    ViewData["Title"] = "User View";
+    ViewData["ReturnURL"] = Url.Page("/User/UserView");
+    var userID = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+    var email = User.FindFirst(ClaimTypes.Name).Value;
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">View profile</li>
+    </ol>
+</nav>
+
+<div class="alert alert-secondary border-0 admin_background" role="alert">
+    <div class="text-muted mb-1">Admin</div>
+    <a class="btn btn-outline-secondary" asp-page="/User/UserEdit" asp-route-userID="@userID"><i class="fa fa-plus" aria-hidden="true" title="Add blog"></i> Edit profile</a>
+</div>
+
+@await Component.InvokeAsync("User", new{
+                                            userID = userID,
+                                            showInstagram = true,
+                                            showLastName = true
+                                        })

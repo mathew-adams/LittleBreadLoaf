@@ -2,6 +2,7 @@
 @model ProductBadgeAddModel
 @{
     ViewData["Title"] = "Add Badge";
+    ViewData["ReturnURL"] = Url.Page("/Products/ProductBadgeAdd", new { productID = Model.ProductID });
 }
 
 <nav aria-label="breadcrumb">

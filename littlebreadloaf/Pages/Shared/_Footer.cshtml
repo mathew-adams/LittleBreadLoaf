@@ -10,13 +10,17 @@
 
         <div class="row pt-1">
             <!--COLUMN 1-->
-            <div class="col-md-4 col-sm-6 text-center border-bottom">
-                <h6 class="text-uppercase">Navigation</h6>
-                <ul class="list-unstyled">
-                    <li><a asp-page="/Index"><i class="fa fa-home" aria-hidden="true" title="Home"></i> Home</a></li>
-                    <li><a asp-page="/About"><i class="fa fa-question-circle" aria-hidden="true" title="About"></i> About</a></li>
-                    <li><a asp-page="/Products/ProductList"><i class="fa fa-shopping-bag" aria-hidden="true" title="Products"></i> Products</a></li>
-                </ul>
+            <div class="col-md-4 col-sm-6 border-bottom d-flex flex-row justify-content-center">
+                <div>
+                    <h6 class="text-uppercase text-center">Navigation</h6>
+                    <ul class="list-unstyled align-self-center">
+                        <li><a asp-page="/Index"><i class="fa fa-home fa-fw" aria-hidden="true" title="Home"></i> Home</a></li>
+                        <li><a asp-page="/Products/ProductList"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true" title="Products"></i> Products</a></li>
+                        <li><a asp-page="/Blog/BlogList"><i class="fa fa-book fa-fw" aria-hidden="true" title="Blog"></i> Blog</a></li>
+                        <li><a asp-page="/About"><i class="fa fa-question-circle fa-fw" aria-hidden="true" title="About"></i> About</a></li>
+                    </ul>
+                </div>
+                
             </div>
 
             <!--COLUMN 2-->
@@ -40,7 +44,6 @@
                                 </h1>
                             </li>
                         </ul>
-                        <p class="powered_by">Powered by <a href="https://github.com/ZombieFleshEaters"><i class=" fa fa-heart" aria-hidden="true"></i></a></p>
                     </div>
 
                     <div class="row d-block mt-2">
@@ -51,19 +54,22 @@
                             <br />
                             <i class="fa fa-map-marker" aria-hidden="true" title="Address"></i> 31a Railway Ave, Lower Hutt, New Zealand
                         </address>
+                        <p class="powered_by">Powered by <a href="https://github.com/ZombieFleshEaters"><i class=" fa fa-heart" aria-hidden="true"></i></a></p>
                     </div>
                 </div>
             </div>
 
 
             <!--COLUMN 3-->
-            <div class="col-md-4 col-sm-6 text-center border-bottom">
-                <h6 class="text-uppercase">Support</h6>
-                <ul class="list-unstyled">
-                    <li><a asp-page="/Privacy"><i class="fa fa-user-secret" aria-hidden="true" title="Privacy"></i> Privacy</a></li>
-                    <li><a asp-page="/Cookies"><i class="fa fa-id-card-o" aria-hidden="true" title="Cookie consent"></i> Cookie Consent</a></li>
-                    <li><a asp-page="/TermsAndConditions"><i class="fa fa-registered" aria-hidden="true" title="Terms and conditions"></i> Terms and Conditions</a></li>
-                </ul>
+            <div class="col-md-4 col-sm-6 border-bottom d-flex flex-row justify-content-center">
+                <div>
+                    <h6 class="text-uppercase">Support</h6>
+                    <ul class="list-unstyled">
+                        <li><a asp-page="/Privacy"><i class="fa fa-user-secret fa-fw" aria-hidden="true" title="Privacy"></i> Privacy</a></li>
+                        <li><a asp-page="/Cookies"><i class="fa fa-id-card-o fa-fw" aria-hidden="true" title="Cookie consent"></i> Cookie Consent</a></li>
+                        <li><a asp-page="/TermsAndConditions"><i class="fa fa-registered fa-fw" aria-hidden="true" title="Terms and conditions"></i> Terms and Conditions</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

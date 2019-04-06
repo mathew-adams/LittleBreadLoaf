@@ -4,6 +4,7 @@
 
     var productImage = Model.Images.FirstOrDefault(m => m.PrimaryImage == true);
     ViewData["Title"] = @Model.Product.Name;
+    ViewData["ReturnURL"] = Url.Page("/Products/ProductView", new { productID = Model.Product.ProductID });
 }
 
 <nav aria-label="breadcrumb">
@@ -12,6 +13,26 @@
         <li class="breadcrumb-item active" aria-current="page">@Model.Product.Name</li>
     </ol>
 </nav>
+
+@if (User.Identity.IsAuthenticated) // && User.IsInRole("Admin")) TODO: Figure out role based security.
+{
+    <div class="row">
+        <div class="col-12">
+            <div class="card bg-light mb-3">
+                <div class="card-body">
+                    <div class="text-muted mb-1">Admin</div>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductEdit" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-pencil" aria-hidden="true" title="Edit product"></i> Edit product</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductDelete" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-trash" aria-hidden="true" title="Delete product"></i> Delete product</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductBadgeList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-flag-o" aria-hidden="true" title="Edit badges"></i> Edit badges</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductIngredientList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-birthday-cake" aria-hidden="true" title="Edit ingredients"></i> Edit ingredients</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductSuggestionList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-lightbulb-o" aria-hidden="true" title="Edit suggestions"></i> Edit suggestions</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductImageList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-picture-o" aria-hidden="true" title="Edit images"></i> Edit images</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductReport" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-bar-chart" aria-hidden="true" title="Product reports"></i> Product reports</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 <div id="cartItemAdded" class="alert alert-success d-none" role="alert">
 </div>
@@ -35,11 +56,10 @@
                 else
                 {
                     <a href="@productImage.FileLocation.Replace("{1}","500")" data-toggle="lightbox" data-title="@productImage.Title">
-                        <img class="img-fluid" 
-                             src="@productImage.FileLocation.Replace("{1}","500")" 
+                        <img class="img-fluid"
+                             src="@productImage.FileLocation.Replace("{1}","500")"
                              alt="@productImage.Title"
-                             title="@productImage.Title"
-                             />
+                             title="@productImage.Title" />
                     </a>
                 }
 
@@ -132,30 +152,9 @@
                                  data-src="@img.FileLocation.Replace("{1}","200")"
                                  asp-append-version="true"
                                  alt="@img.Title"
-                                 title="@img.Title"
-                                 />
+                                 title="@img.Title" />
                         </a>
                     }
-                </div>
-            </div>
-        </div>
-    </div>
-}
-
-@if (User.Identity.IsAuthenticated) // && User.IsInRole("Admin")) TODO: Figure out role based security.
-{
-    <div class="row">
-        <div class="col-12">
-            <div class="card bg-light mb-3">
-                <div class="card-body">
-                    <div class="text-muted mb-1">Admin</div>
-                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductEdit" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-pencil" aria-hidden="true" title="Edit product"></i> Edit product</a>
-                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductDelete" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-trash" aria-hidden="true" title="Delete product"></i> Delete product</a>
-                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductBadgeList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-flag-o" aria-hidden="true" title="Edit badges"></i> Edit badges</a>
-                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductIngredientList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-birthday-cake" aria-hidden="true" title="Edit ingredients"></i> Edit ingredients</a>
-                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductSuggestionList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-lightbulb-o" aria-hidden="true" title="Edit suggestions"></i> Edit suggestions</a>
-                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductImageList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-picture-o" aria-hidden="true" title="Edit images"></i> Edit images</a>
-                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductReport" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-bar-chart" aria-hidden="true" title="Product reports"></i> Product reports</a>
                 </div>
             </div>
         </div>

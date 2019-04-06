@@ -1,0 +1,88 @@
+﻿@page
+@model littlebreadloaf.Pages.User.UserEditModel
+@{
+    ViewData["Title"] = "User Edit";
+    ViewData["ReturnURL"] = Url.Page("/User/UserEdit");
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/User/UserView">View profile</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Edit profile</li>
+    </ol>
+</nav>
+
+@using (Html.BeginForm("UserEdit", "UserEdit", FormMethod.Post, new { @name = "user_edit", @enctype = "multipart/form-data" }))
+{
+    <div class="form-row">
+        <div class="col-md-6">
+            <div class="form-row">
+                <div class="form-group col">
+                    @Html.LabelFor(m => m.UserProfile.FirstName)
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-user fa-fw" aria-hidden="true"></i></div>
+                        </div>
+                        @Html.TextBoxFor(m => m.UserProfile.FirstName, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.UserProfile.FirstName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col">
+                    @Html.LabelFor(m => m.UserProfile.LastName)
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-user-o fa-fw" aria-hidden="true"></i></div>
+                        </div>
+                        @Html.TextBoxFor(m => m.UserProfile.LastName, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.UserProfile.LastName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col">
+                    @Html.LabelFor(m => m.UserProfile.InstagramDisplay)
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-instagram" aria-hidden="true"></i></div>
+                        </div>
+                        @Html.TextBoxFor(m => m.UserProfile.InstagramDisplay, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.UserProfile.InstagramDisplay, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col">
+                    @Html.LabelFor(m => m.UserProfile.InstagramURL)
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-instagram" aria-hidden="true"></i></div>
+                        </div>
+                        @Html.TextBoxFor(m => m.UserProfile.InstagramURL, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.UserProfile.InstagramURL, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col">
+                    @Html.LabelFor(m => m.UserProfile.ProfileImageLocation)
+                    <input id="file_upload" class="form-control" asp-for="FileUpload" type="file" />
+                    @Html.ValidationMessageFor(m => m.UserProfile.ProfileImageLocation, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.HiddenFor(h => h.UserProfile.UserID)
+    @Html.HiddenFor(h => h.UserProfile.ProfileImageLocation)
+
+    <div class="my-3">
+        <button type="submit" class="btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true" title="Save"></i> Save</button>
+        <a class="btn btn-danger" asp-page="/User/UserView"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
+    </div>
+}

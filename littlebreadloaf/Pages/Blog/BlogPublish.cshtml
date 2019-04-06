@@ -1,0 +1,43 @@
+﻿@page
+@model littlebreadloaf.Pages.Blog.BlogPublishModel
+@{
+    ViewData["Title"] = "Add Blog";
+    ViewData["ReturnURL"] = Url.Page("/Blog/BlogPublish", new { Model.Blog.BlogID });
+
+    var published = (Model.Blog.Published < new DateTime(9999, 12, 31));
+
+    var publishedButtonText = (published) ? "Yes, please unpublish" : "Yes, please publish";
+    var publishLabel = (published) ? "Unpublish" : "Publish";
+    var publishImage = (published) ? "fa fa-low-vision" : "fa fa-podcast";
+    var publishMessage = (published) ? "Are you sure you want to unpublish this blog? This will no longer be available publicly." : "Are you sure you want to publish this blog? It will be publicly available.";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Blog/BlogList">Blog</a></li>
+        <li class="breadcrumb-item"><a asp-page="/Blog/BlogView" asp-route-blogID="@Model.Blog.BlogID">@Model.Blog.Title</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@publishLabel</li>
+    </ol>
+</nav>
+
+@using (Html.BeginForm("BlogPublish", "BlogPublish", FormMethod.Post, new { @class = "form-group-sm" }))
+{
+    <div class="alert alert-primary" role="alert">
+        <i class="fa fa-question-circle" aria-hidden="true" title="@publishLabel"></i> @publishMessage
+    </div>
+
+    <div class="my-3">
+        <button type="submit" class="btn btn-info"><i class="@publishImage" aria-hidden="true" title="@publishLabel"></i> @publishedButtonText</button>
+        <a class="btn btn-danger" asp-page="/Blog/BlogView" asp-route-blogID="@Model.Blog.BlogID"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
+    </div>
+
+    @Html.HiddenFor(h => h.Blog.BlogID)
+    @Html.HiddenFor(h => h.Blog.UserID)
+    @Html.HiddenFor(h => h.Blog.Title)
+    @Html.HiddenFor(h => h.Blog.Description)
+    @Html.HiddenFor(h => h.Blog.Content)
+    @Html.HiddenFor(h => h.Blog.Created)
+    @Html.HiddenFor(h => h.Blog.Published)
+}
+
+@await Component.InvokeAsync("Blog", Model.Blog.BlogID)

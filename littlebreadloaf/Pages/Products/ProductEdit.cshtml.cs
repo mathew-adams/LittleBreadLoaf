@@ -4,10 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using littlebreadloaf.Data;
 
 namespace littlebreadloaf.Pages.Products
 {
+    [Authorize]
     public class ProductEditModel : PageModel
     {
         private readonly ProductContext _context;
@@ -19,14 +22,14 @@ namespace littlebreadloaf.Pages.Products
         [BindProperty]
         public Product Product { get; set; }
 
-        public IActionResult OnGet(string productID)
+        public async Task<IActionResult> OnGetAsync(string productID)
         {
             if (String.IsNullOrEmpty(productID) || !Guid.TryParse(productID, out Guid parsedID))
             {
                 return new RedirectToPageResult("/Products/ProductList");
             }
 
-            Product = _context.Product.FirstOrDefault(m => m.ProductID == parsedID);
+            Product = await _context.Product.FirstOrDefaultAsync(m => m.ProductID == parsedID);
 
             if (Product == null)
             {

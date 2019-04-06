@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using littlebreadloaf.Data;
 
 namespace littlebreadloaf.Pages.Cart
@@ -31,12 +32,8 @@ namespace littlebreadloaf.Pages.Cart
         [BindProperty]
         public bool HasCart { get; set; }
 
-        [BindProperty]
-        public MovieUser MovieUser { get; set; }
-
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
-
             if (HttpContext.Request.Cookies[CartHelper.CartCookieName] == null)
             {
                 HasCart = false;
@@ -44,22 +41,23 @@ namespace littlebreadloaf.Pages.Cart
             }
             else
             {
-                HasCart = true;
                 var cartId = HttpContext.Request.Cookies[CartHelper.CartCookieName];
-                var parsedCartID = Guid.Parse(cartId);
+                if(string.IsNullOrEmpty(cartId) || !Guid.TryParse(cartId, out Guid parsedCartID))
+                {
+                    HasCart = false;
+                    return Page();
+                }
+
+                HasCart = true;
 
                 //Cart is checked out?
 
-                CartItems = _context.CartItem.Where(m => m.CartID == parsedCartID).ToList();
-                Products = _context.Product
+                CartItems = await _context.CartItem.Where(m => m.CartID == parsedCartID).ToListAsync();
+                Products = await _context.Product
                                    .Join(_context.CartItem,
                                          p => p.ProductID,
                                          ci => ci.ProductID,
                                          (p, ci) => new { p.ProductID, p.Price, p.Name, p.Description, ci.CartItemID, ci.CartID })
-                                   //.Join(_context.Cart,
-                                   //      ci => ci.CartID,
-                                   //      c => c.CartID,
-                                   //      (ci, c) => new { ci.ProductID, ci.Price, ci.Name, ci.Description, ci.CartItemID, c.CartID })
                                    .Where(w => w.CartID == parsedCartID)
                                    .Select(s => new Product()
                                            {
@@ -68,32 +66,28 @@ namespace littlebreadloaf.Pages.Cart
                                                Description = s.Description,
                                                Price = s.Price
                                            })
-                                   .ToList();
-                ProductImages = _context.ProductImage
-                                   .Join(_context.CartItem,
-                                         p => p.ProductID,
-                                         ci => ci.ProductID,
-                                         (p, ci) => new { p.ProductID, p.ProductImageID, p.PrimaryImage, p.FileLocation, p.Title, ci.CartItemID, ci.CartID })
-                                   //.Join(_context.Cart,
-                                   //      ci => ci.CartID,
-                                   //      c => c.CartID,
-                                   //      (ci, c) => new { ci.ProductID, ci.ProductImageID, ci.PrimaryImage, ci.FileLocation, ci.Title, ci.CartItemID, c.CartID })
-                                   .Where(w => w.CartID == parsedCartID && w.PrimaryImage == true)
-                                   .Select(s => new ProductImage()
-                                   {
-                                       ProductImageID = s.ProductImageID,
-                                       ProductID = s.ProductID,
-                                       FileLocation = s.FileLocation,
-                                       PrimaryImage = s.PrimaryImage,
-                                       Title = s.Title
-                                   })
-                                   .ToList();
+                                   .ToListAsync();
+
+                ProductImages = await _context.ProductImage
+                                       .Join(_context.CartItem,
+                                             p => p.ProductID,
+                                             ci => ci.ProductID,
+                                             (p, ci) => new { p.ProductID, p.ProductImageID, p.PrimaryImage, p.FileLocation, p.Title, ci.CartItemID, ci.CartID })
+                                       .Where(w => w.CartID == parsedCartID && w.PrimaryImage == true)
+                                       .Select(s => new ProductImage()
+                                       {
+                                           ProductImageID = s.ProductImageID,
+                                           ProductID = s.ProductID,
+                                           FileLocation = s.FileLocation,
+                                           PrimaryImage = s.PrimaryImage,
+                                           Title = s.Title
+                                       })
+                                       .ToListAsync();
             }
 
             return Page();
 
         }
-
         
         public async Task<IActionResult> OnPostIncreaseAsync(string cartItemID)
         {
@@ -104,8 +98,7 @@ namespace littlebreadloaf.Pages.Cart
                 return new RedirectToPageResult("/Cart/CartView");
             }
             
-            var cartItem = _context.CartItem.FirstOrDefault(ci => ci.CartItemID == parsedCartItemID);
-            var cart = _context.Cart.Where(c => c.CartID == cartItem.CartID);
+            var cartItem = await _context.CartItem.FirstOrDefaultAsync(ci => ci.CartItemID == parsedCartItemID);
 
             if (cartItem == null)
             {

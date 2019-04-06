@@ -2,6 +2,7 @@
 @model ProductDeleteModel
 @{
     ViewData["Title"] = "Delete Product";
+    ViewData["ReturnURL"] = Url.Page("/Products/ProductDelete", new { productID = Model.Product.ProductID });
 }
 
 <nav aria-label="breadcrumb">

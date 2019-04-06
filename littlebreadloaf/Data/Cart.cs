@@ -11,8 +11,6 @@ namespace littlebreadloaf.Data
         [Key]
         public Guid? CartID { get; set; }
 
-        public Guid? UserID { get; set; }
-
         public DateTime? Created { get; set; }
 
         public DateTime? CheckedOut { get; set; }

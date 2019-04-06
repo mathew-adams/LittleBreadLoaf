@@ -2,9 +2,13 @@
 @model PrivacyModel
 @{
     ViewData["Title"] = "Privacy policy";
+    ViewData["ReturnURL"] = Url.Page("/Privacy");
 }
-<h2>@ViewData["Title"]</h2>
-<br />
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+    </ol>
+</nav>
 
 <p>Your privacy is important to us. It is Little Bread Loaf's policy to respect your privacy regarding any information we may collect from you across our website, <a href="http://www.littlebreadloaf.com">http://www.littlebreadloaf.com</a>, and other sites we own and operate.</p>
 

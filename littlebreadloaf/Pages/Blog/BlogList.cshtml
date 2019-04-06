@@ -1,0 +1,198 @@
+﻿@page
+@model littlebreadloaf.Pages.Blog.BlogListModel
+@{
+    ViewData["Title"] = "Blog";
+    ViewData["ReturnURL"] = Url.Page("/Blog/BlogList");
+}
+
+@if (!string.IsNullOrEmpty(Model.BlogSearchTerm))
+{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-page="/Blog/BlogList">Blog</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Search: @Model.BlogSearchTerm</li>
+        </ol>
+    </nav>
+}
+else if (!string.IsNullOrEmpty(Model.FilterTagID) && Guid.TryParse(Model.FilterTagID, out Guid parsedTagID))
+{
+    var tag = @Model.AllTags.FirstOrDefault(w => w.TagID == parsedTagID);
+    string tagName = (tag == null) ? "" : tag.Name;
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-page="/Blog/BlogList">Blog</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Tag: @tagName</li>
+        </ol>
+    </nav>
+}
+else if (Model.FilterYear > 0 && !string.IsNullOrEmpty(Model.FilterMonth))
+{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-page="/Blog/BlogList">Blog</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.FilterMonth, @Model.FilterYear</li>
+        </ol>
+    </nav>
+}
+else if(!string.IsNullOrEmpty(Model.FilterCategoryID) && Guid.TryParse(Model.FilterCategoryID, out Guid parsedCategoryID))
+{
+    var category = @Model.BlogCategories.FirstOrDefault(w => w.BlogCategoryID == parsedCategoryID);
+    string categoryName = (category == null) ? "" : category.Name;
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-page="/Blog/BlogList">Blog</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Category: @categoryName</li>
+        </ol>
+    </nav>
+}
+else
+{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">Blog</li>
+        </ol>
+    </nav>
+}
+
+@if (User.Identity.IsAuthenticated) //&& User.IsInRole("Admin")) //TODO: Figure out role based security.
+{
+    <div class="alert alert-secondary border-0 admin_background" role="alert">
+        <div class="text-muted mb-1">Admin</div>
+        <a class="btn btn-outline-secondary" asp-page="/Blog/BlogAdd"><i class="fa fa-plus" aria-hidden="true" title="Add blog"></i> Add blog</a>
+        <a class="btn btn-outline-secondary" asp-page="/Blog/BlogCategoryList"><i class="fa fa-bookmark" aria-hidden="true" title="Blog catgories"></i> Blog categories</a>
+        <a class="btn btn-outline-secondary" asp-page="/Blog/BlogTagList"><i class="fa fa-tags" aria-hidden="true" title="Blog tags"></i> Blog tags</a>
+    </div>
+}
+
+    <div class="form-row">
+        @if (Model.BlogCategories.Count > 0)
+        {
+            <div class="col-md-9 mb-3">
+                <nav class="nav d-flex justify-content-between">
+                    @foreach (var category in Model.BlogCategories)
+                    {
+                        <h6><a class="p-2 text-muted" asp-route-FilterCategoryID="@category.BlogCategoryID">@category.Name</a></h6>
+                    }
+                </nav>
+            </div>
+        }
+
+        <div class="col-md-9 form-group">
+            @if (Model.BlogList.Count > 0)
+            {
+                @foreach (var item in Model.BlogList)
+                {
+                    string publishedClass = (item.Blog.Published == new DateTime(9999, 12, 31) && User.Identity.IsAuthenticated) ? "card bg-light form-group" : "card form-group";
+
+                    <div class="@publishedClass">
+                        <div class="card-body">
+                            @if (User.Identity.IsAuthenticated && item.Blog.Published == new DateTime(9999, 12, 31)) // && User.IsInRole("Admin")) TODO: Figure out role based security.
+                            {
+                                <div>
+                                    <div class="d-inline float-right"><span class="badge badge-secondary">Unpublished</span></div>
+                                </div>
+                            }
+                            <h5 class="card-title">
+                                @Html.DisplayFor(b => item.Blog.Title)
+                                @if (item.Category != null)
+                                {
+                                    <a class="badge badge-secondary" asp-route-FilterCategoryID="@item.Category.BlogCategoryID">@item.Category.Name</a>
+                                }
+                            </h5>
+                            <h6 class="card-subtitle mb-1 text-muted"><i class="fa fa-calendar" aria-hidden="true" title="Created"></i> @Html.DisplayFor(b => item.Blog.Created)</h6>
+                            @if (item.Tags != null && item.Tags.Count > 0)
+                            {
+                                <div class="mb-1">
+                                    <i class="fa fa-tags text-muted" aria-hidden="true" title="Blog tags"></i>
+                                    @foreach (var tag in item.Tags)
+                                    {
+                                        <a class="badge badge-info" asp-route-FilterTagID="@tag.TagID">@tag.Name</a>
+                                    }
+                                </div>
+                            }
+                            <p class="card-text">@Html.DisplayFor(b => item.Blog.Description)</p>
+                            <div>
+                                <div class="d-inline-block float-left">
+                                    <a class="btn btn-outline-secondary" asp-page="/Blog/BlogView" asp-route-blogID="@item.Blog.BlogID">
+                                        Read more <i class="fa fa-arrow-circle-o-right" aria-hidden="true" title="Read more"></i>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(Model.BlogSearchTerm) || !string.IsNullOrEmpty(Model.FilterCategoryID) || Model.FilterYear > 0 || !String.IsNullOrEmpty(Model.FilterTagID))
+                {
+                    <div class="alert alert-info" role="alert">
+                        There are no blog enties that match your search terms or filters. <a asp-page="/Blog/BlogList">Go back</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info" role="alert">
+                        There are no blog entries. <a asp-page="/Blog/BlogList">View Blog</a>
+                    </div>
+                }
+            }
+
+        </div>
+        <div class="col-md-3 form-group">
+            <div class="row">
+                <div class="col form-group">
+                    @using (Html.BeginForm("BlogList", "Search", FormMethod.Get, new { @class = "form-group-sm" }))
+                    {
+                        <div class="d-flex">
+                            @Html.TextBoxFor(b => b.BlogSearchTerm, new { @class = "form-control mr-1", @placeholder = "Search..." })
+                            <button class="btn btn-primary">Search</button>
+                        </div>
+                    }
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col form-group">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fa fa-tag" aria-hidden="true" title="Tags"></i> Tags</h5>
+                            <p class="card-text">
+                                @foreach (var tag in Model.AllTags)
+                                {
+                                    <a class="badge badge-info" asp-route-FilterTagID="@tag.TagID">@tag.Name</a>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col form-group">
+                    <div class="card">
+                        <div class="card-body">
+                            @foreach (var year in Model.AllDates.Select(s => s.Value.Year).Distinct())
+                            {
+                                <div class="mb-1">
+                                    <h5 class="card-title"><i class="fa fa-calendar" aria-hidden="true" title="Filter by date"></i> @year</h5>
+                                    @foreach (var month in Model.AllDates
+                                                              .Where(w => w.Value.Year == year)
+                                                              .OrderBy(o => o.Value)
+                                                              .Select(s => s.Value.ToString("MMMM"))
+                                                              .Distinct())
+                                    {
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item"><a asp-route-FilterMonth="@month" asp-route-FilterYear="@year">@month</a></li>
+                                        </ul>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

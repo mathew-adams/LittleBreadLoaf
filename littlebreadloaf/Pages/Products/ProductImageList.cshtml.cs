@@ -4,10 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using littlebreadloaf.Data;
 
 namespace littlebreadloaf.Pages.Products
 {
+    [Authorize]
     public class ProductImageListModel : PageModel
     {
         private readonly ProductContext _context;
@@ -22,21 +25,24 @@ namespace littlebreadloaf.Pages.Products
         [BindProperty]
         public List<ProductImage> ProductImages { get; set; }
 
-        public IActionResult OnGet(string ProductID)
+        public async Task<IActionResult> OnGetAsync(string productID)
         {
-            if (String.IsNullOrEmpty(ProductID) || !Guid.TryParse(ProductID, out Guid parsedID))
+            if (String.IsNullOrEmpty(productID) || !Guid.TryParse(productID, out Guid parsedID))
             {
                 return new RedirectToPageResult("/Products/ProductList");
             }
 
-            Product = _context.Product.FirstOrDefault(m => m.ProductID == parsedID);
+            Product = await _context.Product.FirstOrDefaultAsync(m => m.ProductID == parsedID);
 
             if (Product == null)
             {
                 return new RedirectToPageResult("/Products/ProductList");
             }
 
-            ProductImages = _context.ProductImage.Where(m => m.ProductID == parsedID).ToList();
+            ProductImages = await _context
+                                    .ProductImage
+                                    .Where(m => m.ProductID == parsedID)
+                                    .ToListAsync();
 
             return Page();
         }
@@ -59,6 +65,7 @@ namespace littlebreadloaf.Pages.Products
                 return new RedirectToPageResult("/Products/ProductList");
             }
 
+            //TODO: Anything to do better?
             var primaryImages = _context.ProductImage.Where(m => m.ProductID == parsedProductID && m.PrimaryImage == true);
 
             foreach(var image in primaryImages)
@@ -67,7 +74,7 @@ namespace littlebreadloaf.Pages.Products
                 _context.Update(image);
             }
 
-            var productImage = _context.ProductImage.FirstOrDefault(m => m.ProductImageID == parsedProductImageID);
+            var productImage = await _context.ProductImage.FirstOrDefaultAsync(m => m.ProductImageID == parsedProductImageID);
             if(productImage != null)
             {
                 productImage.PrimaryImage = true;

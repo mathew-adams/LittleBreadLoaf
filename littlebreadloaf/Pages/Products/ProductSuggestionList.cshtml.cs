@@ -4,10 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using littlebreadloaf.Data;
 
 namespace littlebreadloaf.Pages.Products
 {
+    [Authorize]
     public class ProductSuggestionListModel : PageModel
     {
         private readonly ProductContext _context;
@@ -22,21 +25,24 @@ namespace littlebreadloaf.Pages.Products
         [BindProperty]
         public List<ProductSuggestion> ProductSuggestions { get; set; }
 
-        public IActionResult OnGet(string ProductID)
+        public async Task<IActionResult> OnGetAsync(string productID)
         {
-            if (String.IsNullOrEmpty(ProductID) || !Guid.TryParse(ProductID, out Guid parsedID))
+            if (String.IsNullOrEmpty(productID) || !Guid.TryParse(productID, out Guid parsedID))
             {
                 return new RedirectToPageResult("/Products/ProductList");
             }
 
-            Product = _context.Product.FirstOrDefault(m => m.ProductID == parsedID);
+            Product = await _context.Product.FirstOrDefaultAsync(m => m.ProductID == parsedID);
 
             if (Product == null)
             {
                 return new RedirectToPageResult("/Products/ProductList");
             }
 
-            ProductSuggestions = _context.ProductSuggestion.Where(m => m.ProductID == parsedID).ToList();
+            ProductSuggestions = await _context
+                                        .ProductSuggestion
+                                        .Where(m => m.ProductID == parsedID)
+                                        .ToListAsync();
 
             return Page();
         }
@@ -51,14 +57,14 @@ namespace littlebreadloaf.Pages.Products
                 return new RedirectToPageResult("/Products/ProductList");
             }
 
-            Product = _context.Product.FirstOrDefault(m => m.ProductID == parsedProductID);
+            Product = await _context.Product.FirstOrDefaultAsync(m => m.ProductID == parsedProductID);
 
             if (Product == null)
             {
                 return new RedirectToPageResult("/Products/ProductList");
             }
 
-            var suggestion = _context.ProductSuggestion.FirstOrDefault(m => m.ProductSuggestionID == parsedSuggestionID);
+            var suggestion = await _context.ProductSuggestion.FirstOrDefaultAsync(m => m.ProductSuggestionID == parsedSuggestionID);
             if (suggestion != null)
             {
                 _context.ProductSuggestion.Remove(suggestion);

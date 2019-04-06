@@ -1,0 +1,153 @@
+﻿@page
+@model littlebreadloaf.Pages.Cart.CartCheckoutReviewModel
+@{
+    ViewData["Title"] = "Checkout review";
+    ViewData["ReturnURL"] = Url.Page("/Cart/CartCheckoutConfirmation", new { ProductOrderID = Model.ProductOrder.OrderID, CartID = Model.ProductOrder.CartID });
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Cart/CartView">Cart</a></li>
+        <li class="breadcrumb-item">Checkout</li>
+        <li class="breadcrumb-item active" aria-current="page">Review</li>
+    </ol>
+</nav>
+
+@using (Html.BeginForm("CartCheckoutReview", "CartCheckoutReview", FormMethod.Post, new { @id = "cart_checkout_review", @class = "block-form-submit" }))
+{
+    <div class="form-row">
+        <div class="col-md-6">
+
+            <strong>@Html.Label("Order details:")</strong>
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="form-control">
+                        <div class="form-check">
+                            @Html.CheckBoxFor(m => m.ProductOrder.Pickup, new { @class = "form-check-input", autocomplete = "off", autofocus = "autofocus", disabled = "on" })
+                            @Html.LabelFor(m => m.ProductOrder.Pickup, new { @class = "form-check-label" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.ProductOrder.Pickup, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="form-control">
+                        <div class="form-check">
+                            @Html.CheckBoxFor(m => m.ProductOrder.Invoice, new { @class = "form-check-input", autocomplete = "off", autofocus = "autofocus", disabled = "on" })
+                            @Html.LabelFor(m => m.ProductOrder.Invoice, new { @class = "form-check-label" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.ProductOrder.Invoice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <strong>@Html.Label("Delivery / Pickup:")</strong>
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-calendar fa-fw" aria-hidden="true" title="Delivery date"></i></div>
+                        </div>
+                        @Html.TextBoxFor(m => m.ProductOrder.DeliveryDate, "{0:yyyy-MM-dd}", new { @id = "delivery_date", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Enter the date for delivery", disabled = "on" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.ProductOrder.DeliveryDate, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-clock-o fa-fw" aria-hidden="true" title="Delivery time"></i></div>
+                        </div>
+                        @Html.TextBoxFor(m => m.ProductOrder.DeliveryTime, new { @id = "delivery_time", @class = "form-control", autocomplete = "off", autofocus = "autofocus", disabled = "on" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.ProductOrder.DeliveryTime, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-6">
+            <strong>@Html.Label("Contact information:")</strong>
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-pencil fa-fw" aria-hidden="true" title="Name"></i></div>
+                        </div>
+                        @Html.TextBoxFor(m => m.ProductOrder.ContactName, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", disabled = "on" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.ProductOrder.ContactName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-envelope-o fa-fw" aria-hidden="true" title="Email address"></i></div>
+                        </div>
+                        @Html.TextBoxFor(m => m.ProductOrder.ContactEmail, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", disabled = "on" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.ProductOrder.ContactEmail, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-mobile fa-fw" aria-hidden="true" title="Phone number"></i></div>
+                        </div>
+                        @Html.TextBoxFor(m => m.ProductOrder.ContactPhone, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", disabled = "on" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.ProductOrder.ContactPhone, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <strong>@Html.Label("Payment method:")</strong>
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-money fa-fw" aria-hidden="true" title="Payment method"></i></div>
+                        </div>
+                        @Html.TextBoxFor(p => p.ProductOrder.PaymentMethod, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", disabled = "on" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-map-marker fa-fw" aria-hidden="true" title="Delivey address"></i></div>
+                </div>
+                @Html.TextBoxFor(a => a.NzAddressDeliverable.full_address, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @id = "delivery_address", @placeholder = "Enter the address to deliver to", disabled = "on" })
+            </div>
+        </div>
+    </div>
+
+    @await Component.InvokeAsync("Cart", new { cartID = Model.ProductOrder.CartID.ToString() })
+
+    @Html.HiddenFor(h => h.ProductOrder.OrderID)
+    @Html.HiddenFor(h => h.ProductOrder.CartID)
+    @Html.HiddenFor(h => h.ProductOrder.Created)
+    @Html.HiddenFor(h => h.ProductOrder.DeliveryDate)
+    @Html.HiddenFor(h => h.ProductOrder.DeliveryTime)
+    @Html.HiddenFor(h => h.ProductOrder.Confirmed)
+    @Html.HiddenFor(h => h.ProductOrder.Payment)
+    @Html.HiddenFor(h => h.ProductOrder.PaymentMethod)
+    @Html.HiddenFor(h => h.ProductOrder.Invoice)
+    @Html.HiddenFor(h => h.ProductOrder.Pickup)
+    @Html.HiddenFor(h => h.ProductOrder.ContactName)
+    @Html.HiddenFor(h => h.ProductOrder.ContactEmail)
+    @Html.HiddenFor(h => h.ProductOrder.ContactPhone)
+    @Html.HiddenFor(h => h.ProductOrder.ContactAddress)
+    @Html.HiddenFor(h => h.ProductOrder.ConfirmationCode)
+
+    <div class="clearfix mb-3">
+        <div class="tex-right float-right">
+            <a class="btn btn-danger btn-lg" asp-page="/Cart/CartView"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
+            <button id="cart_place_order" type="submit" class="btn btn-success btn-lg block-form-submit-button"><i class="fa fa-shopping-basket fa-fw" aria-hidden="true" title="Place order"></i> Place order</button>
+        </div>
+    </div>
+}

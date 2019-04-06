@@ -2,6 +2,7 @@
 @model ProductBadgeListModel
 @{
     ViewData["Title"] = "Badges";
+    ViewData["ReturnURL"] = Url.Page("/Products/ProductBadgeList", new { productID = Model.Product.ProductID });
 }
 
 <nav aria-label="breadcrumb">
@@ -12,8 +13,7 @@
     </ol>
 </nav>
 
-<a class="btn btn-outline-secondary" asp-page="/Products/ProductBadgeAdd" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-plus" aria-hidden="true" title="Create new badge"></i> Create a new badge</a>
-<div class="mb-3"></div>
+<a class="btn btn-outline-secondary mb-3" asp-page="/Products/ProductBadgeAdd" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-plus" aria-hidden="true" title="Create new badge"></i> Create a new badge</a>
 
 @if (Model.ProductBadges.Count > 0)
 {

@@ -2,9 +2,14 @@
 @model littlebreadloaf.Pages.TermsAndConditionsModel
 @{
     ViewData["Title"] = "Terms and conditions";
+    ViewData["ReturnURL"] = Url.Page("/TermsAndConditions");
 }
-<h2>@ViewData["Title"]</h2>
-<br />
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+    </ol>
+</nav>
+
 <h3>MIT License</h3>
 
 <p>

@@ -1,7 +1,7 @@
 
 main {
-    margin-top:75px;
-    min-height:30em;
+    margin-top:92px;
+    min-height:33em;
 }
 
 .admin_background {
@@ -127,7 +127,12 @@ main {
 }
 /* BLAZY END */
 
+/* BLOG BEGIN */
+#quilEditor {
+    min-height: 20em;
+}
 
+/* BLOG END */
 /* SERVICE BEGIN */
 #service .service-round {
     height: 100px;

@@ -2,7 +2,9 @@
 @model ProductImageDeleteModel
 @{
     ViewData["Title"] = "Delete Image";
+    ViewData["ReturnURL"] = Url.Page("/Products/ProductImageDelete", new { productImageID = Model.ProductImage.ProductImageID });
 }
+
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">

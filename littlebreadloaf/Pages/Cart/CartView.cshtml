@@ -1,115 +1,129 @@
 ﻿@page
 @model CartViewModel
 @{
-    ViewData["Title"] = "Shopping cart";
+    ViewData["Title"] = "Cart";
+    ViewData["ReturnURL"] = Url.Page("/Cart/CartView");
 }
 
-<h2 class="mt-3 mb-3">@ViewData["Title"]</h2>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+    </ol>
+</nav>
 
 @if (Model.HasCart && Model.CartItems.Count > 0)
-{
-    
-<div class="row">
-    <div class="col-lg-12">
-        <div class="text-right float-right">
-            <h4>
-                <span class="badge badge-secondary badge-pill">@Model.CartItems.Sum(s => s.Quantity) items</span>
-            </h4>
-        </div>
-        <table class="table table-sm">
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th class="text-right">Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var cartItem in Model.CartItems)
-                {
-                    var product = @Model.Products.FirstOrDefault(p => p.ProductID == cartItem.ProductID);
-                    var productImage = @Model.ProductImages.FirstOrDefault(i => i.ProductID == cartItem.ProductID);
-                    var itemSum = cartItem.Quantity * cartItem.Price;
-                    <tr>
-                        <td>
-                            <a href="@productImage.FileLocation.Replace("{1}","500")" data-toggle="lightbox" data-title="@productImage.Title">
-                                <img 
-                                     src="@productImage.FileLocation.Replace("{1}","100")" 
-                                     class="img-thumbnail" 
-                                     style="width:100px; height:100px;" 
-                                     alt="@productImage.Title" 
-                                     title="@productImage.Title" />
-                            </a>
-                        </td>
-                        <td>
-                            <h6>@product.Name</h6>
-                            @product.Description
-                        </td>
-                        <td>
-                            <form class="input-group" asp-page-handler="delete" asp-route-CartItemID="@cartItem.CartItemID" method="post">
-                                <button type="submit" class="btn btn-danger">
-                                    <i class="fa fa-trash" aria-hidden="true" title="Delete"></i> Delete
-                                </button>
-                            </form>
-                        </td>
-                        <td style="width:60px;">
-                            <div class="row">
-                                <div class="col">
-                                    <form id="cart-item-increase" class="input-group" asp-page-handler="increase" asp-route-CartItemID="@cartItem.CartItemID" method="post">
-                                        <button type="submit" class="btn btn-outline-secondary">
-                                            <i class="fa fa-arrow-up" aria-hidden="true" title="Increase quantity"></i>
+    {
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="text-right float-right">
+                    <h4>
+                        <span class="badge badge-secondary badge-pill">@Model.CartItems.Sum(s => s.Quantity) items</span>
+                    </h4>
+                </div>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th class="text-right">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var cartItem in Model.CartItems)
+                        {
+                            var product = @Model.Products.FirstOrDefault(p => p.ProductID == cartItem.ProductID);
+                            var productImage = @Model.ProductImages.FirstOrDefault(i => i.ProductID == cartItem.ProductID);
+                            var itemSum = cartItem.Quantity * cartItem.Price;
+                            <tr>
+                                <td>
+                                    @if (productImage == null)
+                                    {
+                                        <img class="img-fluid" src="https://dummyimage.com/100x100/000/fff" />
+                                    }
+                                    else
+                                    {
+                                        <a href="@productImage.FileLocation.Replace("{1}","500")" data-toggle="lightbox" data-title="@productImage.Title">
+                                            <img src="@productImage.FileLocation.Replace("{1}","100")"
+                                                 class="img-thumbnail"
+                                                 style="width:100px; height:100px;"
+                                                 alt="@productImage.Title"
+                                                 title="@productImage.Title" />
+                                        </a>
+                                    }
+                                </td>
+                                <td>
+                                    <h6>@product.Name</h6>
+                                    @product.Description
+                                </td>
+                                <td>
+                                    <form class="input-group" asp-page-handler="delete" asp-route-CartItemID="@cartItem.CartItemID" method="post">
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fa fa-trash" aria-hidden="true" title="Delete"></i> Delete
                                         </button>
                                     </form>
-                                </div>
-                            </div>
-                            <div class="row mt-1">
-                                <div class="col">
-                                    <form id="cart-item-decrease" class="input-group" asp-page-handler="decrease" asp-route-CartItemID="@cartItem.CartItemID" method="post">
-                                        <button type="submit" class="btn btn-outline-secondary">
-                                            <i class="fa fa-arrow-down" aria-hidden="true" title="Decrease quantity"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </td>
-                        <td id="cart-quantity-@cartItem.CartItemID">
-                            @cartItem.Quantity
-                        </td>
-                        <td id="cart-price-@cartItem.CartItemID">
-                            @cartItem.Price
-                        </td>
-                        <td class ="text-right">
-                            <strong id="cart-item-sum-@cartItem.CartItemID">@itemSum</strong>
-                        </td>
-                    </tr>
-                }
-                <tr class="table-active">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <th></th>
-                    <td class="text-right"><strong>@Model.CartItems.Sum(s => s.Quantity * s.Price)</strong></td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="text-right float-right">
-            <a class="btn btn-success btn-lg" asp-page="/Cart/CartCheckout">
-                <i class="fa fa-shopping-basket fa-fw" aria-hidden="true" title="Checkout"></i> Checkout!
-            </a>
+                                </td>
+                                <td style="width:60px;">
+                                    <div class="row">
+                                        <div class="col">
+                                            <form id="cart-item-increase" class="input-group" asp-page-handler="increase" asp-route-CartItemID="@cartItem.CartItemID" method="post">
+                                                <button type="submit" class="btn btn-outline-secondary">
+                                                    <i class="fa fa-arrow-up" aria-hidden="true" title="Increase quantity"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-1">
+                                        <div class="col">
+                                            <form id="cart-item-decrease" class="input-group" asp-page-handler="decrease" asp-route-CartItemID="@cartItem.CartItemID" method="post">
+                                                <button type="submit" class="btn btn-outline-secondary">
+                                                    <i class="fa fa-arrow-down" aria-hidden="true" title="Decrease quantity"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td id="cart-quantity-@cartItem.CartItemID">
+                                    @cartItem.Quantity
+                                </td>
+                                <td id="cart-price-@cartItem.CartItemID">
+                                    @cartItem.Price
+                                </td>
+                                <td class="text-right">
+                                    <strong id="cart-item-sum-@cartItem.CartItemID">@itemSum</strong>
+                                </td>
+                            </tr>
+                        }
+                        <tr class="table-active">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <th></th>
+                            <td class="text-right"><strong>@Model.CartItems.Sum(s => s.Quantity * s.Price)</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="clearfix mb-3">
+                    <div class="text-right float-right">
+                        <a class="btn btn-success btn-lg" asp-page="/Cart/CartCheckout">
+                            Proceed to checkout <i class="fa fa-arrow-right" aria-hidden="true" title="continue"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            </div>
+    }
+    else
+    {
+        //No cart
+        <div class="alert alert-info" role="alert">
+            You do not have any items in your cart. <a asp-page="/Products/ProductList">View products</a>
         </div>
-    </div>
-</div>
-}
-else
-{
-    //No cart
-    <div class="alert alert-info" role="alert">
-        You do not have any items in your cart. <a asp-page="/Products/ProductList">View products</a>
-    </div>
-}
+    }

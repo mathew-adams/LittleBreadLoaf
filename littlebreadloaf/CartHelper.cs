@@ -22,21 +22,21 @@ namespace littlebreadloaf
             Data.Cart cart = null;
             Data.CartItem item = null;
 
-            if (http.Request.Cookies[CartCookieName] == null)
+            var cookie = http.Request.Cookies[CartCookieName];
+            bool invalidCookieDetected = false;
+            if(!string.IsNullOrEmpty(cookie) && !Guid.TryParse(cookie, out Guid parsedCookie))
             {
-                var userID = user.Claims.FirstOrDefault(u => u.Type == "UserID");
-                Guid? gUserID = null;
-                if (userID != null)
-                {
-                    gUserID = Guid.Parse(userID.Value);
-                }
+                http.Response.Cookies.Delete(CartCookieName);
+                invalidCookieDetected = true;
+            }
 
+            if (http.Request.Cookies[CartCookieName] == null || invalidCookieDetected)
+            {
                 cart = new Data.Cart()
                 {
                     CartID = Guid.NewGuid(),
                     Created = DateTime.Now,
-                    CheckedOut = new DateTime(9999, 12, 31),
-                    UserID = gUserID
+                    CheckedOut = new DateTime(9999, 12, 31)
                 };
 
                 context.Cart.Add(cart);

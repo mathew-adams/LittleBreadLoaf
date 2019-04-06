@@ -3,9 +3,11 @@
 @{
     ViewData["Title"] = "About";
 }
-<h2>@ViewData["Title"]</h2>
-<br />
-<h3>@Model.Message</h3>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+    </ol>
+</nav>
 
 <p>
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi a consequat nibh, non tristique orci. Integer vestibulum metus quis fermentum volutpat. Cras rhoncus porta sem, eget faucibus turpis aliquam ut. In hac habitasse platea dictumst. Vivamus molestie finibus leo ut lacinia. Nam dictum diam id tortor facilisis molestie. Sed metus diam, laoreet quis condimentum ac, molestie vel nisl.

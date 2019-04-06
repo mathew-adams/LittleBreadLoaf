@@ -2,20 +2,25 @@
 @model littlebreadloaf.Pages.CookiesModel
 @{
     ViewData["Title"] = "Cookies";
+    ViewData["ReturnURL"] = Url.Page("/Cookies");
 }
 
-<h2>@ViewData["Title"]</h2>
-<br />
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+    </ol>
+</nav>
+
+<div class="alert alert-info">
+    <i class="fa fa-exclamation-circle" aria-hidden="true" title="Alert"></i> By browsing our website, you consent to our use of cookies and other tracking technologies
+</div>
+
 <h3>What are cookies?</h3>
 <p>Cookies are small pieces of data that are sent from the website's server to the client's browser to track "state" as the user is browsing. They are a reliable mechanism to keep track of a user's experience while using a website. Examples of cookies include tracking when a user wishes to remain logged in, track the status of a web cart, or determine if the user is authenticated.</p>
 
 <br />
 <h3>Why we use cookies</h3>
 <p>We use cookies and other tracking technologies to improve your browsing experience on our website, to show you personalized content and targeted ads, to analyze our website traffic, and to understand where our visitors are coming from.</p>
-
-<div class="alert alert-info">
-    <i class="fa fa-exclamation-circle" aria-hidden="true" title="Alert"></i> By browsing our website, you consent to our use of cookies and other tracking technologies
-</div>
 
 <br />
 <h3>How we use cookies</h3>

@@ -1,0 +1,55 @@
+﻿@page
+@model littlebreadloaf.Pages.Cart.CartCheckoutConfirmationModel
+@{
+    ViewData["Title"] = "Checkout confirmation";
+    ViewData["ReturnURL"] = Url.Page("/Cart/CartCheckoutConfirmation", new { ProductOrderID = Model.ProductOrder.OrderID, CartID = Model.ProductOrder.CartID });
+
+    var getOrderMethod = (Model.ProductOrder.Pickup) ? "In-store pickup:" : "Delivery:";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Cart/CartView">Cart</a></li>
+        <li class="breadcrumb-item">Checkout</li>
+        <li class="breadcrumb-item active" aria-current="page">Confirmation</li>
+    </ol>
+</nav>
+
+<div class="jumbotron">
+    <h1 class="display-4"><i class="fa fa-check-circle sr-icons text-success" title="Order received"></i> We have received your order!</h1>
+    <hr class="my-4">
+    <h3>Your confirmation number is: @Model.ProductOrder.ConfirmationCode</h3>
+
+    <table class="table mt-4">
+        <tbody>
+            <tr>
+                <td>Name:</td>
+                <td>@Html.DisplayFor(n => n.ProductOrder.ContactName)</td>
+            </tr>
+            <tr>
+                <td>Payment Method:</td>
+                <td>@Html.DisplayFor(p => p.ProductOrder.PaymentMethod)</td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td>@Html.DisplayFor(c => c.ProductOrder.ContactEmail)</td>
+            </tr>
+            <tr>
+                <td>Phone:</td>
+                <td>@Html.DisplayFor(p => p.ProductOrder.ContactPhone)</td>
+            </tr>
+            @if ((bool)ViewData["HasAddress"])
+            {
+                <tr>
+                    <td>Delivery Address:</td>
+                    <td>@Html.DisplayFor(a => a.NzAddressDeliverable.full_address)</td>
+                </tr>
+            }
+            <tr>
+                <td>@getOrderMethod</td>
+                <td>@Html.DisplayFor(d => d.ProductOrder.DeliveryDate) at @Html.DisplayFor(t => t.ProductOrder.DeliveryTime)</td>
+            </tr>
+        </tbody>
+    </table>
+    @await Component.InvokeAsync("Cart", new { cartID = Model.ProductOrder.CartID.ToString() })
+</div>
