@@ -18,6 +18,7 @@ namespace littlebreadloaf.Data
         public virtual DbSet<ProductSuggestion> ProductSuggestion { get; set; }
         public virtual DbSet<ProductImage> ProductImage { get; set; }
         public virtual DbSet<ProductOrder> ProductOrder { get; set; }
+        public virtual DbSet<ProductOrderOutage> ProductOrderOutage { get; set; }
 
         public virtual DbSet<Cart> Cart { get; set; }
         public virtual DbSet<CartItem> CartItem { get; set; }
@@ -32,5 +33,7 @@ namespace littlebreadloaf.Data
         public virtual DbSet<CategoryToBlog> CategoryToBlog { get; set; }
 
         public virtual DbSet<UserProfile> UserProfile { get; set; }
+
+        public virtual DbSet<littlebreadloaf.ConfigurationProvider.LittleBreadLoafSystem> LittleBreadLoafSystem { get; set; }
     }
 }

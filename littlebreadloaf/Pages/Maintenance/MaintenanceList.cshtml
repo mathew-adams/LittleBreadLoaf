@@ -1,0 +1,19 @@
+﻿@page
+@model littlebreadloaf.Pages.Maintenance.MaintenanceListModel
+@{
+    ViewData["Title"] = "Maintenance";
+    ViewData["ReturnURL"] = Url.Page("/Maintenance/MaintenanceList");
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+    </ol>
+</nav>
+
+<div class="alert alert-secondary border-0 admin_background" role="alert">
+    <div class="text-muted mb-1">Admin</div>
+
+    <a class="btn btn-outline-secondary" asp-page="/Maintenance/MaintenanceSystemValueList"><i class="fa fa-wrench" aria-hidden="true" title="View system values"></i> View system values</a>
+    <a class="btn btn-outline-secondary" asp-page="/Maintenance/MaintenanceOutageList"><i class="fa fa-pause-circle-o" aria-hidden="true" title="View system outages"></i> View system outages</a>
+</div>

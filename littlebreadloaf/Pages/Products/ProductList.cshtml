@@ -3,6 +3,9 @@
 @{
     ViewData["Title"] = "Products";
     ViewData["ReturnURL"] = Url.Page("/Products/ProductList");
+
+    var outage = Model.ProductOrderOutages.Count > 0 && Model.ProductOrderOutages.Any(a => a.Start <= DateTime.Now && a.Stop >= DateTime.Now);
+
 }
 
 <nav aria-label="breadcrumb">
@@ -17,6 +20,14 @@
         <div class="text-muted mb-1">Admin</div>
         <a class="btn btn-outline-secondary" asp-page="/Products/ProductAdd"><i class="fa fa-plus" aria-hidden="true" title="Add product"></i> Add product</a>
         <a class="btn btn-outline-secondary" asp-page="/Reports/ProductsReport"><i class="fa fa-bar-chart" aria-hidden="true" title="View reports"></i> View reports</a>
+    </div>
+}
+
+@if (outage)
+{
+    <div class="alert alert-warning" role="alert">
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> 
+        We are not taking orders between @Model.ProductOrderOutages.Min(s => s.Start).ToString("dddd, dd MMMM yyyy") and @Model.ProductOrderOutages.Max(m => m.Stop).ToString("dddd, dd MMMM yyyy")
     </div>
 }
 
@@ -50,11 +61,15 @@
                              alt="@title"
                              title="@title" />
                     </a>
-                    <form name="add_cart" asp-page-handler="cartadd" asp-route-ProductID="@product.ProductID" method="post">
-                        <button class="add-to-cart" type="submit">
-                            <i class="fa fa-cart-plus" aria-hidden="true" title="Add to cart"></i> Add to cart
-                        </button>
-                    </form>
+                    @if (!outage)
+                    {
+                        <form name="add_cart" asp-page-handler="cartadd" asp-route-ProductID="@product.ProductID" method="post">
+                            <button class="add-to-cart" type="submit">
+                                <i class="fa fa-cart-plus" aria-hidden="true" title="Add to cart"></i> Add to cart
+                            </button>
+                        </form>
+                    }
+
                 </div>
                 <div class="product-content">
                     <h3 class="title"><a asp-page="/Products/ProductView" asp-route-ProductID="@product.ProductID"> @product.Name</a></h3>

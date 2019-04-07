@@ -1,0 +1,46 @@
+﻿@page
+@model littlebreadloaf.Pages.Maintenance.MaintenanceOutageAddModel
+@{
+    ViewData["Title"] = "System outage add";
+    ViewData["ReturnURL"] = Url.Page("/Maintenance/MaintenanceOutageAdd");
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Maintenance/MaintenanceList">Maintenance</a></li>
+        <li class="breadcrumb-item"><a asp-page="/Maintenance/MaintenanceOutageList">System outage list</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+    </ol>
+</nav>
+
+@using (Html.BeginForm("OutageAdd", "OutageAdd", FormMethod.Post, new { @class = "form-group-sm" }))
+{
+    <div class="form-row">
+        <div class="form-group col-6">
+            @Html.LabelFor(m => m.ProductOrderOutage.Start)
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-calendar fa-fw" aria-hidden="true" title="Outage start"></i></div>
+                </div>
+                @Html.TextBoxFor(m => m.ProductOrderOutage.Start, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
+            </div>
+            @Html.ValidationMessageFor(m => m.ProductOrderOutage.Start, "", new { @class = "text-danger" })
+            @Html.ValidationMessage("Outage.StartLessThanStop", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-6">
+            @Html.LabelFor(m => m.ProductOrderOutage.Stop)
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-calendar fa-fw" aria-hidden="true" title="Outage stop"></i></div>
+                </div>
+                @Html.TextBoxFor(m => m.ProductOrderOutage.Stop, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
+            </div>
+            @Html.ValidationMessageFor(m => m.ProductOrderOutage.Stop, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    
+    <button type="submit" class="btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true" title="Save"></i> Save</button>
+    <a class="btn btn-danger" asp-page="/Maintenance/MaintenanceOutageList"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
+}

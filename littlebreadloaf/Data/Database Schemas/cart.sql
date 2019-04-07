@@ -1,8 +1,6 @@
 CREATE TABLE `cart` (
-  `CartID` varchar(36) NOT NULL,
-  `UserID` varchar(36) DEFAULT NULL,
+  `CartID` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `Created` datetime NOT NULL,
   `CheckedOut` datetime NOT NULL,
-  PRIMARY KEY (`CartID`),
-  KEY `UserID` (`UserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`CartID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;

@@ -77,6 +77,19 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
+    $("#ProductOrderOutage_Start").datepicker({
+        dateFormat: "yy-mm-dd"
+    });
+});
+
+$(document).ready(function () {
+    $("#ProductOrderOutage_Stop").datepicker({
+        dateFormat: "yy-mm-dd"
+    });
+});
+
+
+$(document).ready(function () {
     $('#delivery_time').timepicker({
         'timeFormat': 'H:i',
         'minTime': '8:30am',

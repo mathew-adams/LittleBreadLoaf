@@ -26,11 +26,15 @@ namespace littlebreadloaf.Pages.Products
         [BindProperty]
         public List<ProductImage> ProductImages { get; set; }
 
+        [BindProperty]
+        public List<ProductOrderOutage> ProductOrderOutages { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
-            Products = await _context.Product.ToListAsync();
-            ProductBadges = await _context.ProductBadge.ToListAsync();
-            ProductImages = await _context.ProductImage.Where(m => m.PrimaryImage == true).ToListAsync();
+            Products = await _context.Product.AsNoTracking().ToListAsync();
+            ProductBadges = await _context.ProductBadge.AsNoTracking().ToListAsync();
+            ProductImages = await _context.ProductImage.AsNoTracking().Where(m => m.PrimaryImage == true).ToListAsync();
+            ProductOrderOutages = await _context.ProductOrderOutage.AsNoTracking().ToListAsync();
 
             return Page();
         }

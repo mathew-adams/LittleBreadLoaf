@@ -5,6 +5,8 @@
     var productImage = Model.Images.FirstOrDefault(m => m.PrimaryImage == true);
     ViewData["Title"] = @Model.Product.Name;
     ViewData["ReturnURL"] = Url.Page("/Products/ProductView", new { productID = Model.Product.ProductID });
+
+    var outage = Model.ProductOrderOutages.Count > 0 && Model.ProductOrderOutages.Any(a => a.Start <= DateTime.Now && a.Stop >= DateTime.Now);
 }
 
 <nav aria-label="breadcrumb">
@@ -41,6 +43,14 @@
 {
     <div class="alert alert-danger" role="alert">
         @Model.ModelState.FirstOrDefault(m => m.Key == "NO_ZERO").Value.Errors[0].ErrorMessage
+    </div>
+}
+
+@if (outage)
+{
+    <div class="alert alert-warning" role="alert">
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        We are not taking orders between @Model.ProductOrderOutages.Min(s => s.Start).ToString("dddd, dd MMMM yyyy") and @Model.ProductOrderOutages.Max(m => m.Stop).ToString("dddd, dd MMMM yyyy")
     </div>
 }
 
@@ -118,6 +128,9 @@
                         </div>
                     }
                 </div>
+                
+                @if(!outage)
+                {
                 <form name="add_cart" class="add-cart" asp-page-handler="cartadd" asp-route-ProductID="@Model.Product.ProductID" method="post">
                     <button class="btn btn-success btn-lg btn-block text-uppercase add-to-cart" type="submit">
                         <i class="fa fa-cart-plus" aria-hidden="true" title="Add to cart"></i> Add to cart
@@ -127,6 +140,8 @@
                     @Html.HiddenFor(m => m.Product.Name, new { @id = "productName" })
                     @Html.HiddenFor(m => m.Product.Description)
                 </form>
+                }
+                
 
             </div>
         </div>

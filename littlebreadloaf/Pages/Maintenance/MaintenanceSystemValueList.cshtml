@@ -1,0 +1,66 @@
+﻿@page
+@model littlebreadloaf.Pages.Maintenance.MaintenanceSystemValueListModel
+@{
+
+    ViewData["Title"] = "System Values";
+    ViewData["ReturnURL"] = Url.Page("/Maintenance/SystemValueList");
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Maintenance/MaintenanceList">Maintenance</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+    </ol>
+</nav>
+
+<div class="alert alert-secondary border-0 admin_background" role="alert">
+    <div class="text-muted mb-1">Admin</div>
+
+    <form class="input-group" asp-page-handler="default" method="post">
+        <button type="submit" class="btn btn-outline-secondary">
+            <i class="fa fa-wrench" aria-hidden="true" title="Add default values"></i> Add default values
+        </button>
+    </form>
+
+    @*<a class="btn btn-outline-secondary" asp-page="/Maintenance/MaintenanceSystemValueList"><i class="fa fa-wrench" aria-hidden="true" title="Add blog"></i> Add default values</a>*@
+</div>
+
+
+@if (Model.LittleBreadLoafSystem.Count > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Key</th>
+                <th>Value</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var systemValue in Model.LittleBreadLoafSystem)
+            {
+                <tr>
+                    <td>@systemValue.Key</td>
+                    <td>@systemValue.Value</td>
+                    <td>
+                        <a class="btn btn-outline-secondary" asp-page="/Maintenance/MaintenanceSystemValueEdit" asp-route-LittleBreadLoafSystemKey="@systemValue.Key">
+                            <i class="fa fa-pencil" aria-hidden="true" title="Edit"></i> Edit
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" asp-page="/Maintenance/MaintenanceSystemValueDelete" asp-route-LittleBreadLoafSystemKey="@systemValue.Key">
+                            <i class="fa fa-trash" aria-hidden="true" title="Delete"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info" role="alert">
+        No system value options to display.
+    </div>
+}

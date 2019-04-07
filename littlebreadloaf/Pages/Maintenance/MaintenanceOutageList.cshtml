@@ -1,0 +1,54 @@
+﻿@page
+@model littlebreadloaf.Pages.Maintenance.MaintenanceOutageListModel
+@{
+    ViewData["Title"] = "System outage list";
+    ViewData["ReturnURL"] = Url.Page("/Maintenance/MaintenanceOutageList");
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Maintenance/MaintenanceList">Maintenance</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+    </ol>
+</nav>
+
+<div class="alert alert-secondary border-0 admin_background" role="alert">
+    <div class="text-muted mb-1">Admin</div>
+
+    <a class="btn btn-outline-secondary" asp-page="/Maintenance/MaintenanceOutageAdd"><i class="fa fa-plus" aria-hidden="true" title="Add system outage"></i> Add system outage</a>
+</div>
+
+@if (Model.ProductOrderOutage.Count > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Start</th>
+                <th>Stop</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var outage in Model.ProductOrderOutage)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(s => outage.Start)</td>
+                    <td>@Html.DisplayFor(s => outage.Stop)</td> 
+                    <td>
+                        <form class="input-group" asp-page-handler="delete" asp-route-OutageID="@outage.OutageID" method="post"> 
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fa fa-trash" aria-hidden="true" title="Delete"></i> Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info" role="alert">
+        No system outages to display.
+    </div>
+}

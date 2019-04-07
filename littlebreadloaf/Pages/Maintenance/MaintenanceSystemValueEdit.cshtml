@@ -1,0 +1,47 @@
+﻿@page
+@model littlebreadloaf.Pages.Maintenance.MaintenanceSystemValueEditModel
+@{
+    ViewData["Title"] = "System value edit";
+    ViewData["ReturnURL"] = Url.Page("/Maintenance/MaintenanceSystemValueEdit", new { Model.LittleBreadLoafSystemKey });
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Maintenance/MaintenanceList">Maintenance</a></li>
+        <li class="breadcrumb-item"><a asp-page="/Maintenance/MaintenanceSystemValueList">System value list</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Edit system value</li>
+    </ol>
+</nav>
+
+@using (Html.BeginForm("SystemValueEdit", "SystemValueEdit", FormMethod.Post, new { @class = "form-group-sm" }))
+{
+    <div class="form-row">
+        <div class="form-group col-6">
+            @Html.LabelFor(m => m.LittleBreadLoafSystem.Key)
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-key fa-fw" aria-hidden="true" title="Blog tag"></i></div>
+                </div>
+                @Html.TextBoxFor(m => m.LittleBreadLoafSystem.Key, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @disabled = "on" })
+            </div>
+            @Html.ValidationMessageFor(m => m.LittleBreadLoafSystem.Key, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-6">
+            @Html.LabelFor(m => m.LittleBreadLoafSystem.Value)
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-pencil fa-fw" aria-hidden="true" title="Blog tag"></i></div>
+                </div>
+                @Html.TextBoxFor(m => m.LittleBreadLoafSystem.Value, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
+            </div>
+            @Html.ValidationMessageFor(m => m.LittleBreadLoafSystem.Value, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @Html.HiddenFor(h => h.LittleBreadLoafSystem.Key);
+
+    <button type="submit" class="btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true" title="Save"></i> Save</button>
+    <a class="btn btn-danger" asp-page="/Maintenance/MaintenanceSystemValueList"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
+}

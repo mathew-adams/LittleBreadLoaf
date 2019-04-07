@@ -33,6 +33,9 @@ namespace littlebreadloaf.Pages.Products
         [BindProperty]
         public List<ProductImage> Images { get; set; }
 
+        [BindProperty]
+        public List<ProductOrderOutage> ProductOrderOutages { get; set; }
+
         public CartItem CartItem { get; set; }
         public littlebreadloaf.Data.Cart Cart { get; set; }
 
@@ -53,6 +56,7 @@ namespace littlebreadloaf.Pages.Products
             ProductIngredients = await _context.ProductIngredient.Where(m => m.ProductID == parsedID).ToListAsync();
             ProductSuggestions = await _context.ProductSuggestion.Where(m => m.ProductID == parsedID).ToListAsync();
             Images = await _context.ProductImage.Where(m => m.ProductID == parsedID).ToListAsync();
+            ProductOrderOutages = await _context.ProductOrderOutage.AsNoTracking().ToListAsync();
 
             return new PageResult();
             
