@@ -12,6 +12,23 @@ main {
     height: auto
 }
 
+.home-tile .darken {
+    display: inline-block;
+    background-color: black;
+}
+
+.home-tile img:hover {
+    opacity: 0.7;
+}
+
+blockquote.block-quote {
+    font: 14px/22px normal helvetica, sans-serif;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 15px;
+    padding-left: 15px;
+    border-left: 3px solid #ccc;
+} 
 
 /* PRODUCT BEGIN */
 .product-grid {
@@ -60,7 +77,7 @@ main {
 }
 
 .product-grid .add-to-cart:hover {
-    background-color: #3498db;
+    background-color: #17a2b8; 
     text-decoration: none
 }
 
@@ -89,7 +106,6 @@ main {
 }
 
 .product-grid .price {
-    color: #303030;
     font-size: 15px
 }
 /* PRODUCT END */
@@ -133,6 +149,7 @@ main {
 }
 
 /* BLOG END */
+
 /* SERVICE BEGIN */
 #service .service-round {
     height: 100px;

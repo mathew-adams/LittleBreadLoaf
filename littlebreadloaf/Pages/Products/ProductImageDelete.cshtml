@@ -45,7 +45,7 @@
     @Html.HiddenFor(m => m.ProductImage.Title)
     @Html.HiddenFor(m => m.ProductImage.FileLocation)
     @Html.HiddenFor(m => m.ProductImage.PrimaryImage)
-    <div>
+    <div class="form-group">
         <button type="submit" class="btn btn-success"><i class="fa fa-trash" aria-hidden="true" title="Delete"></i> Yes, please delete</button>
         <a class="btn btn-danger" asp-page="/Products/PRoductImageList" asp-route-ProductID="@Model.ProductImage.ProductID"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
     </div>

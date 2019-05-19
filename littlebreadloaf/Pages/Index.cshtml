@@ -4,21 +4,34 @@
     ViewData["Title"] = "Home";
     ViewData["ReturnUrl"] = "/Index";
 }
-<div id="carouselExampleIndicators" class="carousel slide mt-n4" data-ride="carousel">
+
+<div id="carouselExampleIndicators" class="carousel slide mt-n4 d-none d-sm-block" data-ride="carousel">
     <ol class="carousel-indicators">
         <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
         <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
         <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="5"></li>
     </ol>
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <img class="d-block w-100" src="~/images/38485195_314932255911703_4213696219723071488_n.jpg" alt="First slide">
+            <img class="d-block w-100" src="~/images/banners/POLISH_BREAD_BANNER.png" alt="Polish Bread">
         </div>
         <div class="carousel-item">
-            <img class="d-block w-100" src="~/images/38632915_314932252578370_9071530035109691392_n.jpg" alt="Second slide">
+            <img class="d-block w-100" src="~/images/banners/CATERING_BANNER.png" alt="Catering">
         </div>
         <div class="carousel-item">
-            <img class="d-block w-100" src="~/images/38471722_314932249245037_6101685008919953408_n.jpg" alt="Third slide">
+            <img class="d-block w-100" src="~/images/banners/DONUTS_BANNER.png" alt="Donuts">
+        </div>
+        <div class="carousel-item">
+            <img class="d-block w-100" src="~/images/banners/MORNING_TEA_BANNER.png" alt="Morning Tea">
+        </div>
+        <div class="carousel-item">
+            <img class="d-block w-100" src="~/images/banners/PIZZA_BANNER.png" alt="Pizza">
+        </div>
+        <div class="carousel-item">
+            <img class="d-block w-100" src="~/images/banners/SOURDOUGH_BANNER.png" alt="Sourdough Bread">
         </div>
     </div>
     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -31,31 +44,92 @@
     </a>
 </div>
 
-<section class="bg-service bg-section mt-5 mb-5" id="service">
-    <div class="container-fluid text-center">
-        <h1 class="container-h1">Service</h1>
-        <div class="row service-round-3">
-            <div class="col-sm-4 text-center round">
-                <div class="service-round b-party">
-                    <i class="fa fa-4x fa fa-birthday-cake sr-icons"></i>
-                </div>
-                <h4>Birthday party</h4>
-                <p>For more information please contact us.</p>
+<div class="row mt-3">
+    <div class="col-sm-4 text-center">
+        <div class="home-tile">
+            <a asp-page="/Products/ProductList" class="darken">
+                <img class="img-fluid"
+                     src="~/images/services/section1.png"
+                     asp-append-version="true" />
+            </a>
+        </div>
+        <h4>Fresh Bread</h4>
+        <p>For more information please contact us.</p>
+    </div>
+    <div class="col-sm-4 text-center">
+        <div class="home-tile">
+            <a asp-page="/Products/ProductList" class="darken">
+                <img class="img-fluid"
+                     src="~/images/services/section2.png"
+                     asp-append-version="true" />
+            </a>
+        </div>
+        <h4>Morning / Afternoon Tea</h4>
+        <p>For more information please contact us</p>
+    </div>
+    <div class="col-sm-4 text-center">
+        <div class="home-tile">
+            <a asp-page="/Products/ProductList" class="darken">
+                <img class="img-fluid"
+                     src="~/images/services/section3.png"
+                     asp-append-version="true" />
+            </a>
+        </div>
+        <h4>Where to find my bread</h4>
+        <p>For more information please contact us.</p>
+    </div>
+</div>
+
+<div class="card mt-4 mb-3">
+    <div class="card-header">
+        <h3><i class="fa fa-comments-o" aria-hidden="true" title="Reviews"></i> Reviews</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-4">
+                
+                <blockquote class="block-quote">
+                    <i class="fa fa-quote-left" aria-hidden="true"></i>
+                    <p class="mb-0">Seriously delicious bread! nothing like anything else i have tried before. the drozdzowka was amazing - it was soft inside and had a crunchy and sweet crust on top! Ewa and her bread are a definite hidden gem in wellington</p>
+                </blockquote>
             </div>
-            <div class="col-sm-4 text-center round">
-                <div class="service-round wedding">
-                    <i class="fa fa-4x fa fa-heart sr-icons"></i>
-                </div>
-                <h4>Wedding</h4>
-                <p>For more information please contact us</p>
+            <div class="col-sm-4">
+                
+                <blockquote class="block-quote">
+                    <i class="fa fa-quote-left" aria-hidden="true"></i>
+                    <p class="mb-0">Absolutely delicious, fresh, crusty bread. My personal favorite - sourdough baguettes!!!! Not sure if they are better on the first day or the second when you can toast them... SOOOOO YUMMY Polish bread at its best. Do not miss out on this little gem!</p>
+                </blockquote>
             </div>
-            <div class="col-sm-4 text-center round">
-                <div class="service-round b-dinner">
-                    <i class="fa fa-4x fa fa-suitcase  sr-icons"></i>
-                </div>
-                <h4>Business dinner</h4>
-                <p>For more information please contact us.</p>
+            <div class="col-sm-4">
+                
+                <blockquote class="block-quote">
+                    <i class="fa fa-quote-left" aria-hidden="true"></i>
+                    <p class="mb-0">Amazing bread and donuts!! Everything is always fresh and delicious, plus Ewa is very friendly and welcoming. Would definitely recommend.</p>
+                </blockquote>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-sm-4">
+               
+                <blockquote class="block-quote">
+                    <i class="fa fa-quote-left" aria-hidden="true"></i>
+                    <p class="mb-0">Best bread in Wellington. If you're coming from Europe and miss sourdough-style bread, you won't be disappointed.</p>
+                </blockquote>
+            </div>
+            <div class="col-sm-4">
+              
+                <blockquote class="block-quote">
+                    <i class="fa fa-quote-left" aria-hidden="true"></i>
+                    <p class="mb-0">Love the bread! Great quality and love the loaf with the sesame seeds.</p>
+                </blockquote>
+            </div>
+            <div class="col-sm-4">
+                
+                <blockquote class="block-quote">
+                    <i class="fa fa-quote-left" aria-hidden="true"></i>
+                    <p class="mb-0">Soooo good! Reminds me of my European holidays!</p>
+                </blockquote>
             </div>
         </div>
     </div>
-</section>
+</div>

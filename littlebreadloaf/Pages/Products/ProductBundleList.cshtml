@@ -1,0 +1,64 @@
+﻿@page
+@model littlebreadloaf.Pages.Products.ProductBundleListModel
+@{
+    ViewData["Title"] = "Bundles";
+    ViewData["ReturnURL"] = Url.Page("/Products/ProductBundleList");
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Bundles</li>
+    </ol>
+</nav>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="alert alert-secondary border-0 admin_background" role="alert">
+        <div class="text-muted mb-1">Admin</div>
+        <a class="btn btn-outline-secondary" asp-page="/Products/ProductBundleAdd"><i class="fa fa-plus" aria-hidden="true" title="Add product"></i> Add bundle</a>
+    </div>
+}
+
+<div class="row justify-content-center">
+    @foreach (var bundle in Model.ProductBundles)
+    {
+        <div class="col-md-4 mt-0 px-2">
+            <div class="product-grid">
+                <div class="product-image">
+                    @{
+                        //var productImage = Model.ProductImages.FirstOrDefault(m => m.ProductID == product.ProductID);
+                        string source, title;
+                    }
+                    @if (true)
+                    {
+                        source = "https://dummyimage.com/350x350/000/fff"; //TODO: Do not make a referal out to another domain??
+                        title = "350X350";
+                    }
+                    else
+                    {
+                        source = ""; //@productImage.FileLocation.Replace("{1}", "350");
+                        title = ""; // @productImage.Title;
+                    }
+                    <a asp-page="/Products/ProductBundleView" asp-route-ProductBundleID="@bundle.ProductBundleID" class="darken">
+                        <img class="b-lazy"
+                                src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                                data-src="@source"
+                                asp-append-version="true"
+                                alt="@title"
+                                title="@title" />
+                    </a>
+                    
+                    <form name="add_cart" asp-page-handler="cartadd" asp-route-ProductBundleID="@bundle.ProductBundleID" method="post">
+                        <button class="add-to-cart" type="submit">
+                            <i class="fa fa-cart-plus" aria-hidden="true" title="Add to cart"></i> Add to cart
+                        </button>
+                    </form>
+
+                </div>
+                <div class="product-content">
+                    <h3 class="title"><a asp-page="/Products/ProductBundleView" asp-route-ProductBundleID="@bundle.ProductBundleID"> @bundle.Title</a></h3>
+                </div>
+            </div>
+        </div>
+    }
+</div>

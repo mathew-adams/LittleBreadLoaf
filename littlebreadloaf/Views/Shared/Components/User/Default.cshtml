@@ -3,11 +3,11 @@
 
 @if (Model.HasProfile)
 {
-    if(!String.IsNullOrEmpty(Model.UserProfile.ProfileImageLocation))
+    if (!String.IsNullOrEmpty(Model.UserProfile.ProfileImageLocation))
     {
         <img class="rounded-circle" src="@Model.UserProfile.ProfileImageLocation.Replace("{1}","200")" alt="@Model.UserProfile.FirstName" title="@Model.UserProfile.FirstName" />
     }
-    <h3 class="d-inline"> 
+    <h3 class="d-inline">
         @Html.DisplayFor(f => f.UserProfile.FirstName)
         @if (Model.ShowLastName)
         {
@@ -19,7 +19,7 @@
     {
         <h5 class="d-inline text-muted">
             <a class="text-muted" href="@Model.UserProfile.InstagramURL" target="_blank">
-                <i class="fa fa-instagram" aria-hidden="true" title="Instagram"></i> 
+                <i class="fa fa-instagram" aria-hidden="true" title="Instagram"></i>
                 @Model.UserProfile.InstagramDisplay
             </a>
         </h5>
@@ -27,9 +27,12 @@
 }
 else
 {
-    <div class="alert alert-info" role="alert">
-        You have not provided your profile details. <a href="@Url.Page("/User/UserEdit",new { userID = User.FindFirst(ClaimTypes.NameIdentifier).Value })">Edit Profile</a>
-    </div>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="alert alert-info" role="alert">
+            You have not provided your profile details. <a href="@Url.Page("/User/UserEdit",new { userID = User.FindFirst(ClaimTypes.NameIdentifier).Value })">Edit Profile</a>
+        </div>
+    }
 }
 
 <br />

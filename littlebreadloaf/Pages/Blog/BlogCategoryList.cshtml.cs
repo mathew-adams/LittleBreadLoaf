@@ -24,7 +24,7 @@ namespace littlebreadloaf.Pages.Blog
 
         public async Task<IActionResult> OnGetAsync()
         {
-            BlogCategories = await _context.BlogCategory.ToListAsync();
+            BlogCategories = await _context.BlogCategory.AsNoTracking().ToListAsync();
             return Page();
         }
     }

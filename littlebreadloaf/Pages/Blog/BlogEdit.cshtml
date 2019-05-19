@@ -76,6 +76,6 @@
 
     <div class="my-3">
         <button type="submit" class="btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true" title="Save"></i> Save</button>
-        <a class="btn btn-danger" asp-page="/Blog/BlogList"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
+        <a class="btn btn-danger" asp-page="/Blog/BlogView" asp-route-BlogID="@Model.Blog.BlogID"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a> 
     </div>
 }

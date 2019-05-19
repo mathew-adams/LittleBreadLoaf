@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using littlebreadloaf.Data;
+using System.Drawing;
 
 namespace littlebreadloaf.Pages.User
 {
@@ -61,33 +62,53 @@ namespace littlebreadloaf.Pages.User
             {
                 var sourceID = UserProfile.UserID.ToString();
                 var imgHelper = new ImageHelper(sourceID);
-                var sizes = new List<int>
+
+                var sizes = new List<Size>
                 {
-                    50,
-                    100,
-                    200,
+                    new Size(50, 50),
+                    new Size(100, 100),
+                    new Size(200, 200)
                 };
 
                 try
                 {
-                    imgHelper.AddImages(sourceID,
+                    imgHelper.AddImages(ImageHelper.ImageResizeMode.Square,
+                                        sourceID,
                                         sizes.ToArray(),
                                         FileUpload);
                 }
-                catch (Exception)
+                catch  (Exception ex)
                 {
-                    //Log?
+                    var systemError = new SystemError
+                    {
+                        ErrorID = Guid.NewGuid(),
+                        RequestID = sourceID,
+                        Path = "UserEditModel",
+                        Error = ex.ToString(),
+                        Occurred = DateTime.Now
+                    };
+                    _context.SystemError.Add(systemError);
+                    await _context.SaveChangesAsync();
+
                     ModelState.AddModelError("BadFile", "The file is invalid. It must be an image");
                     return Page();
                 }
 
                 UserProfile.ProfileImageLocation = imgHelper.GetDisplayFileName(sourceID);
             }
-            
 
+            if (UserProfile.InstagramDisplay == null)
+                UserProfile.InstagramDisplay = "";
+            if (UserProfile.InstagramURL == null)
+                UserProfile.InstagramURL = "";
             if (! await _context.UserProfile.AnyAsync(a => a.UserID == UserProfile.UserID))
             {
                 //Add
+
+                if (UserProfile.InstagramDisplay == null)
+                    UserProfile.InstagramDisplay = "";
+                if (UserProfile.InstagramURL == null)
+                    UserProfile.InstagramURL = "";
                 _context.UserProfile.Add(UserProfile);
             }
             else

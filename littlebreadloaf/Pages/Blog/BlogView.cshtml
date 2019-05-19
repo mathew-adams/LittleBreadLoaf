@@ -17,7 +17,7 @@
     </ol>
 </nav>
 
-@if (User.Identity.IsAuthenticated) // && User.IsInRole("Admin")) TODO: Figure out role based security.
+@if (User.Identity.IsAuthenticated)
 {
     <div class="row">
         <div class="col-12">
@@ -27,13 +27,14 @@
                     <a class="btn btn-outline-secondary" asp-page="/Blog/BlogEdit" asp-route-blogID="@Model.Blog.BlogID"><i class="fa fa-pencil" aria-hidden="true" title="Edit blog"></i> Edit</a>
                     <a class="btn btn-outline-secondary" asp-page="/Blog/BlogPublish" asp-route-blogID="@Model.Blog.BlogID"><i class="@publishImage" aria-hidden="true" title="@publishLabel"></i> @publishLabel</a>
                     <a class="btn btn-outline-secondary" asp-page="/Blog/BlogDelete" asp-route-blogID="@Model.Blog.BlogID"><i class="fa fa-trash" aria-hidden="true" title="Delete"></i> Delete</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Blog/BlogImageList" asp-route-blogID="@Model.Blog.BlogID"><i class="fa fa-picture-o" aria-hidden="true" title="Edit images"></i> Edit images</a>
                 </div>
             </div>
         </div>
     </div>
 }
 
-@if (User.Identity.IsAuthenticated && Model.Blog.Published == new DateTime(9999, 12, 31)) // && User.IsInRole("Admin")) TODO: Figure out role based security.
+@if (User.Identity.IsAuthenticated && Model.Blog.Published == new DateTime(9999, 12, 31))
 {
     <div class="alert alert-warning">
         <i class="fa fa-exclamation-circle" aria-hidden="true" title="Alert"></i> This Blog is not published, so it is NOT available to the public

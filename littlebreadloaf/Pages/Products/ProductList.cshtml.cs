@@ -35,7 +35,6 @@ namespace littlebreadloaf.Pages.Products
             ProductBadges = await _context.ProductBadge.AsNoTracking().ToListAsync();
             ProductImages = await _context.ProductImage.AsNoTracking().Where(m => m.PrimaryImage == true).ToListAsync();
             ProductOrderOutages = await _context.ProductOrderOutage.AsNoTracking().ToListAsync();
-
             return Page();
         }
 

@@ -14,9 +14,6 @@
                 <thead>
                     <tr>
                         <th>Product</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
                         <th>Quantity</th>
                         <th>Price</th>
                         <th class="text-right">Total</th>
@@ -28,59 +25,47 @@
                         var product = @Model.Products.FirstOrDefault(p => p.ProductID == cartItem.ProductID);
                         var productImage = @Model.ProductImages.FirstOrDefault(i => i.ProductID == cartItem.ProductID);
                         var itemSum = cartItem.Quantity * cartItem.Price;
-                        <tr>
-                            <td>
-                                @if (productImage == null)
-                                {
-                                    <img class="img-fluid" src="https://dummyimage.com/100x100/000/fff" />
-                                }
-                                else
-                                {
-                                    <a href="@productImage.FileLocation.Replace("{1}","500")" data-toggle="lightbox" data-title="@productImage.Title">
-                                        <img src="@productImage.FileLocation.Replace("{1}","100")"
-                                             class="img-thumbnail"
-                                             style="width:100px; height:100px;"
-                                             alt="@productImage.Title"
-                                             title="@productImage.Title" />
-                                    </a>
-                                }
-                            </td>
-                            <td>
-                                <h6>@product.Name</h6>
-                                @product.Description
-                            </td>
-                            <td>
-                            </td>
-                            <td style="width:60px;">
-                                <div class="row">
-                                    <div class="col">
-
-                                    </div>
+                    <tr>
+                        <td>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    @if (productImage == null)
+                                    {
+                                        <img class="img-fluid" src="https://dummyimage.com/100x100/000/fff" />
+                                    }
+                                    else
+                                    {
+                                        <a href="@productImage.FileLocation.Replace("{1}","500")" data-toggle="lightbox" data-title="@productImage.Title">
+                                            <img src="@productImage.FileLocation.Replace("{1}","100")"
+                                                 class="img-thumbnail"
+                                                 style="width:100px; height:100px;"
+                                                 alt="@productImage.Title"
+                                                 title="@productImage.Title" />
+                                        </a>
+                                    }
                                 </div>
-                                <div class="row mt-1">
-                                    <div class="col">
-
-                                    </div>
+                                <div class="col-md-9">
+                                    <h6>@product.Name</h6>
+                                    @product.Description
                                 </div>
-                            </td>
-                            <td id="cart-quantity-@cartItem.CartItemID">
-                                @cartItem.Quantity
-                            </td>
-                            <td id="cart-price-@cartItem.CartItemID">
-                                @cartItem.Price
-                            </td>
-                            <td class="text-right">
-                                <strong id="cart-item-sum-@cartItem.CartItemID">@itemSum</strong>
-                            </td>
-                        </tr>
+                            </div>
+
+                        </td>
+                        <td id="cart-quantity-@cartItem.CartItemID">
+                            @cartItem.Quantity
+                        </td>
+                        <td id="cart-price-@cartItem.CartItemID">
+                            @cartItem.Price
+                        </td>
+                        <td class="text-right">
+                            <strong id="cart-item-sum-@cartItem.CartItemID">@itemSum</strong>
+                        </td>
+                    </tr>
                     }
                     <tr class="table-active">
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
-                        <td></td>
-                        <th></th>
                         <td class="text-right"><strong>@Model.CartItems.Sum(s => s.Quantity * s.Price)</strong></td>
                     </tr>
                 </tbody>

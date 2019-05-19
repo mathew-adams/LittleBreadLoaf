@@ -28,10 +28,16 @@ namespace littlebreadloaf.ViewComponents
         {
             Guid.TryParse(userID, out Guid parsedID);
             var userProfile = await _context.UserProfile.FirstOrDefaultAsync(f => f.UserID == parsedID);
+
+            if(userProfile == null)
+            {
+                userProfile = new UserProfile();
+            }
+
             var displayUserProfile = new DisplayUserProfile()
             {
                 UserProfile = userProfile,
-                ShowInstagram = showInstagram,
+                ShowInstagram = showInstagram && !string.IsNullOrEmpty(userProfile.InstagramDisplay) && !string.IsNullOrEmpty(userProfile.InstagramDisplay),
                 ShowLastName = showLastName,
                 HasProfile = userProfile != null
             };

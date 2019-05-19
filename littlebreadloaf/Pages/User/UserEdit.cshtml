@@ -72,7 +72,7 @@
                 <div class="form-group col">
                     @Html.LabelFor(m => m.UserProfile.ProfileImageLocation)
                     <input id="file_upload" class="form-control" asp-for="FileUpload" type="file" />
-                    @Html.ValidationMessageFor(m => m.UserProfile.ProfileImageLocation, "", new { @class = "text-danger" })
+                    @Html.ValidationMessage("BadFile", new { @class = "text-danger" })
                 </div>
             </div>
         </div>

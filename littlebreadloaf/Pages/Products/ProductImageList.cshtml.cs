@@ -64,8 +64,7 @@ namespace littlebreadloaf.Pages.Products
             {
                 return new RedirectToPageResult("/Products/ProductList");
             }
-
-            //TODO: Anything to do better?
+            
             var primaryImages = _context.ProductImage.Where(m => m.ProductID == parsedProductID && m.PrimaryImage == true);
 
             foreach(var image in primaryImages)

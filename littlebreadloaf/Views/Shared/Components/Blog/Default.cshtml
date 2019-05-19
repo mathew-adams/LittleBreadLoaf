@@ -1,16 +1,24 @@
-﻿@model littlebreadloaf.Data.Blog
+﻿@model littlebreadloaf.ViewComponents.ViewBlog
 
-<div class="border-bottom border-top">
-    <h1 class="text-center text-uppercase py-1">@Model.Title</h1>
-    <div class="mb-2">
+@if (Model.HasImage)
+{
+    <img class="img-fluid" src="@Model.BlogImage.FileLocation.Replace("{1}","1110")" />
+}
+
+<div>
+    <div class="my-2">
         @await Component.InvokeAsync("User", new{
-                                            userID = Model.UserID.ToString(),
+                                            userID = Model.Blog.UserID.ToString(),
                                             showInstagram = true,
                                             showLastName = true
                                         })
     </div>
-    <h6 class="text-muted"><i class="fa fa-calendar" aria-hidden="true" title="Created"></i> @Html.DisplayFor(c => c.Created)</h6>
+    <h3 class="mt-2">@Model.Blog.Title</h3>
+
+    <h6 class="text-muted"><i class="fa fa-calendar" aria-hidden="true" title="Created"></i> @Html.DisplayFor(c => c.Blog.Created)</h6>
+
+    <p>@Html.Raw(@Model.Blog.Content)</p>
+    <br />
+
 </div>
 
-<p>@Html.Raw(@Model.Content)</p>
-<br />

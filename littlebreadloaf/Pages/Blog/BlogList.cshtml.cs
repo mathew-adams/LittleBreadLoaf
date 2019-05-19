@@ -15,6 +15,8 @@ namespace littlebreadloaf.Pages.Blog
         public littlebreadloaf.Data.Blog Blog { get; set; }
         public List<Tag> Tags { get; set; }
         public BlogCategory Category { get; set; }
+        public BlogImage BlogImage { get; set; }
+        public bool HasImage { get; set; }
     }
 
     public class BlogListModel : PageModel
@@ -117,6 +119,23 @@ namespace littlebreadloaf.Pages.Blog
                                 })
                                 .ToListAsync();
 
+            var imageList = await _context
+                                    .BlogImage
+                                    .AsNoTracking()
+                                    .Join(_context.Blog,
+                                            bi => bi.BlogID,
+                                            b => b.BlogID,
+                                            (bi, b) => new { bi.BlogImageID, bi.FileLocation, bi.Title, bi.BlogID })
+                                    .Where(w => Blogs.Any(a => a.BlogID == w.BlogID))
+                                    .Select(s => new
+                                    {
+                                        s.BlogID,
+                                        s.BlogImageID,
+                                        s.FileLocation,
+                                        s.Title
+                                    })
+                                    .ToListAsync();
+
             AllTags =  listTags
                         .Where(w => allBlogs.Any(a => a.BlogID == w.SourceID))
                         .GroupBy(g => g.Name)
@@ -142,25 +161,40 @@ namespace littlebreadloaf.Pages.Blog
             BlogList = new List<BlogList>();
             foreach (var blog in Blogs)
             {
-                BlogList.Add(new BlogList()
-                {
-                    Blog = blog,
-                    Tags = listTags
+                var img = imageList
+                            .Where(w => w.BlogID == blog.BlogID)
+                            .Select(s => new BlogImage
+                            {
+                                BlogID = s.BlogID,
+                                BlogImageID = s.BlogImageID,
+                                FileLocation = s.FileLocation,
+                                Title = s.Title
+                            })
+                            .FirstOrDefault();
+                var cat = categoryList
+                            .Where(w => w.BlogID == blog.BlogID)
+                            .Select(s => new BlogCategory
+                            {
+                                BlogCategoryID = s.BlogCategoryID,
+                                Name = s.Name
+                            })
+                            .FirstOrDefault();
+                var tgs = listTags
                            .Where(w => w.SourceID == blog.BlogID)
                            .Select(s => new Tag()
                            {
                                Name = s.Name,
                                TagID = s.TagID
                            })
-                           .ToList(),
-                    Category = categoryList
-                               .Where(w => w.BlogID == blog.BlogID)
-                               .Select(s => new BlogCategory
-                               {
-                                   BlogCategoryID = s.BlogCategoryID,
-                                   Name = s.Name
-                               })
-                               .FirstOrDefault()
+                           .ToList();
+
+                BlogList.Add(new BlogList()
+                {
+                    Blog = blog,
+                    Tags = tgs,
+                    Category = cat,
+                    BlogImage = img,
+                    HasImage = img != null
                 });
             }
             return Page();
@@ -332,7 +366,7 @@ namespace littlebreadloaf.Pages.Blog
 
         private List<littlebreadloaf.Data.Blog> FilterAuthenticated(List<littlebreadloaf.Data.Blog> blogs)
         {
-            if (!User.Identity.IsAuthenticated) //TODO: Add administrator
+            if (!User.Identity.IsAuthenticated)
             {
                 return  blogs
                         .Where(w => w.Published < new DateTime(9999, 12, 31))

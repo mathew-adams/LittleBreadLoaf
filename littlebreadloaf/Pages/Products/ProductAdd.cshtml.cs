@@ -18,7 +18,6 @@ namespace littlebreadloaf.Pages.Products
             _context = context;
         }
 
-
         [BindProperty]
         public Product Product { get; set; }
         

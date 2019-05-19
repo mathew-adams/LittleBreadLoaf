@@ -1,0 +1,48 @@
+﻿@page
+@model littlebreadloaf.Pages.Blog.BlogImageEditModel
+@{
+    ViewData["Title"] = "Edit image";
+    ViewData["ReturnURL"] = Url.Page("/Blog/BlogImageEdit", new { Model.BlogImageID, Model.BlogID });
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Blog/BlogList">Blog</a></li>
+        <li class="breadcrumb-item"><a asp-page="/Blog/BlogView" asp-route-BlogID="@Model.BlogID">View blog</a></li>
+        <li class="breadcrumb-item"><a asp-page="/Blog/BlogImageList" asp-route-BlogID="@Model.BlogID">Image list</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Edit image</li>
+    </ol>
+</nav>
+
+@using (Html.BeginForm("BlogImageEdit", "BlogImageEdit", FormMethod.Post, new { @class = "form-group-sm" }))
+{
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(m => m.BlogImage.Title)
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-pencil fa-fw" aria-hidden="true" title="Title"></i></div>
+                </div>
+                @Html.TextBoxFor(m => m.BlogImage.Title, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
+            </div>
+            @Html.ValidationMessageFor(m => m.BlogImage.Title, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <a href="@Model.BlogImage.FileLocation.Replace("{1}","555")" data-toggle="lightbox" data-title="@Model.BlogImage.Title">
+                <img src="@Model.BlogImage.FileLocation.Replace("{1}","222")" class="img-thumbnail" alt="@Model.BlogImage.Title" title="@Model.BlogImage.Title" />
+            </a>
+        </div>
+    </div>
+
+    @Html.HiddenFor(m => m.BlogImageID)
+    @Html.HiddenFor(m => m.BlogID)
+    @Html.HiddenFor(m => m.BlogImage.FileLocation)
+    @Html.HiddenFor(m => m.BlogImage.BlogImageID)
+    @Html.HiddenFor(m => m.BlogImage.BlogID)
+    <div>
+        <button type="submit" class="btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true" title="Save"></i> Save</button>
+        <a class="btn btn-danger" asp-page="/Blog/BlogImageList" asp-route-BlogID="@Model.BlogImage.BlogID"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
+    </div>
+}

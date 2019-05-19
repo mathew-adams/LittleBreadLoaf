@@ -1,11 +1,10 @@
 ﻿@page
 @model ProductViewModel
 @{
-
-    var productImage = Model.Images.FirstOrDefault(m => m.PrimaryImage == true);
     ViewData["Title"] = @Model.Product.Name;
     ViewData["ReturnURL"] = Url.Page("/Products/ProductView", new { productID = Model.Product.ProductID });
 
+    var productImage = Model.Images.FirstOrDefault(m => m.PrimaryImage == true);
     var outage = Model.ProductOrderOutages.Count > 0 && Model.ProductOrderOutages.Any(a => a.Start <= DateTime.Now && a.Stop >= DateTime.Now);
 }
 
@@ -16,7 +15,7 @@
     </ol>
 </nav>
 
-@if (User.Identity.IsAuthenticated) // && User.IsInRole("Admin")) TODO: Figure out role based security.
+@if (User.Identity.IsAuthenticated)
 {
     <div class="row">
         <div class="col-12">
@@ -83,7 +82,7 @@
                 <h6 class="product-name">
                     @Model.Product.Name
                 </h6>
-                <p class="price">
+                <p class="price text-info">
                     @Model.Product.Price
                     @if (!String.IsNullOrEmpty(Model.Product.Unit))
                     {
@@ -104,12 +103,12 @@
 
                     @if (Model.ProductIngredients.Count > 0)
                     {
-                        <div class="col-6 mt-3">
-                            <h6><i class="fa fa-birthday-cake" aria-hidden="true" title="Ingredients"></i> Ingredients</h6>
-                            <ul class="list-group">
+                        <div class="col-sm-4 col-md-4 mt-3">
+                            <h6><i class="fa fa-heartbeat" aria-hidden="true" title="Ingredients"></i> Ingredients</h6>
+                            <ul>
                                 @foreach (var ingredient in Model.ProductIngredients)
                                 {
-                                    <li class="list-group-item">@ingredient.Description</li>
+                                    <li>@ingredient.Description</li>
                                 }
                             </ul>
                         </div>
@@ -117,12 +116,12 @@
 
                     @if (Model.ProductSuggestions.Count > 0)
                     {
-                        <div class="col-6 mt-3">
+                        <div class="col-sm-8 col-md-8 mt-3">
                             <h6><i class="fa fa-lightbulb-o" aria-hidden="true" title="Suggestions"></i> Suggestions</h6>
-                            <ul class="list-group">
+                            <ul>
                                 @foreach (var suggestion in Model.ProductSuggestions)
                                 {
-                                    <li class="list-group-item">@suggestion.Description</li>
+                                    <li>@suggestion.Description</li>
                                 }
                             </ul>
                         </div>
@@ -132,7 +131,7 @@
                 @if(!outage)
                 {
                 <form name="add_cart" class="add-cart" asp-page-handler="cartadd" asp-route-ProductID="@Model.Product.ProductID" method="post">
-                    <button class="btn btn-success btn-lg btn-block text-uppercase add-to-cart" type="submit">
+                    <button class="btn btn-info btn-lg btn-block text-uppercase add-to-cart" type="submit">
                         <i class="fa fa-cart-plus" aria-hidden="true" title="Add to cart"></i> Add to cart
                     </button>
                     @Html.HiddenFor(m => m.Product.ProductID)

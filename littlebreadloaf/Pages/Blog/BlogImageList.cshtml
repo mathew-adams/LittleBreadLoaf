@@ -1,0 +1,58 @@
+﻿@page
+@model littlebreadloaf.Pages.Blog.BlogImageListModel
+@{
+    ViewData["Title"] = "Blog Images";
+    ViewData["ReturnURL"] = Url.Page("/Blog/BlogImageList", new { productID = Model.BlogID });
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Blog/BlogList">Blog</a></li>
+        <li class="breadcrumb-item"><a asp-page="/Blog/BlogView" asp-route-ProductID="@Model.BlogID">View blog</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Image List</li>
+    </ol>
+</nav>
+
+<div class="mb-3">
+    <a class="btn btn-outline-secondary" asp-page="/Blog/BlogImageAdd" asp-route-BlogID="@Model.BlogID"><i class="fa fa-plus" aria-hidden="true" title="Upload new image"></i> Upload new image</a>
+</div>
+
+@if (Model.BlogImages.Count > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Image</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var image in Model.BlogImages)
+            {
+                <tr>
+                    <td>@image.Title</td>
+                    <td>
+                        <a href="@image.FileLocation.Replace("{1}","555")" data-toggle="lightbox" data-title="@image.Title">
+                            <img src="@image.FileLocation.Replace("{1}","222")" class="img-thumbnail" alt="@image.Title" title="@image.Title" />
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-secondary" asp-page="/Blog/BlogImageEdit" asp-route-BlogImageID="@image.BlogImageID" asp-route-BlogID="@image.BlogID"><i class="fa fa-pencil fa-fw" aria-hidden="true" title="Edit"></i> Edit image</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" asp-page="/Blog/BlogImageDelete" asp-route-BlogImageID="@image.BlogImageID" asp-route-BlogID="@image.BlogID"><i class="fa fa-trash" aria-hidden="true" title="Delete"></i> Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    //No Images
+    <div class="alert alert-info" role="alert">
+        There are no images.
+    </div>
+}

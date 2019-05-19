@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using littlebreadloaf.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace littlebreadloaf
 {
@@ -16,7 +17,7 @@ namespace littlebreadloaf
                                                    string sourceURL,
                                                    IEnumerable<string> tags)
         {
-            List<Tag> allTags = context.Tag.ToList();
+            List<Tag> allTags = await context.Tag.AsNoTracking().ToListAsync();
 
             List<string> transformedTags = new List<string>(tags);
             transformedTags = transformedTags.ConvertAll(s => s.Replace(" ", "").ToUpper());
@@ -41,15 +42,15 @@ namespace littlebreadloaf
             if(transformedTags.Count > 0)
             {
                 context.SourceToTag.AddRange(allTags
-                                        .Where(w => transformedTags.Contains(w.Name))
-                                        .Select(s => new SourceToTag()
-                                        {
-                                            SourceTagID = Guid.NewGuid(),
-                                            TagID = s.TagID.Value,
-                                            SourceArea = sourceArea,
-                                            SourceID = sourceID.Value,
-                                            SourceURL = sourceURL
-                                        }));
+                                            .Where(w => transformedTags.Contains(w.Name))
+                                            .Select(s => new SourceToTag()
+                                            {
+                                                SourceTagID = Guid.NewGuid(),
+                                                TagID = s.TagID.Value,
+                                                SourceArea = sourceArea,
+                                                SourceID = sourceID.Value,
+                                                SourceURL = sourceURL
+                                            }));
             }
         
             return new OkResult(); 

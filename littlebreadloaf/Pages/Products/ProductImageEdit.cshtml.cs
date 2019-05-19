@@ -39,7 +39,7 @@ namespace littlebreadloaf.Pages.Products
                 return new RedirectToPageResult("/Products/ProductList");
             }
 
-            var product = await _context.Product.FirstOrDefaultAsync(m => m.ProductID == ProductImage.ProductID);
+            var product = await _context.Product.FirstOrDefaultAsync(m => m.ProductID == ProductImage.ProductID); //TODO: Can use a where clause and an anonymouse select for just the name
             if(product != null)
             {
                 ProductName = product.Name;

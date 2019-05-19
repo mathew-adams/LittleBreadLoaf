@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using littlebreadloaf.Data;
+using System.Drawing;
 
 namespace littlebreadloaf.Pages.Products
 {
@@ -76,29 +77,40 @@ namespace littlebreadloaf.Pages.Products
 
             var productImageID = Guid.NewGuid();
             var imgHelper = new ImageHelper(product.ProductID.ToString());
-            var sizes = new List<int>
+            var sizes = new List<Size>
             {
-                50,
-                100,
-                200,
-                350,
-                500
+                new Size(50, 50),
+                new Size(100, 100),
+                new Size(200, 200),
+                new Size(350, 350),
+                new Size(500, 500)
             };
 
             try
             {
-                imgHelper.AddImages(productImageID.ToString(), 
+                imgHelper.AddImages(ImageHelper.ImageResizeMode.Square,
+                                    productImageID.ToString(), 
                                     sizes.ToArray(), 
                                     FileUpload);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //Log?
+                var systemError = new SystemError
+                {
+                    ErrorID = Guid.NewGuid(),
+                    RequestID = product.ProductID.ToString(),
+                    Path = "ProductImageAddModel",
+                    Error = ex.ToString(),
+                    Occurred = DateTime.Now
+                };
+                _context.SystemError.Add(systemError);
+                await _context.SaveChangesAsync();
+
                 ModelState.AddModelError("BadFile", "The file is invalid. It must be an image");
                 return Page();
             }
 
-            bool primary = await _context.ProductImage.AnyAsync(a => a.ProductID == product.ProductID && a.PrimaryImage == true);
+            bool primary = !await _context.ProductImage.AnyAsync(a => a.ProductID == product.ProductID && a.PrimaryImage == true);
             
             ProductImage.ProductImageID = productImageID;
             ProductImage.ProductID = product.ProductID;

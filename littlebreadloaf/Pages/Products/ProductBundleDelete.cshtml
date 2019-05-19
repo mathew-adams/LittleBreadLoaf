@@ -1,0 +1,58 @@
+﻿@page
+@model littlebreadloaf.Pages.Products.ProductBundleDeleteModel
+@{
+    ViewData["Title"] = "Delete bundle";
+    ViewData["ReturnURL"] = Url.Page("/Products/ProductBundleDelete", new { productID = Model.ProductBundleID });
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Products/ProductBundleList">Bundles</a></li>
+        <li class="breadcrumb-item"><a asp-page="/Products/ProductBundleList" asp-route-ProductBundleID="Model.ProductBundle.ProductBundleID">@Model.ProductBundle.Title</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Delete bundle</li>
+    </ol>
+</nav>
+
+<div class="alert alert-danger" role="alert">
+    Are you sure you want to delete this bundle?
+</div>
+
+@using (Html.BeginForm("ProductBundleEdit", "ProductBundleEdit", FormMethod.Post, new { @class = "form-group-sm" }))
+{
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(m => m.ProductBundle.Title)
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-pencil fa-fw"></i></div>
+                </div>
+                @Html.TextBoxFor(m => m.ProductBundle.Title, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @disabled="on" })
+            </div>
+            @Html.ValidationMessageFor(m => m.ProductBundle.Title, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(m => m.ProductBundle.Description)
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-pencil-square-o fa-fw"></i></div>
+                </div>
+                @Html.TextBoxFor(m => m.ProductBundle.Description, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @disabled = "on" })
+            </div>
+            @Html.ValidationMessageFor(m => m.ProductBundle.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @Html.HiddenFor(h => h.ProductBundleID)
+    @Html.HiddenFor(h => h.ProductBundle.ProductBundleID)
+    @Html.HiddenFor(h => h.ProductBundle.Description)
+    @Html.HiddenFor(h => h.ProductBundle.Title)
+    @Html.HiddenFor(h => h.ProductBundle.Created)
+
+    <div>
+        <button type="submit" class="btn btn-success"><i class="fa fa-trash" aria-hidden="true" title="Delete"></i> Yes, please delete</button>
+        <a class="btn btn-danger" asp-page="/Products/ProductBundleView" asp-route-ProductBundleID="@Model.ProductBundle.ProductBundleID"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
+    </div>
+}

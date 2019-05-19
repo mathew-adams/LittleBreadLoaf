@@ -30,12 +30,12 @@
 
         <div class="col-5">
             <input id="file_upload" class="form-control" asp-for="FileUpload" type="file" />
-            @Html.ValidationMessageFor(m => m.ProductImage.Title, "", new { @class = "text-danger" })
+            @Html.ValidationMessage("BadFile", new { @class = "text-danger" })
         </div>
     </div>
     @Html.HiddenFor(m => m.ProductID)
 
-    <div>
+    <div class="form-group">
         <button type="submit" class="btn btn-success" asp-page-handler="upload"><i class="fa fa-floppy-o" aria-hidden="true" title="Save"></i> Save</button>
         <a class="btn btn-danger" asp-page="/Products/ProductImageList" asp-route-ProductID="@Model.ProductID"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
     </div>

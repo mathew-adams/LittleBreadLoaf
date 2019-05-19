@@ -73,6 +73,7 @@ namespace littlebreadloaf
         {
             if (env.IsDevelopment())
             {
+                //app.UseExceptionHandler("/Error");
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
@@ -100,9 +101,7 @@ namespace littlebreadloaf
                 }
             });
             app.UseCookiePolicy();
-
             app.UseAuthentication();
-
             app.UseMvc();
         }
     }

@@ -1,7 +1,7 @@
 ﻿@page
 @model ProductImageListModel
 @{
-    ViewData["Title"] = "Images";
+    ViewData["Title"] = "Product Images";
     ViewData["ReturnURL"] = Url.Page("/Products/ProductImageList", new { productID = Model.Product.ProductID });
 }
 
@@ -13,8 +13,9 @@
     </ol>
 </nav>
 
-<a class="btn btn-outline-secondary" asp-page="/Products/ProductImageAdd" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-plus" aria-hidden="true" title="Upload new image"></i> Upload new image</a>
-<div class="mb-3"></div>
+<div class="mb-3">
+    <a class="btn btn-outline-secondary" asp-page="/Products/ProductImageAdd" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-plus" aria-hidden="true" title="Upload new image"></i> Upload new image</a>
+</div>
 
 @if (Model.ProductImages.Count > 0)
 {

@@ -41,7 +41,7 @@ namespace littlebreadloaf.Pages.Products
 
         public async Task<IActionResult> OnGetAsync(string productID)
         {
-            if (String.IsNullOrEmpty(productID) || !Guid.TryParse(productID, out Guid parsedID))
+            if (string.IsNullOrEmpty(productID) || !Guid.TryParse(productID, out Guid parsedID))
             {
                 return new RedirectResult("/Products/ProductList");
             }
@@ -59,7 +59,6 @@ namespace littlebreadloaf.Pages.Products
             ProductOrderOutages = await _context.ProductOrderOutage.AsNoTracking().ToListAsync();
 
             return new PageResult();
-            
         }
 
         public async Task<IActionResult> OnPostCartAddAsync(string productID)

@@ -1,0 +1,62 @@
+﻿@page
+@model littlebreadloaf.Pages.Products.ProductBundleAddModel
+@{
+    ViewData["Title"] = "Add bundle";
+    ViewData["ReturnURL"] = Url.Page("/Products/ProductBundleAdd");
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Products/ProductBundleList">Bundles</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Add bundle</li>
+    </ol>
+</nav>
+
+@using (Html.BeginForm("ProductBundleAdd", "ProductBundleAdd", FormMethod.Post, new { @class = "form-group-sm" }))
+{
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(m => m.ProductBundle.Title)
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-pencil fa-fw"></i></div>
+                </div>
+                @Html.TextBoxFor(m => m.ProductBundle.Title, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
+            </div>
+            @Html.ValidationMessageFor(m => m.ProductBundle.Title, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(m => m.ProductBundle.Description)
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-pencil-square-o fa-fw"></i></div>
+                </div>
+                @Html.TextBoxFor(m => m.ProductBundle.Description, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
+            </div>
+            @Html.ValidationMessageFor(m => m.ProductBundle.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            @Html.Label("Products")
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-shopping-bag fa-fw"></i></div>
+                </div>
+                @Html.ListBoxFor(l => l.SelectedProducts,
+                                     Model.Products,
+                                     new { @id = "tag_control", @name = "Products", @class = "form-control", @multiple = "multiple" })
+            </div>
+            
+        </div>
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true" title="Save"></i> Save</button>
+        <a class="btn btn-danger" asp-page="/Products/ProductBundleList"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
+    </div>
+}

@@ -17,11 +17,12 @@ namespace littlebreadloaf.Data
         public DateTime? Created { get; set; }
 
         [DataType(DataType.Date)]
+        [Display(Name = "Date", Prompt = "Date", Description = "The time you would like your order delivered")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? DeliveryDate { get; set; }
         
         [StringLength(45)]
-        [Display(Name = "Delivery time", Prompt = "Enter the time for delivery", Description = "The time you would like your order delivered")]
+        [Display(Name = "Time", Prompt = "Time", Description = "The time you would like your order delivered")]
         [Required(ErrorMessage = "A delivery time is required.")]
         public string DeliveryTime { get; set; }
 
@@ -36,18 +37,18 @@ namespace littlebreadloaf.Data
         public Boolean Invoice { get; set; }
 
         [StringLength(255, MinimumLength = 2)]
-        [Display(Name = "Name", Prompt = "Enter your name", Description = "Your name")]
+        [Display(Name = "Name", Prompt = "Name", Description = "Your name")]
         [Required(ErrorMessage = "Your name is required.")]
         public string ContactName { get; set; }
 
         [EmailAddress]
-        [Display(Name = "Email address", Prompt = "Enter your email address", Description = "Your email address")]
+        [Display(Name = "Email address", Prompt = "Email", Description = "Your email address")]
         [StringLength(255, MinimumLength = 2)]
         [Required(ErrorMessage = "Your email address is required.")]
         public string ContactEmail { get; set; }
 
         [StringLength(20, MinimumLength = 2)]
-        [Display(Name = "Phone number", Prompt = "Enter your phone number", Description = "Your phone number")]
+        [Display(Name = "Phone number", Prompt = "Phone", Description = "Your phone number")]
         [Required(ErrorMessage = "Your phone number is required.")]
         public string ContactPhone { get; set; }
 

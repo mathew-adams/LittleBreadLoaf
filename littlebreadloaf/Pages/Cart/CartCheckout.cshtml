@@ -16,112 +16,110 @@
     </ol>
 </nav>
 
-@using (Html.BeginForm("CartCheckout", "CartCheckout", FormMethod.Post, new { @id = "cart_checkout", @class= "block-form-submit" }))
+@using (Html.BeginForm("CartCheckout", "CartCheckout", FormMethod.Post, new { @id = "cart_checkout", @class = "block-form-submit" }))
 {
-<div class="form-row">
-    <div class="col-md-6">
-
-        <strong>@Html.Label("Order details:")</strong>
-        <div class="form-row">
-            <div class="form-group col">
-                <div class="form-control">
-                    <div class="form-check">
-                        @Html.CheckBoxFor(m => m.ProductOrder.Pickup, new {@id = "checkout_pickup", @class = "form-check-input", autocomplete = "off", autofocus = "autofocus", @tabindex="100" })
-                        @Html.LabelFor(m => m.ProductOrder.Pickup, new { @class = "form-check-label" })
+    <div class="form-row">
+        <div class="col-md-6">
+            <strong>@Html.Label("Order details:")</strong>
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="form-control">
+                        <div class="form-check">
+                            @Html.CheckBoxFor(m => m.ProductOrder.Pickup, new { @id = "checkout_pickup", @class = "form-check-input", autocomplete = "off", autofocus = "autofocus", @tabindex = "100" })
+                            @Html.LabelFor(m => m.ProductOrder.Pickup, new { @class = "form-check-label" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.ProductOrder.Pickup, "", new { @class = "text-danger" })
                     </div>
-                    @Html.ValidationMessageFor(m => m.ProductOrder.Pickup, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="form-control">
+                        <div class="form-check">
+                            @Html.CheckBoxFor(m => m.ProductOrder.Invoice, new { @class = "form-check-input", autocomplete = "off", autofocus = "autofocus", @tabindex = "101" })
+                            @Html.LabelFor(m => m.ProductOrder.Invoice, new { @class = "form-check-label" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.ProductOrder.Invoice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <strong>@Html.Label("Delivery / Pickup:")</strong>
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-calendar fa-fw" aria-hidden="true" title="Delivery date"></i></div>
+                        </div>
+                        @Html.TextBoxFor(m => m.ProductOrder.DeliveryDate, "{0:yyyy-MM-dd}", new { @id = "delivery_date", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Date", @tabindex = "102" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.ProductOrder.DeliveryDate, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-clock-o fa-fw" aria-hidden="true" title="Delivery time"></i></div>
+                        </div>
+                        @Html.TextBoxFor(m => m.ProductOrder.DeliveryTime, new { @id = "delivery_time", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "103" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.ProductOrder.DeliveryTime, "", new { @class = "text-danger" })
                 </div>
             </div>
         </div>
 
-        <div class="form-row">
-            <div class="form-group col">
-                <div class="form-control">
-                    <div class="form-check">
-                        @Html.CheckBoxFor(m => m.ProductOrder.Invoice, new { @class = "form-check-input", autocomplete = "off", autofocus = "autofocus", @tabindex = "101" })
-                        @Html.LabelFor(m => m.ProductOrder.Invoice, new { @class = "form-check-label" })
+        <div class="col-md-6">
+            <strong>@Html.Label("Your contact information:")</strong>
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-pencil fa-fw" aria-hidden="true" title="Name"></i></div>
+                        </div>
+                        @Html.TextBoxFor(m => m.ProductOrder.ContactName, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "104" })
                     </div>
-                    @Html.ValidationMessageFor(m => m.ProductOrder.Invoice, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(m => m.ProductOrder.ContactName, "", new { @class = "text-danger" })
                 </div>
             </div>
-        </div>
 
-        <strong>@Html.Label("Delivery / Pickup:")</strong>
-        <div class="form-row">
-            <div class="form-group col">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text"><i class="fa fa-calendar fa-fw" aria-hidden="true" title="Delivery date"></i></div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-envelope-o fa-fw" aria-hidden="true" title="Email address"></i></div>
+                        </div>
+                        @Html.TextBoxFor(m => m.ProductOrder.ContactEmail, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "105" })
                     </div>
-                    @Html.TextBoxFor(m => m.ProductOrder.DeliveryDate, "{0:yyyy-MM-dd}", new { @id = "delivery_date", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Enter the date for delivery", @tabindex = "105" })
+                    @Html.ValidationMessageFor(m => m.ProductOrder.ContactEmail, "", new { @class = "text-danger" })
                 </div>
-                @Html.ValidationMessageFor(m => m.ProductOrder.DeliveryDate, "", new { @class = "text-danger" })
+                <div class="form-group col-md-6">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-mobile fa-fw" aria-hidden="true" title="Phone number"></i></div>
+                        </div>
+                        @Html.TextBoxFor(m => m.ProductOrder.ContactPhone, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "106" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.ProductOrder.ContactPhone, "", new { @class = "text-danger" })
+                </div>
             </div>
-            <div class="form-group col">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text"><i class="fa fa-clock-o fa-fw" aria-hidden="true" title="Delivery time"></i></div>
+
+            <strong>@Html.Label("Payment method:")</strong>
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-money fa-fw" aria-hidden="true" title="Payment method"></i></div>
+                        </div>
+                        @Html.DropDownListFor(m => m.ProductOrder.PaymentMethod,
+                                              Model.PaymentMethod,
+                                              "",
+                                              new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "107" })
                     </div>
-                    @Html.TextBoxFor(m => m.ProductOrder.DeliveryTime, new { @id = "delivery_time", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "106" })
+                    @Html.ValidationMessageFor(m => m.PaymentMethod, "", new { @class = "text-danger" })
                 </div>
-                @Html.ValidationMessageFor(m => m.ProductOrder.DeliveryTime, "", new { @class = "text-danger" })
             </div>
         </div>
     </div>
-
-
-    <div class="col-md-6">
-        <strong>@Html.Label("Contact information:")</strong>
-        <div class="form-row">
-            <div class="form-group col">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text"><i class="fa fa-pencil fa-fw" aria-hidden="true" title="Name"></i></div>
-                    </div>
-                    @Html.TextBoxFor(m => m.ProductOrder.ContactName, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "102" })
-                </div>
-                @Html.ValidationMessageFor(m => m.ProductOrder.ContactName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group col">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text"><i class="fa fa-envelope-o fa-fw" aria-hidden="true" title="Email address"></i></div>
-                    </div>
-                    @Html.TextBoxFor(m => m.ProductOrder.ContactEmail, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "103" })
-                </div>
-                @Html.ValidationMessageFor(m => m.ProductOrder.ContactEmail, "", new { @class = "text-danger" })
-            </div>
-            <div class="form-group col">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text"><i class="fa fa-mobile fa-fw" aria-hidden="true" title="Phone number"></i></div>
-                    </div>
-                    @Html.TextBoxFor(m => m.ProductOrder.ContactPhone, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "104" })
-                </div>
-                @Html.ValidationMessageFor(m => m.ProductOrder.ContactPhone, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <strong>@Html.Label("Payment method:")</strong>
-        <div class="form-row">
-            <div class="form-group col">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text"><i class="fa fa-money fa-fw" aria-hidden="true" title="Payment method"></i></div>
-                    </div>
-                    @Html.DropDownListFor(m => m.ProductOrder.PaymentMethod,
-                                          Model.PaymentMethod,
-                                          "",
-                                          new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "107" })
-                </div>
-                @Html.ValidationMessageFor(m => m.PaymentMethod, "", new { @class = "text-danger" })
-            </div>
-        </div>
-    </div>
-</div>
 
     <div class="form-row">
         <div class="form-group col">
@@ -129,19 +127,19 @@
                 <div class="input-group-prepend">
                     <div class="input-group-text"><i class="fa fa-map-marker fa-fw" aria-hidden="true" title="Delivey address"></i></div>
                 </div>
-                @if(Model.ProductOrder != null && Model.ProductOrder.Pickup)
+                @if (Model.ProductOrder != null && Model.ProductOrder.Pickup)
                 {
                     @Html.TextBoxFor(m => m.Full_Address, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @id = "delivery_address", @placeholder = "Enter your address", @tabindex = "108", @disabled = true })
                 }
                 else
                 {
-                    @Html.TextBoxFor(m => m.Full_Address, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @id = "delivery_address", @placeholder = "Enter your address", @tabindex = "108"})
+                    @Html.TextBoxFor(m => m.Full_Address, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @id = "delivery_address", @placeholder = "Enter your address", @tabindex = "108" })
                 }
             </div>
-            @Html.ValidationMessage("Address.Missing","", new { @class = "text-danger" }, "")
+            @Html.ValidationMessage("Address.Missing", "", new { @class = "text-danger" }, "")
         </div>
     </div>
-    
+
     @Html.HiddenFor(h => h.ProductOrder.OrderID)
     @Html.HiddenFor(h => h.ProductOrder.ContactAddress, new { @id = "address_id" })
     @Html.HiddenFor(h => h.ProductOrder.CartID)
@@ -167,4 +165,4 @@
             </button>
         </div>
     </div>
-    }
+}

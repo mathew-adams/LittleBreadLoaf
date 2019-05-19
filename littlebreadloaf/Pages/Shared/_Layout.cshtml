@@ -22,9 +22,7 @@
 
     </environment>
     <environment exclude="Development">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-        asp-fallback-href="~/lib/bootstrap/css/bootstrap.min.css"
-        asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.min.css" />
         <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css" />
         <link rel="stylesheet" href="~/lib/jqueryui/jquery-ui.min.css" />
         <link rel="stylesheet" href="~/lib/quill/quill.snow.min.css" />
@@ -50,12 +48,12 @@
         <div id="mainNavBar" class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item"><a class="nav-link" asp-page="/Index"><i class="fa fa-home fa-fw" aria-hidden="true" title="Home"></i> Home</a></li>
-                <li class="nav-item"><a class="nav-link" asp-page="/Products/ProductList"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true" title="Products"></i> Products</a></li>
+                <li class="nav-item"><a class="nav-link" asp-page="/Products/ProductList"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true" title="Shop online"></i> Shop online</a></li>
+                <li class="nav-item"><a class="nav-link" asp-page="/Products/ProductBundleList"><i class="fa fa-gift fa-fw" aria-hidden="true" title="Bundles"></i> Bundles</a></li>
                 <li class="nav-item"><a class="nav-link" asp-page="/Blog/BlogList"><i class="fa fa-book fa-fw" aria-hidden="true" title="Blog"></i> Blog</a></li>
-                <li class="nav-item"><a class="nav-link" asp-page="/About"><i class="fa fa-question-circle fa-fw" aria-hidden="true" title="About"></i> About</a></li>
+                <li class="nav-item"><a class="nav-link" asp-page="/About"><i class="fa fa-question-circle fa-fw" aria-hidden="true" title="About me"></i> About me</a></li>
                 @if (User.Identity.IsAuthenticated)
                 {
-                    ///Maintenance/MaintenanceList
                     <li class="nav-item"><a class="nav-link" asp-page="/Orders/OrdersList"><i class="fa fa-thumb-tack" aria-hidden="true" title="Orders"></i> Orders</a></li>
                     <li class="nav-item"><a class="nav-link" asp-page="/Maintenance/MaintenanceList"><i class="fa fa-cogs" aria-hidden="true" title="Maintenance"></i> Maintenance</a></li>
                 }
@@ -96,23 +94,13 @@
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment exclude="Development">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
-        </script>
+        <script src="~/lib/jquery/jquery.min.js"></script>
         <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
         <script src="~/lib/jquery.blockUI/jquery.blockUI.min.js"></script>
         <script src="~/lib/popper.js/umd/popper.min.js"></script>
         <script src="~/lib/blazy/blazy.min.js"></script>
         <script src="~/lib/ekko-lightbox/ekko-lightbox.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                crossorigin="anonymous"
-                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
-        </script>
+        <script src="~/lib/twitter-bootstrap/js/bootstrap.min.js"></script>
         <script src="~/lib/quill/quill.min.js"></script>
         <script src="~/lib/select2/js/select2.min.js"></script>
         <script src="~/lib/jquery-timepicker/jquery.timepicker.min.js"></script>

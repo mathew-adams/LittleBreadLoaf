@@ -1,0 +1,93 @@
+﻿@page
+@model littlebreadloaf.Pages.Products.ProductBundleViewModel
+@{
+    ViewData["Title"] = @Model.ProductBundle.Title;
+    ViewData["ReturnURL"] = Url.Page("/Products/ProductBundleView", new { productID = Model.ProductBundleID });
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Products/ProductBundleList">Bundles</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.ProductBundle.Title</li>
+    </ol>
+</nav>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="row">
+        <div class="col-12">
+            <div class="card bg-light mb-3">
+                <div class="card-body">
+                    <div class="text-muted mb-1">Admin</div>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductBundleEdit" asp-route-ProductBundleID="@Model.ProductBundle.ProductBundleID"><i class="fa fa-pencil" aria-hidden="true" title="Edit bundle"></i> Edit bundle</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductBundleDelete" asp-route-ProductBundleID="@Model.ProductBundle.ProductBundleID"><i class="fa fa-trash" aria-hidden="true" title="Delete bundle"></i> Delete bundle</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="text-center mb-3">
+    <h1 class="display-4 font-weight-normal">@Html.DisplayFor(d => d.ProductBundle.Title)</h1>
+</div>
+
+@if (Model.Products.Count > 0)
+{
+    <div class="row justify-content-center">
+        @foreach (var product in Model.Products)
+        {
+            <div class="col-md-4 mt-0 px-2">
+                <div class="product-grid">
+                    <div class="product-image">
+                        @{
+                            string source, title;
+                        }
+                        @if (product.ProductImage == null)
+                        {
+                            source = "https://dummyimage.com/350x350/000/fff"; //TODO: Do not make a referal out to another domain??
+                            title = "350X350";
+                        }
+                        else
+                        {
+                            source = product.ProductImage.FileLocation.Replace("{1}", "350");
+                            title = product.ProductImage.Title;
+                        }
+                        <a asp-page="/Products/ProductView" asp-route-ProductID="@product.Product.ProductID" class="darken"> 
+                            <img class="b-lazy"
+                                 src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                                 data-src="@source"
+                                 asp-append-version="true"
+                                 alt="@title"
+                                 title="@title" />
+                        </a>
+                        @if (!product.Outage)
+                        {
+                            <form name="add_cart" asp-page-handler="cartadd" asp-route-ProductID="@product.Product.ProductID" method="post">
+                                <button class="add-to-cart" type="submit">
+                                    <i class="fa fa-cart-plus" aria-hidden="true" title="Add to cart"></i> Add to cart
+                                </button>
+                            </form>
+                        }
+
+                    </div>
+                    <div class="product-content">
+                        <h3 class="title"><a asp-page="/Products/ProductView" asp-route-ProductID="@product.Product.ProductID"> @product.Product.Name</a></h3>
+                        <div class="price">
+                            $@product.Product.Price
+                            @if (!String.IsNullOrEmpty(product.Product.Unit))
+                            {
+                                <span class="text-muted"> / @product.Product.Unit</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info" role="alert">
+        No products in this bundle.
+    </div>
+}

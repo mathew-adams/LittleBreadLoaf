@@ -8,6 +8,7 @@ $(document).on('click', '[data-toggle="lightbox"]', function (event) {
     $(this).ekkoLightbox();
 });
 
+$.blockUI.defaults.message = '<h3>Please wait...</h3>';
 $(document).ajaxStart($.blockUI)
     .ajaxStop($.unblockUI);
 
@@ -139,6 +140,11 @@ $(document).ready(function () {
 $(document).ready(function () {
     $(".block-form-submit").submit(function (e) {
         $.blockUI();
+        //$.blockUI({
+        //    message: 'Wait',
+        //    css: { width: '4%', border: '0px solid #FFFFFF', cursor: 'wait', backgroundColor: '#FFFFFF' },
+        //    overlayCSS: { backgroundColor: '#FFFFFF', opacity: 0.0, cursor: 'wait' }
+        //}); 
         $(".block-form-submit-button").prop('disabled', true);
     });
 });
