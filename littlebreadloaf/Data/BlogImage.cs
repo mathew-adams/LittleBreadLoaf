@@ -21,5 +21,8 @@ namespace littlebreadloaf.Data
         [Display(Name = "File Location", Description = "The file location of the image.")]
         [StringLength(1000, MinimumLength = 2)]
         public string FileLocation { get; set; }
+
+        [Display(Name = "File Save Mode", Description = "Square, aspect, or banner")]
+        public string Mode { get; set; }
     }
 }

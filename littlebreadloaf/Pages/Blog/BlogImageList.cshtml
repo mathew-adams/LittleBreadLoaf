@@ -31,11 +31,23 @@
         <tbody>
             @foreach (var image in Model.BlogImages)
             {
+                var sizeBig = "";
+                var sizeSmall = "";
+                if(image.Mode == "SQUARE" || image.Mode == "ASPECT")
+                {
+                    sizeBig = "500";
+                    sizeSmall = "100";
+                }
+                else //Banner
+                {
+                    sizeBig = "500";
+                    sizeSmall = "100";
+                }
                 <tr>
                     <td>@image.Title</td>
                     <td>
-                        <a href="@image.FileLocation.Replace("{1}","555")" data-toggle="lightbox" data-title="@image.Title">
-                            <img src="@image.FileLocation.Replace("{1}","222")" class="img-thumbnail" alt="@image.Title" title="@image.Title" />
+                        <a href="@image.FileLocation.Replace("{1}",sizeBig)" data-toggle="lightbox" data-title="@image.Title">
+                            <img src="@image.FileLocation.Replace("{1}",sizeSmall)" class="img-thumbnail" alt="@image.Title" title="@image.Title" />
                         </a>
                     </td>
                     <td>

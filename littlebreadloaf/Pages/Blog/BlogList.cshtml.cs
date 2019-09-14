@@ -125,14 +125,15 @@ namespace littlebreadloaf.Pages.Blog
                                     .Join(_context.Blog,
                                             bi => bi.BlogID,
                                             b => b.BlogID,
-                                            (bi, b) => new { bi.BlogImageID, bi.FileLocation, bi.Title, bi.BlogID })
+                                            (bi, b) => new { bi.BlogImageID, bi.FileLocation, bi.Title, bi.BlogID, bi.Mode })
                                     .Where(w => Blogs.Any(a => a.BlogID == w.BlogID))
                                     .Select(s => new
                                     {
                                         s.BlogID,
                                         s.BlogImageID,
                                         s.FileLocation,
-                                        s.Title
+                                        s.Title,
+                                        s.Mode
                                     })
                                     .ToListAsync();
 
@@ -168,7 +169,8 @@ namespace littlebreadloaf.Pages.Blog
                                 BlogID = s.BlogID,
                                 BlogImageID = s.BlogImageID,
                                 FileLocation = s.FileLocation,
-                                Title = s.Title
+                                Title = s.Title,
+                                Mode = s.Mode
                             })
                             .FirstOrDefault();
                 var cat = categoryList

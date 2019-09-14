@@ -25,6 +25,23 @@
         </div>
     </div>
 
+    
+
+    <div class="form-group row">
+        @Html.Label("", "Image resize type", new { @class = "col-2 col-form-label" })
+        <div class="col-5">
+            <div class="form-check">
+                <label>@Html.RadioButtonFor(m => Model.ImageSizeMode, ImageHelper.ImageResizeMode.Square, null) Square</label>
+            </div>
+            <div class="form-check">
+                <label>@Html.RadioButtonFor(m => Model.ImageSizeMode, ImageHelper.ImageResizeMode.Banner, null) Banner (wider than tall)</label>
+            </div>
+            <div class="form-check">
+                <label>@Html.RadioButtonFor(m => Model.ImageSizeMode, ImageHelper.ImageResizeMode.AspectRatio, null) Keep size, just make smaller</label>
+            </div>
+        </div>
+    </div>
+
     <div class="form-group row">
         @Html.LabelFor(m => m.FileUpload, new { @class = "col-2 col-form-label" })
 

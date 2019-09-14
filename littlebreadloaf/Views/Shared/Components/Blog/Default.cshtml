@@ -1,10 +1,5 @@
 ﻿@model littlebreadloaf.ViewComponents.ViewBlog
 
-@if (Model.HasImage)
-{
-    <img class="img-fluid" src="@Model.BlogImage.FileLocation.Replace("{1}","1110")" />
-}
-
 <div>
     <div class="my-2">
         @await Component.InvokeAsync("User", new{
@@ -13,6 +8,21 @@
                                             showLastName = true
                                         })
     </div>
+    @if (Model.HasImage)
+    {
+        var size = "";
+        if (Model.BlogImage.Mode == "SQUARE" || Model.BlogImage.Mode == "ASPECT")
+        {
+            size = "350";
+        }
+        else //Banner
+        {
+            size = "1110";
+        }
+
+        <img class="img-fluid" src="@Model.BlogImage.FileLocation.Replace("{1}",size)" />
+    }
+
     <h3 class="mt-2">@Model.Blog.Title</h3>
 
     <h6 class="text-muted"><i class="fa fa-calendar" aria-hidden="true" title="Created"></i> @Html.DisplayFor(c => c.Blog.Created)</h6>

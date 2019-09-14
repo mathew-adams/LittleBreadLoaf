@@ -31,6 +31,9 @@ namespace littlebreadloaf.Pages.Blog
         [BindProperty]
         public BlogImage BlogImage { get; set; }
 
+        [BindProperty]
+        public ImageHelper.ImageResizeMode ImageSizeMode { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
             if (String.IsNullOrEmpty(BlogID) || !Guid.TryParse(BlogID, out Guid parsedID))
@@ -75,16 +78,47 @@ namespace littlebreadloaf.Pages.Blog
 
             var blogImageID = Guid.NewGuid();
             var imgHelper = new ImageHelper(blog.BlogID.ToString());
-            var sizes = new List<Size>
+
+            List<Size> sizes = new List<Size>();
+            var imageMode = "";
+
+            switch (ImageSizeMode)
             {
-                new Size(1110, 400),
-                new Size(555, 200),
-                new Size(222, 80)
-            };
+                case ImageHelper.ImageResizeMode.Banner:
+                    imageMode = "BANNER";
+                    sizes = new List<Size>
+                    {
+                        new Size(1110, 400),
+                        new Size(555, 200),
+                        new Size(222, 80)
+                    };
+                    break;
+                case ImageHelper.ImageResizeMode.AspectRatio:
+                    imageMode = "ASPECT";
+                    sizes = new List<Size>
+                    {
+                        new Size(100, 100),
+                        new Size(200, 200),
+                        new Size(350, 350),
+                        new Size(500, 500),
+                    };
+                    break;
+                default:
+                    imageMode = "SQUARE";
+                    sizes = new List<Size>
+                    {
+                        new Size(100, 100),
+                        new Size(200, 200),
+                        new Size(350, 350),
+                        new Size(500, 500),
+                    };
+                    break;
+            }
+
 
             try
             {
-                imgHelper.AddImages(ImageHelper.ImageResizeMode.Banner,
+                imgHelper.AddImages(ImageSizeMode,
                                     blogImageID.ToString(),
                                     sizes.ToArray(),
                                     FileUpload);
@@ -109,6 +143,7 @@ namespace littlebreadloaf.Pages.Blog
             BlogImage.BlogID = blog.BlogID.Value;
             BlogImage.BlogImageID = blogImageID;
             BlogImage.FileLocation = imgHelper.GetDisplayFileName(blogImageID.ToString());
+            BlogImage.Mode = imageMode;
 
             _context.BlogImage.Add(BlogImage);
             await _context.SaveChangesAsync();
