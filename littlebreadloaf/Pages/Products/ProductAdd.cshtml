@@ -66,7 +66,20 @@
         </div>
     </div>
 
-    <div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(m => m.Product.SortOrder)
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-sort-numeric-desc fa-fw"></i></div>
+                </div>
+                @Html.TextBoxFor(m => m.Product.SortOrder, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus" })
+            </div>
+            @Html.ValidationMessageFor(m => m.Product.SortOrder, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="my-3">
         <button type="submit" class="btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true" title="Save"></i> Save</button>
         <a class="btn btn-danger" asp-page="/Products/ProductList"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
     </div>

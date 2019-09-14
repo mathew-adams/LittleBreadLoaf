@@ -31,7 +31,11 @@ namespace littlebreadloaf.Pages.Products
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Products = await _context.Product.AsNoTracking().ToListAsync();
+            Products = await _context
+                            .Product
+                            .AsNoTracking()
+                            .ToListAsync();
+            Products = Products.OrderBy(o => o.SortOrder).ToList();
             ProductBadges = await _context.ProductBadge.AsNoTracking().ToListAsync();
             ProductImages = await _context.ProductImage.AsNoTracking().Where(m => m.PrimaryImage == true).ToListAsync();
             ProductOrderOutages = await _context.ProductOrderOutage.AsNoTracking().ToListAsync();

@@ -40,7 +40,7 @@ namespace littlebreadloaf.Pages.Products
             _context.Product.Add(Product);
 
             await _context.SaveChangesAsync();
-            return RedirectToPage("/Products/ProductList");
+            return new RedirectToPageResult("/Products/ProductView", new { Product.ProductID });
         }
     }
 }

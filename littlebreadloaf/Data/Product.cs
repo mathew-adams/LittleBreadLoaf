@@ -39,5 +39,7 @@ namespace littlebreadloaf.Data
         [DisplayFormat(DataFormatString = "{0:dddd, dd MMMM yyyy HH:mm:ss}")]
         public DateTime? LastUpdated { get; set; }
 
+        [Display(Name = "Sort Order", Prompt = "Enter sort order", Description = "The order in which the product will be sorted in the catalogue")]
+        public int SortOrder { get; set; }
     }
 }
