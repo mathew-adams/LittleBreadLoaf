@@ -1,0 +1,98 @@
+﻿@page
+@model littlebreadloaf.Pages.Maintenance.MaintenanceErrorListModel
+@{
+    ViewData["Title"] = "Error List";
+    ViewData["ReturnURL"] = Url.Page("/Maintenance/MaintenaceErrorList");
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Maintenance/MaintenanceList">Maintenance</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+    </ol>
+</nav>
+
+@using (Html.BeginForm("MaintenanceErrorList", "Search", FormMethod.Get, new { @class = "form-group-sm" }))
+{
+    <div class="form-row">
+        <div class="col-md-6">
+
+            @Html.Label("From:")
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-arrow-right fa-fw" aria-hidden="true" title="From"></i></div>
+                        </div>
+                        @Html.TextBoxFor(f => f.From, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "From" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            @Html.Label("To:")
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-arrow-left fa-fw" aria-hidden="true" title="To"></i></div>
+                        </div>
+                        @Html.TextBoxFor(f => f.To, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "To" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            @Html.Label("Search text:")
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-text-width fa-fw" aria-hidden="true" title="Search text"></i></div>
+                        </div>
+                        @Html.TextBoxFor(f => f.SearchTerm, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Search text" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix">
+        <div class="float-right mb-3">
+            <button class="btn btn-outline-secondary"><i class="fa fa-search" aria-hidden="true" title="Search"></i> Search</button>
+        </div>
+    </div>
+
+    @if (Model.SystemErrors.Count > 0)
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Path</th>
+                    <th>Occurred</th>
+                    <th>Error</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var systemError in Model.SystemErrors)
+                {
+                    <tr>
+                        <td>@systemError.Path</td>
+                        <td>@systemError.Occurred</td>
+                        <td>
+                            @systemError.Error
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            No system errors to display.
+        </div>
+    }
+}

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using littlebreadloaf.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 
 namespace littlebreadloaf.Pages.Orders
 {
@@ -14,9 +15,11 @@ namespace littlebreadloaf.Pages.Orders
     public class InvoicePrintModel : PageModel
     {
         private readonly ProductContext _context;
-        public InvoicePrintModel(ProductContext context)
+        private readonly IConfiguration _config;
+        public InvoicePrintModel(ProductContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
 
         [BindProperty(SupportsGet = true)]
@@ -56,12 +59,15 @@ namespace littlebreadloaf.Pages.Orders
                 HasAddress = true;
             }
             
-
             Invoice = await _context.Invoice.FirstOrDefaultAsync(f => f.ProductOrderID == parsedID);
             if (Invoice == null)
             {
                 return new RedirectResult("/Orders/OrdersList");
             }
+
+            ViewData["Name"] = _config["LittleBreadLoaf.Name"];
+            ViewData["AddressLine1"] = _config["LittleBreadLoaf.AddressLine1"];
+            ViewData["AddressLine2"] = _config["LittleBreadLoaf.AddressLine2"];
 
             InvoiceTransaction = await _context
                                         .InvoiceTransaction

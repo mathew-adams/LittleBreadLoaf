@@ -1,19 +1,23 @@
 ﻿@page
-@model littlebreadloaf.Pages.Maintenance.MaintenanceSystemValueEditModel
+@model littlebreadloaf.Pages.Maintenance.MaintenanceSystemValueAddModel
 @{
-    ViewData["Title"] = "System value edit";
-    ViewData["ReturnURL"] = Url.Page("/Maintenance/MaintenanceSystemValueEdit", new { Model.LittleBreadLoafSystemKey });
+    ViewData["Title"] = "System value add";
+    ViewData["ReturnURL"] = Url.Page("/Maintenance/MaintenanceSystemValueAdd");
 }
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a asp-page="/Maintenance/MaintenanceList">Maintenance</a></li>
         <li class="breadcrumb-item"><a asp-page="/Maintenance/MaintenanceSystemValueList">System value list</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Edit system value</li>
+        <li class="breadcrumb-item active" aria-current="page">Add system value</li>
     </ol>
 </nav>
 
-@using (Html.BeginForm("SystemValueEdit", "SystemValueEdit", FormMethod.Post, new { @class = "form-group-sm" }))
+<div class="alert alert-info" role="alert">
+    Note: values will only take effect after a restart of the website.
+</div>
+
+@using (Html.BeginForm("SystemValueAdd", "SystemValueAdd", FormMethod.Post, new { @class = "form-group-sm" }))
 {
     <div class="form-row">
         <div class="form-group col-6">
@@ -22,7 +26,7 @@
                 <div class="input-group-prepend">
                     <div class="input-group-text"><i class="fa fa-key fa-fw" aria-hidden="true" title="Blog tag"></i></div>
                 </div>
-                @Html.TextBoxFor(m => m.LittleBreadLoafSystem.Key, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @disabled = "on" })
+                @Html.TextBoxFor(m => m.LittleBreadLoafSystem.Key, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus"})
             </div>
             @Html.ValidationMessageFor(m => m.LittleBreadLoafSystem.Key, "", new { @class = "text-danger" })
         </div>

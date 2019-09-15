@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using SelectPdf;
+using Newtonsoft.Json;
 
 namespace littlebreadloaf.Pages.Cart
 {
@@ -120,45 +121,58 @@ namespace littlebreadloaf.Pages.Cart
                 doc.Save(msInvoice);
                 // close pdf document
                 doc.Close();
-
+                
                 msInvoice.Position = 0;
+
                 //Send confirmation email
+                var emailBody = _config["LittleBreadLoaf.ConfirmationEmailBody"].Replace("{{CONFIRMATION_CODE}}", ProductOrder.ConfirmationCode);
+                var emailSubject = _config["LittleBreadLoaf.ConfirmationEmailSubject"].Replace("{{CONFIRMATION_CODE}}", ProductOrder.ConfirmationCode);
+                var attachmentName = _config["LittleBreadLoaf.ConfirmationAttachmentName"].Replace("{{CONFIRMATION_CODE}}", ProductOrder.ConfirmationCode);
+
                 var emailResponse = await EmailHelper.SendEmail(_config,
-                                                                $"Little Bread Loaf <mailgun@{_config["Mailgun.Uri.Request"]}>",
+                                                                $"{_config["LittleBreadLoaf.Name"]} <mailgun@{_config["Mailgun.Uri.Request"]}>",
                                                                 ProductOrder.ContactEmail,
-                                                                "Order Confirmed",
-                                                                "Thank you for your order! Confirmation number: " + ProductOrder.ConfirmationCode,
-                                                                "little-bread-loaf-confirmation-" + ProductOrder.ConfirmationCode,
+                                                                emailSubject,
+                                                                emailBody,
+                                                                attachmentName,
                                                                 msInvoice);
-                string txtResponse;
-
-                using (Stream receiveStream = await emailResponse.Content.ReadAsStreamAsync())
-                {
-                    using (StreamReader readStream = new StreamReader(receiveStream, System.Text.Encoding.UTF8))
-                    {
-                        txtResponse = readStream.ReadToEnd();
-                    }
-                }
-
+                var successful = true;
+                var message = "";
                 if (emailResponse.IsSuccessStatusCode)
                 {
-                    var test = "Hello";
+                    using (Stream receiveStream = await emailResponse.Content.ReadAsStreamAsync())
+                    {
+                        using (StreamReader readStream = new StreamReader(receiveStream, System.Text.Encoding.UTF8))
+                        {
+                            var response = JsonConvert.DeserializeObject<MailGunResponse>(readStream.ReadToEnd());
+                            successful = response.message.Contains("queued", StringComparison.OrdinalIgnoreCase);
+                            message = response.message;
+                        }
+                    }
+                }
+                else
+                {
+                    successful = false;
                 }
 
+                if(!successful)
+                {
+                    var systemError = new SystemError()
+                    {
+                        ErrorID = Guid.NewGuid(),
+                        RequestID = ProductOrder.ConfirmationCode,
+                        Path = "CartCheckoutReview.SendEmail",
+                        Error = $"Status:{emailResponse.StatusCode}, Message:{message}",
+                        Occurred = DateTime.Now
+                    };
 
-            }
-            
-            // save pdf document
-          
-
-
-           
-
-            
+                    _context.SystemError.Add(systemError);
+                    await _context.SaveChangesAsync();
+                }
+            }            
 
             // Clear cart cookies
             HttpContext.Response.Cookies.Delete(littlebreadloaf.CartHelper.CartCookieName);
-
             
             return new RedirectToPageResult("/Cart/CartCheckoutConfirmation", new { ProductOrderID = ProductOrder.OrderID, ProductOrder.CartID });
         }

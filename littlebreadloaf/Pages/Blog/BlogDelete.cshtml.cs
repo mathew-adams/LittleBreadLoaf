@@ -46,7 +46,8 @@ namespace littlebreadloaf.Pages.Blog
             {
                 return Page();
             }
-            
+            var img = new ImageHelper(Blog.BlogID.ToString());
+            img.DeleteAll();
             _context.CategoryToBlog.RemoveRange(_context.CategoryToBlog.Where(w => w.BlogID == Blog.BlogID));
             _context.SourceToTag.RemoveRange(_context.SourceToTag.Where(w => w.SourceArea == "Blog" && w.SourceID == Blog.BlogID));
             _context.Blog.Remove(Blog);
