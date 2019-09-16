@@ -39,7 +39,7 @@
     </script>
 
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top p-1">
-        <a class="navbar-brand" asp-page="/Index"><img src="~/images/little-bread-loaf-logo.svg" height="50" width="50" class="d-inline-block align-middle mx-2" alt="Little Bread Loaf" title="Little Bread Loaf"> Polish Bread</a>
+        <a class="navbar-brand" asp-page="/Index"><img src="~/images/little-bread-loaf-logo.svg" height="50" width="50" class="d-inline-block align-middle mx-2" alt="About me" title="About me"> About me</a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavBar" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -47,10 +47,11 @@
 
         <div id="mainNavBar" class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" asp-page="/Index"><i class="fa fa-home fa-fw" aria-hidden="true" title="Home"></i> Home</a></li>
-                <li class="nav-item"><a class="nav-link" asp-page="/Products/ProductList"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true" title="Shop online"></i> Shop online</a></li>
+                <li class="nav-item"><a class="nav-link" asp-page="/Products/ProductList"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true" title="Buy bread"></i> Buy bread</a></li>
+                <li class="nav-item"><a class="nav-link" asp-page="/Bakery"><i class="fa fa-map-marker fa-fw" aria-hidden="true" title="Bakery"></i> Bakery</a></li>
+                <li class="nav-item"><a class="nav-link" asp-page="/Markets"><i class="fa fa-shopping-basket fa-fw" aria-hidden="true" title="Farmers markets"></i> Farmers markets</a></li>
                 <li class="nav-item"><a class="nav-link" asp-page="/Blog/BlogList"><i class="fa fa-book fa-fw" aria-hidden="true" title="Blog"></i> Blog</a></li>
-                <li class="nav-item"><a class="nav-link" asp-page="/About"><i class="fa fa-question-circle fa-fw" aria-hidden="true" title="About me"></i> About me</a></li>
+                @*<li class="nav-item"><a class="nav-link" asp-page="/About"><i class="fa fa-question-circle fa-fw" aria-hidden="true" title="About me"></i> About me</a></li>*@
                 @if (User.Identity.IsAuthenticated)
                 {
                     <li class="nav-item"><a class="nav-link" asp-page="/Orders/OrdersList"><i class="fa fa-thumb-tack" aria-hidden="true" title="Orders"></i> Orders</a></li>
