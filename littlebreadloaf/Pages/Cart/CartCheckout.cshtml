@@ -16,6 +16,10 @@
     </ol>
 </nav>
 
+<div id="alertReCaptca" class="alert alert-info" role="alert">
+    <i class="fa fa-shield" aria-hidden="true" title="Shield"></i> Please wait while we verify if you are human.
+</div>
+
 @using (Html.BeginForm("CartCheckout", "CartCheckout", FormMethod.Post, new { @id = "cart_checkout", @class = "block-form-submit" }))
 {
     <div class="form-row">
@@ -148,10 +152,6 @@
     @Html.HiddenFor(h => h.ProductOrder.ConfirmationCode)
     @Html.HiddenFor(h => h.ProductOrder.Confirmed)
     @Html.HiddenFor(h => h.GoogleRecaptchaToken, new { @id = "g-recaptcha-response" })
-
-    <div id="alertReCaptca" class="alert alert-info" role="alert">
-        <i class="fa fa-shield" aria-hidden="true" title="Shield"></i> Please wait while we verify if you are human.
-    </div>
 
     <div class="clearfix mb-3">
         <div class="text-right float-right">

@@ -64,7 +64,8 @@ namespace littlebreadloaf.Pages.Cart
             PaymentMethod = new SelectList(new List<SelectListItem>()
                                 {
                                     new SelectListItem(){ Text = "CASH", Value = "Cash - on delivery / pickup", Selected = false },
-                                    new SelectListItem(){ Text = "EFTPOS", Value = "EFTPOS - on delivery / pickup - no credit cards", Selected = false }
+                                    new SelectListItem(){ Text = "EFTPOS", Value = "EFTPOS - on delivery / pickup - no credit cards", Selected = false },
+                                    new SelectListItem(){ Text = "BANK", Value = "Bank transfer", Selected = false }
                                 },"Text","Value",null);
             
             return Page();
@@ -90,7 +91,8 @@ namespace littlebreadloaf.Pages.Cart
             PaymentMethod = new SelectList(new List<SelectListItem>()
                                 {
                                     new SelectListItem(){ Text = "CASH", Value = "Cash - on delivery", Selected = false },
-                                    new SelectListItem(){ Text = "EFTPOS", Value = "EFTPOS - on delivery - no credit cards", Selected = false }
+                                    new SelectListItem(){ Text = "EFTPOS", Value = "EFTPOS - on delivery - no credit cards", Selected = false },
+                                    new SelectListItem(){ Text = "BANK", Value = "Bank transfer", Selected = false }
                                 }, "Text", "Value", null);
 
             if (!ModelState.IsValid)

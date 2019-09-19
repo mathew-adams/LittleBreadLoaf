@@ -30,10 +30,10 @@ namespace littlebreadloaf.Data
         [DisplayFormat(DataFormatString = "{0:dddd, dd MMMM yyyy HH:mm:ss}")]
         public DateTime? Confirmed { get; set; }
 
-        [Display(Name = "Would you like to schedule a pickup?", Prompt = "Schedule for pickup?", Description = "Schedule for pickup?")]
+        [Display(Name = "I want to schedule a pick-up, please.", Prompt = "Schedule for pickup?", Description = "Schedule for pickup?")]
         public Boolean Pickup { get; set; }
 
-        [Display(Name = "Do you need an invoice?", Prompt = "Do you need an invoice?", Description = "Do you need an invoice?")]
+        [Display(Name = "I want an invoice, please.", Prompt = "Do you need an invoice?", Description = "Do you need an invoice?")]
         public Boolean Invoice { get; set; }
 
         [StringLength(255, MinimumLength = 2)]
