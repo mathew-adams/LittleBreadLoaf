@@ -41,9 +41,6 @@ namespace littlebreadloaf.Pages.Orders
         [BindProperty(SupportsGet = true)]
         public bool FilterShowAll { get; set; }
 
-        [BindProperty(SupportsGet = true)]
-        public bool FilterNeedsInvoice { get; set; }
-
         public async Task<IActionResult> OnGetAsync()
         {
             var query = (from orders in _context.ProductOrder select orders);
@@ -52,9 +49,6 @@ namespace littlebreadloaf.Pages.Orders
 
             if (!FilterShowAll)
                 query = query.Where(w => w.Payment == new DateTime(9999,12,31));
-
-            if (FilterNeedsInvoice)
-                query = query.Where(i => i.Invoice == true);
 
             if (!string.IsNullOrEmpty(FilterConfirmationCode))
                 query = query.Where(w => w.ConfirmationCode.Contains(FilterConfirmationCode, StringComparison.OrdinalIgnoreCase));

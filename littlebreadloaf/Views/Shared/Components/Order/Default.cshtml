@@ -31,10 +31,6 @@
             <td>@Html.DisplayFor(p => p.ProductOrder.ContactPhone)</td>
         </tr>
         <tr>
-            <td>@Html.Label("Needs invoice"):</td>
-            <td>@(Model.ProductOrder.Invoice ? "Yes" : "No")</td>
-        </tr>
-        <tr>
             <td>@Html.LabelFor(p => p.ProductOrder.ContactAddress):</td>
             <td>@Html.DisplayFor(a => a.NzAddressDeliverable.full_address)</td>
         </tr>

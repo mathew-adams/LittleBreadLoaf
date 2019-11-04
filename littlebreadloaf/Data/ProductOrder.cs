@@ -17,24 +17,33 @@ namespace littlebreadloaf.Data
         public DateTime? Created { get; set; }
 
         [DataType(DataType.Date)]
-        [Display(Name = "Date", Prompt = "Date", Description = "The time you would like your order delivered")]
+        [Display(Name = "Deliver date", Prompt = "Deliver date", Description = "The day you would like your order delivered")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? DeliveryDate { get; set; }
         
         [StringLength(45)]
-        [Display(Name = "Time", Prompt = "Time", Description = "The time you would like your order delivered")]
-        [Required(ErrorMessage = "A delivery time is required.")]
+        [DisplayFormat(NullDisplayText = "", ConvertEmptyStringToNull = false)]
+        [Display(Name = "Deliver time", Prompt = "Deliver time", Description = "The time you would like your order delivered")]
         public string DeliveryTime { get; set; }
+
+        [StringLength(2000)]
+        [DisplayFormat(NullDisplayText = "", ConvertEmptyStringToNull = false)]
+        [Display(Name = "Delivery instructions", Prompt = "Delivery instructions", Description = "Any additional delivery instructions you have")]
+        public string DeliveryInstructions { get; set; }
+
+        [DataType(DataType.Date)]
+        [Display(Name = "Pickup date", Prompt = "Pickup date", Description = "The day you would like to pick up your order")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
+        public DateTime? PickupDate { get; set; }
+
+        [StringLength(45)]
+        [DisplayFormat(NullDisplayText = "", ConvertEmptyStringToNull = false)]
+        [Display(Name = "Pickup time", Prompt = "Pickup time", Description = "The time you would like to pick up your order")]
+        public string PickupTime { get; set; }
 
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:dddd, dd MMMM yyyy HH:mm:ss}")]
         public DateTime? Confirmed { get; set; }
-
-        [Display(Name = "I want to schedule a pick-up, please.", Prompt = "Schedule for pickup?", Description = "Schedule for pickup?")]
-        public Boolean Pickup { get; set; }
-
-        [Display(Name = "I want an invoice, please.", Prompt = "Do you need an invoice?", Description = "Do you need an invoice?")]
-        public Boolean Invoice { get; set; }
 
         [StringLength(255, MinimumLength = 2)]
         [Display(Name = "Name", Prompt = "Name", Description = "Your name")]

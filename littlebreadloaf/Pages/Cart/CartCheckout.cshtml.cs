@@ -32,7 +32,7 @@ namespace littlebreadloaf.Pages.Cart
         public ProductOrder ProductOrder { get; set; }
 
         [BindProperty]
-        public IEnumerable<SelectListItem> PaymentMethod { get; set; }
+        public IEnumerable<SelectListItem> PaymentMethodOptions { get; set; }
 
         [BindProperty]
         public string Full_Address { get; set; }
@@ -61,12 +61,20 @@ namespace littlebreadloaf.Pages.Cart
                 }
             }
 
-            PaymentMethod = new SelectList(new List<SelectListItem>()
-                                {
-                                    new SelectListItem(){ Text = "CASH", Value = "Cash - on delivery / pickup", Selected = false },
-                                    new SelectListItem(){ Text = "EFTPOS", Value = "EFTPOS - on delivery / pickup - no credit cards", Selected = false },
-                                    new SelectListItem(){ Text = "BANK", Value = "Bank transfer", Selected = false }
-                                },"Text","Value",null);
+            if(ProductOrder != null)
+            {
+                if (ProductOrder.DeliveryDate == new DateTime(9999, 12, 31))
+                    ProductOrder.DeliveryDate = null;
+                if (ProductOrder.PickupDate == new DateTime(9999, 12, 31))
+                    ProductOrder.PickupDate = null;
+            }
+
+            PaymentMethodOptions = new SelectList(new List<SelectListItem>()
+            {
+                new SelectListItem(){ Text = "CASH", Value = "Cash - on delivery / pickup", Selected = false },
+                new SelectListItem(){ Text = "EFTPOS", Value = "EFTPOS - on delivery / pickup - no credit cards", Selected = false },
+                new SelectListItem(){ Text = "BANK", Value = "Bank transfer", Selected = false }
+            },"Text","Value",null);
             
             return Page();
         }
@@ -87,13 +95,12 @@ namespace littlebreadloaf.Pages.Cart
 
         public async Task<IActionResult> OnPostAsync()
         {
-
-            PaymentMethod = new SelectList(new List<SelectListItem>()
-                                {
-                                    new SelectListItem(){ Text = "CASH", Value = "Cash - on delivery", Selected = false },
-                                    new SelectListItem(){ Text = "EFTPOS", Value = "EFTPOS - on delivery - no credit cards", Selected = false },
-                                    new SelectListItem(){ Text = "BANK", Value = "Bank transfer", Selected = false }
-                                }, "Text", "Value", null);
+            PaymentMethodOptions = new SelectList(new List<SelectListItem>()
+            {
+                new SelectListItem(){ Text = "CASH", Value = "Cash - on delivery", Selected = false },
+                new SelectListItem(){ Text = "EFTPOS", Value = "EFTPOS - on delivery - no credit cards", Selected = false },
+                new SelectListItem(){ Text = "BANK", Value = "Bank transfer", Selected = false }
+            }, "Text", "Value", null);
 
             if (!ModelState.IsValid)
             {
@@ -101,12 +108,60 @@ namespace littlebreadloaf.Pages.Cart
 
                 return Page();
             }
-            
-            if(ProductOrder.Pickup)
+
+            //DATE
+            if(!ProductOrder.PickupDate.HasValue && !ProductOrder.DeliveryDate.HasValue)
+            {
+                ModelState.AddModelError("Validation.DeliveryOrPickup", "Choose either a delivery date or pickup date.");
+                return Page();
+            }
+
+            if(ProductOrder.PickupDate.HasValue && ProductOrder.PickupDate.Value < DateTime.Now)
+            {
+                ModelState.AddModelError("Validation.PickupDateInPast", "Pickup date cannot be in the past.");
+                return Page();
+            }
+
+            if (ProductOrder.DeliveryDate.HasValue && ProductOrder.DeliveryDate.Value < DateTime.Now)
+            {
+                ModelState.AddModelError("Validation.DeliveryDateInPast", "Delivery date cannot be in the past.");
+                return Page();
+            }
+
+            //TIME
+            if (ProductOrder.PickupDate.HasValue && string.IsNullOrEmpty(ProductOrder.PickupTime))
+            {
+                ModelState.AddModelError("Validation.PickupTimeRequired", "A pickup time is required.");
+                return Page();
+            }
+
+            if(ProductOrder.DeliveryDate.HasValue && string.IsNullOrEmpty(ProductOrder.DeliveryTime))
+            {
+                ModelState.AddModelError("Validation.DeliveryTimeRequired", "A delivery time is required.");
+                return Page();
+            }
+
+            var validDays = new List<DayOfWeek>()
+            {
+                DayOfWeek.Thursday,
+                DayOfWeek.Friday
+            };
+
+            if(ProductOrder.DeliveryDate.HasValue)
+            {
+                var dayOfWeek = ProductOrder.DeliveryDate.Value.DayOfWeek;
+                if (!validDays.Contains(dayOfWeek))
+                {
+                    ModelState.AddModelError("Validation.DeliveryDayOfWeek", "Delivery date must be either Thursday or Friday.");
+                    return Page();
+                }
+            }
+
+            if(ProductOrder.PickupDate.HasValue && !ProductOrder.DeliveryDate.HasValue) // If pickup, don't worry about a delivery address
             {
                 ProductOrder.ContactAddress = 0;
             }
-            else
+            else if(ProductOrder.DeliveryDate.HasValue) //Delivery must have an address
             {
                 if(ProductOrder.ContactAddress == 0)
                 {
@@ -134,6 +189,20 @@ namespace littlebreadloaf.Pages.Cart
             {
                 ModelState.AddModelError("Google.Recaptcha.TokenInvalid", "You are not a human!");
                 return Page();
+            }
+
+            if (ProductOrder.DeliveryInstructions == null)
+                ProductOrder.DeliveryInstructions = "";
+
+            //Determine if pickup or delivery
+            if (ProductOrder.DeliveryDate.HasValue)
+            {
+                ProductOrder.PickupDate = new DateTime(9999, 12, 31);
+                ProductOrder.PickupTime = "";
+            }else if(ProductOrder.PickupDate.HasValue)
+            {
+                ProductOrder.DeliveryDate = new DateTime(9999, 12, 31);
+                ProductOrder.DeliveryTime = "";
             }
 
             if (await _context.ProductOrder.AnyAsync(f => f.CartID == parsedCartID))
@@ -184,7 +253,6 @@ namespace littlebreadloaf.Pages.Cart
                 return response.Success;
             }
         }
-
 
         [DataContract]
         internal class RecaptchaResponse

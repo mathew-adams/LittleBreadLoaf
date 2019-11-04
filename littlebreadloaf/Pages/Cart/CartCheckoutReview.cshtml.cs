@@ -50,6 +50,11 @@ namespace littlebreadloaf.Pages.Cart
 
             NzAddressDeliverable = await _context.NzAddressDeliverable.FirstOrDefaultAsync(f => f.address_id == ProductOrder.ContactAddress);
 
+            if (ProductOrder.DeliveryDate == new DateTime(9999, 12, 31))
+                ProductOrder.DeliveryDate = null;
+            if (ProductOrder.PickupDate == new DateTime(9999, 12, 31))
+                ProductOrder.PickupDate = null;
+
             return Page();
         }
 
@@ -59,6 +64,11 @@ namespace littlebreadloaf.Pages.Cart
             {
                 return Page();
             }
+
+            if (ProductOrder.DeliveryDate.HasValue && ProductOrder.DeliveryDate.Value < new DateTime(9999,12,31))
+                ProductOrder.PickupDate = new DateTime(9999, 12, 31);
+            if (ProductOrder.PickupDate.HasValue && ProductOrder.PickupDate.Value < new DateTime(9999,12,31))
+                ProductOrder.DeliveryDate = new DateTime(9999, 12, 31);
 
             ProductOrder.Confirmed = DateTime.Now;
             while (true)
