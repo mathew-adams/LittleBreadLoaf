@@ -6,15 +6,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using littlebreadloaf.Data;
+using Microsoft.Extensions.Configuration;
 
 namespace littlebreadloaf.Pages.Cart
 {
     public class CartViewModel : PageModel
     {
         private readonly ProductContext _context;
-        public CartViewModel(ProductContext context)
+        private readonly IConfiguration _config;
+        public CartViewModel(ProductContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
 
         [BindProperty]
@@ -85,6 +88,8 @@ namespace littlebreadloaf.Pages.Cart
                                        .ToListAsync();
             }
 
+            ViewData["MinumumDelivery"] = _config["LittleBreadLoad.MinimumDelivery"];
+
             return Page();
 
         }
@@ -110,13 +115,11 @@ namespace littlebreadloaf.Pages.Cart
 
             await _context.SaveChangesAsync();
 
-            //return new OkObjectResult(cartItem);
             return new RedirectToPageResult("/Cart/CartView");
         }
 
         public async Task<IActionResult> OnPostDecreaseAsync(string cartItemID)
         {
-            //Sanitize inputs
             if (String.IsNullOrEmpty(cartItemID)
                 || !Guid.TryParse(cartItemID, out Guid parsedCartItemID))
             {
@@ -129,13 +132,13 @@ namespace littlebreadloaf.Pages.Cart
             {
                 return new RedirectToPageResult("/Cart/CartView");
             }
+
             if(cartItem.Quantity>1)
             {
                 cartItem.Quantity--;
                 _context.CartItem.Update(cartItem);
                 await _context.SaveChangesAsync();
             }
-            //return new OkObjectResult(cartItem);
             return new RedirectToPageResult("/Cart/CartView");
         }
 

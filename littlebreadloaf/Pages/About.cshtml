@@ -1,4 +1,8 @@
 ﻿@page
+
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
 @model AboutModel
 @{
     ViewData["Title"] = "About me";
@@ -59,7 +63,7 @@ GOOD FLOUR, SALT AND WATER ONLY
 <p>
     Enjoy browsing!
     Ewa
-    *minimum delivery amount is $30
+    *minimum delivery amount is $@Model.ViewData["MinumumDelivery"]
 </p>
 
 

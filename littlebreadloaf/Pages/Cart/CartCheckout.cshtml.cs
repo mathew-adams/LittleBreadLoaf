@@ -95,6 +95,12 @@ namespace littlebreadloaf.Pages.Cart
 
         public async Task<IActionResult> OnPostAsync()
         {
+            var validDays = new List<DayOfWeek>()
+            {
+                DayOfWeek.Thursday,
+                DayOfWeek.Friday
+            };
+
             PaymentMethodOptions = new SelectList(new List<SelectListItem>()
             {
                 new SelectListItem(){ Text = "CASH", Value = "Cash - on delivery", Selected = false },
@@ -109,8 +115,14 @@ namespace littlebreadloaf.Pages.Cart
                 return Page();
             }
 
+            var cartID = HttpContext.Request.Cookies[CartHelper.CartCookieName];
+            if (string.IsNullOrEmpty(cartID) || !Guid.TryParse(cartID, out Guid parsedCartID))
+            {
+                return new RedirectResult("/Cart/CartView");
+            }
+
             //DATE
-            if(!ProductOrder.PickupDate.HasValue && !ProductOrder.DeliveryDate.HasValue)
+            if (!ProductOrder.PickupDate.HasValue && !ProductOrder.DeliveryDate.HasValue)
             {
                 ModelState.AddModelError("Validation.DeliveryOrPickup", "Choose either a delivery date or pickup date.");
                 return Page();
@@ -141,14 +153,34 @@ namespace littlebreadloaf.Pages.Cart
                 return Page();
             }
 
-            var validDays = new List<DayOfWeek>()
+            if(ProductOrder.PickupDate.HasValue && !ProductOrder.DeliveryDate.HasValue) // If pickup, don't worry about a delivery address
             {
-                DayOfWeek.Thursday,
-                DayOfWeek.Friday
-            };
+                ProductOrder.ContactAddress = 0;
+            }
+            else if(ProductOrder.DeliveryDate.HasValue && ProductOrder.DeliveryDate.Value < new DateTime(9999,12,31)) //Delivery must have an address
+            {
+                if(ProductOrder.ContactAddress == 0)
+                {
+                    ModelState.AddModelError("Address.Missing", "Please select an address to be delivered to.");
+                    return Page();
+                }
 
-            if(ProductOrder.DeliveryDate.HasValue)
-            {
+                if (!Decimal.TryParse(_config["LittleBreadLoad.MinimumDelivery"], out decimal minDeliveryAmount))
+                {
+                    throw new Exception("LittleBreadLoad.MinimumDelivery is not configured.");
+                }
+
+                var cartItems = await _context
+                                        .CartItem
+                                        .Where(w => w.CartID == parsedCartID)
+                                        .Select(s => new { s.Price, s.Quantity })
+                                        .ToListAsync();
+
+                if (cartItems.Sum(s => s.Price * s.Quantity) < minDeliveryAmount)
+                {
+                    ModelState.AddModelError("Validation.DeliveryMinNotMet", $"The minimum delivery amount is ${_config["LittleBreadLoad.MinimumDelivery"]}");
+                    return Page();
+                }
                 var dayOfWeek = ProductOrder.DeliveryDate.Value.DayOfWeek;
                 if (!validDays.Contains(dayOfWeek))
                 {
@@ -157,29 +189,11 @@ namespace littlebreadloaf.Pages.Cart
                 }
             }
 
-            if(ProductOrder.PickupDate.HasValue && !ProductOrder.DeliveryDate.HasValue) // If pickup, don't worry about a delivery address
-            {
-                ProductOrder.ContactAddress = 0;
-            }
-            else if(ProductOrder.DeliveryDate.HasValue) //Delivery must have an address
-            {
-                if(ProductOrder.ContactAddress == 0)
-                {
-                    ModelState.AddModelError("Address.Missing", "Please select an address to be delivered to.");
-                    return Page();
-                }
-            }
-
-            var cartID = HttpContext.Request.Cookies[CartHelper.CartCookieName];
-            if (string.IsNullOrEmpty(cartID) || !Guid.TryParse(cartID, out Guid parsedCartID))
-            {
-                return new RedirectResult("/Cart/CartView");
-            }
-
             if(!await _context.Cart.AnyAsync(a => a.CartID == parsedCartID))
             {
                 return new RedirectResult("/Cart/CartView");
             }
+
             if(string.IsNullOrEmpty(GoogleRecaptchaToken))
             {
                 ModelState.AddModelError("Google.Recaptcha.TokenMissing", "You are missing a token.");
