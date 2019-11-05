@@ -95,10 +95,17 @@ namespace littlebreadloaf.Pages.Cart
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var validDays = new List<DayOfWeek>()
+            var validDeliveryDaysOfWeek = new List<DayOfWeek>()
             {
                 DayOfWeek.Thursday,
                 DayOfWeek.Friday
+            };
+
+            var validPickupDaysOfWeek = new List<DayOfWeek>()
+            {
+                DayOfWeek.Thursday,
+                DayOfWeek.Friday,
+                DayOfWeek.Saturday
             };
 
             PaymentMethodOptions = new SelectList(new List<SelectListItem>()
@@ -153,9 +160,16 @@ namespace littlebreadloaf.Pages.Cart
                 return Page();
             }
 
-            if(ProductOrder.PickupDate.HasValue && !ProductOrder.DeliveryDate.HasValue) // If pickup, don't worry about a delivery address
+            if(ProductOrder.PickupDate.HasValue && ProductOrder.PickupDate.Value < new DateTime(9999,12,31)) 
             {
-                ProductOrder.ContactAddress = 0;
+                ProductOrder.ContactAddress = 0; // If pickup, don't worry about a delivery address
+
+                var dayOfWeek = ProductOrder.PickupDate.Value.DayOfWeek;
+                if (!validPickupDaysOfWeek.Contains(dayOfWeek))
+                {
+                    ModelState.AddModelError("Validation.PickupDayOfWeek", "Pickup date must be either Thursday, Friday or Saturday.");
+                    return Page();
+                }
             }
             else if(ProductOrder.DeliveryDate.HasValue && ProductOrder.DeliveryDate.Value < new DateTime(9999,12,31)) //Delivery must have an address
             {
@@ -170,6 +184,13 @@ namespace littlebreadloaf.Pages.Cart
                     throw new Exception("LittleBreadLoad.MinimumDelivery is not configured.");
                 }
 
+                var dayOfWeek = ProductOrder.DeliveryDate.Value.DayOfWeek;
+                if (!validDeliveryDaysOfWeek.Contains(dayOfWeek))
+                {
+                    ModelState.AddModelError("Validation.DeliveryDayOfWeek", "Delivery date must be either Thursday or Friday.");
+                    return Page();
+                }
+
                 var cartItems = await _context
                                         .CartItem
                                         .Where(w => w.CartID == parsedCartID)
@@ -179,12 +200,6 @@ namespace littlebreadloaf.Pages.Cart
                 if (cartItems.Sum(s => s.Price * s.Quantity) < minDeliveryAmount)
                 {
                     ModelState.AddModelError("Validation.DeliveryMinNotMet", $"The minimum delivery amount is ${_config["LittleBreadLoad.MinimumDelivery"]}");
-                    return Page();
-                }
-                var dayOfWeek = ProductOrder.DeliveryDate.Value.DayOfWeek;
-                if (!validDays.Contains(dayOfWeek))
-                {
-                    ModelState.AddModelError("Validation.DeliveryDayOfWeek", "Delivery date must be either Thursday or Friday.");
                     return Page();
                 }
             }

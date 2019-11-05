@@ -70,6 +70,19 @@ $(document).ready(function () {
             }
         }
     });
+
+    $("#pickup_date").datepicker({
+        minDate: "1d",
+        maxDate: "10d",
+        dateFormat: "yy-mm-dd",
+        beforeShowDay: function (date) {
+            if (getDayOfWeek(date) === "Thursday" || getDayOfWeek(date) === "Friday" || getDayOfWeek(date) === "Saturday") {
+                return [true, ""];
+            } else {
+                return [false, ""];
+            }
+        }
+    });
 });
 
 function getDayOfWeek(date) {
@@ -107,28 +120,16 @@ $(document).ready(function () {
 
     $('#delivery_time').timepicker({
         'timeFormat': 'H:i a',
-        'minTime': '8:30am',
-        'maxTime': '3:00pm'
+        'minTime': '7:30am',
+        'maxTime': '8:30am'
+    });
+
+    $('#pickup_time').timepicker({
+        'timeFormat': 'H:i a',
+        'minTime': '11:00am',
+        'maxTime': '2:00pm'
     });
 });
-
-$(document).ready(function () {
-    $("#checkout_pickup").change(function () {
-        if ($("#checkout_pickup").prop("checked")) {
-            $("#delivery_address").prop('disabled', true);
-
-            $('#delivery_time').timepicker('option', { minTime: '11:00am' });
-            $('#delivery_time').timepicker('option', { maxTime: '2:00pm' });
-        }
-        else {
-            $("#delivery_address").prop('disabled', false);
-
-            $('#delivery_time').timepicker('option', { minTime: '8:00am' });
-            $('#delivery_time').timepicker('option', { maxTime: '9:00am' });
-        }
-    });
-});
-
 
 $(document).ready(function () {
     $("form[name='add_cart']").submit(function (e) {
