@@ -135,32 +135,41 @@ namespace littlebreadloaf.Pages.Cart
                 return Page();
             }
 
-            if(ProductOrder.PickupDate.HasValue && ProductOrder.PickupDate.Value < DateTime.Now)
+            var validPickupDate = (ProductOrder.PickupDate.HasValue && ProductOrder.PickupDate.Value < new DateTime(9999, 12, 31));
+            var validDeliveryDate = (ProductOrder.DeliveryDate.HasValue && ProductOrder.DeliveryDate.Value < new DateTime(9999, 12, 31));
+
+            if(validDeliveryDate && validPickupDate)
+            {
+                ModelState.AddModelError("Validation.DeliveryOrPickup", "Choose either a delivery date or pickup date.");
+                return Page();
+            }
+
+            if (validPickupDate && ProductOrder.PickupDate.Value < DateTime.Now)
             {
                 ModelState.AddModelError("Validation.PickupDateInPast", "Pickup date cannot be in the past.");
                 return Page();
             }
 
-            if (ProductOrder.DeliveryDate.HasValue && ProductOrder.DeliveryDate.Value < DateTime.Now)
+            if (validDeliveryDate && ProductOrder.DeliveryDate.Value < DateTime.Now)
             {
                 ModelState.AddModelError("Validation.DeliveryDateInPast", "Delivery date cannot be in the past.");
                 return Page();
             }
 
             //TIME
-            if (ProductOrder.PickupDate.HasValue && string.IsNullOrEmpty(ProductOrder.PickupTime))
+            if (validPickupDate && string.IsNullOrEmpty(ProductOrder.PickupTime))
             {
                 ModelState.AddModelError("Validation.PickupTimeRequired", "A pickup time is required.");
                 return Page();
             }
 
-            if(ProductOrder.DeliveryDate.HasValue && string.IsNullOrEmpty(ProductOrder.DeliveryTime))
+            if(validDeliveryDate && string.IsNullOrEmpty(ProductOrder.DeliveryTime))
             {
                 ModelState.AddModelError("Validation.DeliveryTimeRequired", "A delivery time is required.");
                 return Page();
             }
 
-            if(ProductOrder.PickupDate.HasValue && ProductOrder.PickupDate.Value < new DateTime(9999,12,31)) 
+            if(validPickupDate) 
             {
                 ProductOrder.ContactAddress = 0; // If pickup, don't worry about a delivery address
 
@@ -171,7 +180,8 @@ namespace littlebreadloaf.Pages.Cart
                     return Page();
                 }
             }
-            else if(ProductOrder.DeliveryDate.HasValue && ProductOrder.DeliveryDate.Value < new DateTime(9999,12,31)) //Delivery must have an address
+
+            if(validDeliveryDate) //Delivery must have an address
             {
                 if(ProductOrder.ContactAddress == 0)
                 {
