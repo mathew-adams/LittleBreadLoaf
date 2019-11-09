@@ -1,0 +1,117 @@
+﻿@page
+@model littlebreadloaf.Pages.AboutModel
+@{
+    ViewData["Title"] = "About me";
+    ViewData["ReturnUrl"] = "/About";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">About me</li>
+    </ol>
+</nav>
+
+<img class="img-fluid" src="~/images/banners/ABOUT_ME_BANNER.png" />
+
+<div class="jumbotron justify-content-md-center">
+
+    <div>
+        <p class="lead">
+            My name is Ewa Adams and I run probably the smallest artisan bakery
+            in the world. It might be small but thanks to that you can be sure bread
+            you buy here is fresh and contains natural ingredients only.
+        </p>
+        <p class="lead">
+            This website lets you order fresh sourdough bread and bread products
+            to be delivered<strong>**</strong> to your doorstep (Wellington, Petone, and Lower Hutt)
+            or being picked up from my bakery in Lower Hutt.
+        </p>
+
+        <h5 class="mt-4">Bread in Polish tradition</h5>
+        <p class="lead">
+            In Poland, where I come from, we eat and bake A LOT of bread. There
+            are hundreds of bakeries only in Warsaw and probably thousands in
+            the whole country. We are addicted to good bread and good bread
+            is mandatory ingredient in every Polish kitchen. Over 96%
+            of Polish households buy bread on a daily basis.
+        </p>
+
+        <h5 class="mt-4">What is Polish bread?</h5>
+        <p class="lead">
+            Polish bread is based on rye wholemeal flour and sourdough starter.
+            Loaf should be dense inside and crunchy on the outside. Heavy but
+            easy to digest. Contains a lot of seeds and is naturally fermented.
+            Healthy and keeps you full for hours.
+        </p>
+
+        <h5 class="mt-4">Only good flour, salt, and water</h5>
+        <p class="lead">
+            That is what you need to make a good sourdough bread and that is
+            what my motto is. Please read the labels on bread you buy and treat
+            yourself and your friend and family to a good bread only.
+        </p>
+        <p class="lead font-italic">
+            Enjoy browsing! <br />
+            Ewa
+            <br />
+            <br />
+            <strong>**</strong> minimum delivery amount is $@ViewData["MinumumDelivery"]
+        </p>
+    </div>
+
+</div>
+
+
+
+<hr />
+
+<div class="mb-3">
+    <div class="">
+        <div class="row">
+            <div class="col-sm-4">
+
+                <blockquote class="block-quote">
+                    <i class="fa fa-quote-left" aria-hidden="true"></i>
+                    <p class="mb-0">Seriously delicious bread! nothing like anything else i have tried before. the drozdzowka was amazing - it was soft inside and had a crunchy and sweet crust on top! Ewa and her bread are a definite hidden gem in wellington</p>
+                </blockquote>
+            </div>
+            <div class="col-sm-4">
+
+                <blockquote class="block-quote">
+                    <i class="fa fa-quote-left" aria-hidden="true"></i>
+                    <p class="mb-0">Absolutely delicious, fresh, crusty bread. My personal favorite - sourdough baguettes!!!! Not sure if they are better on the first day or the second when you can toast them... SOOOOO YUMMY Polish bread at its best. Do not miss out on this little gem!</p>
+                </blockquote>
+            </div>
+            <div class="col-sm-4">
+
+                <blockquote class="block-quote">
+                    <i class="fa fa-quote-left" aria-hidden="true"></i>
+                    <p class="mb-0">Amazing bread and donuts!! Everything is always fresh and delicious, plus Ewa is very friendly and welcoming. Would definitely recommend.</p>
+                </blockquote>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-sm-4">
+
+                <blockquote class="block-quote">
+                    <i class="fa fa-quote-left" aria-hidden="true"></i>
+                    <p class="mb-0">Best bread in Wellington. If you're coming from Europe and miss sourdough-style bread, you won't be disappointed.</p>
+                </blockquote>
+            </div>
+            <div class="col-sm-4">
+
+                <blockquote class="block-quote">
+                    <i class="fa fa-quote-left" aria-hidden="true"></i>
+                    <p class="mb-0">Love the bread! Great quality and love the loaf with the sesame seeds.</p>
+                </blockquote>
+            </div>
+            <div class="col-sm-4">
+
+                <blockquote class="block-quote">
+                    <i class="fa fa-quote-left" aria-hidden="true"></i>
+                    <p class="mb-0">Soooo good! Reminds me of my European holidays!</p>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+</div>

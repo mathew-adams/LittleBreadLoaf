@@ -1,16 +1,15 @@
 ﻿@page
 @model ProductListModel
 @{
-    ViewData["Title"] = "Products";
+    ViewData["Title"] = "Online shopping";
     ViewData["ReturnURL"] = Url.Page("/Products/ProductList");
 
     var outage = Model.ProductOrderOutages.Count > 0 && Model.ProductOrderOutages.Any(a => a.Start <= DateTime.Now && a.Stop >= DateTime.Now);
-
 }
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page">Products</li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
     </ol>
 </nav>
 

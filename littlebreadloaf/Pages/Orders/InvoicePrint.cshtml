@@ -41,7 +41,7 @@
             <h1 class="display-3 font-weight-bold">Invoice</h1>
         </div>
         <div class="col-4 text-center">
-            <img src="~/images/little-bread-loaf-logo-blue.svg" height="200" width="200"/>
+            <img src="~/images/little-bread-loaf-logo-blue.svg" height="200" width="200" />
         </div>
         <div class="col-4">
             <div class="row mt-2">
@@ -97,80 +97,86 @@
 
                 </div>
             </div>
+        </div>
     </div>
-</div>
 
-<table class="table mt-5 table-sm">
-    <thead>
-        <tr>
-            <th class="text-left">Type</th>
-            <th class="text-left">Name</th>
-            <th class="text-left">Description</th>
-            <th class="text-left">Unit Price</th>
-            <th class="text-left">Quantity</th>
-            <th class="text-left">Amount</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var invoiceTxn in Model.InvoiceTransaction.Where(w => w.Type == "Debit"))
-        {
-            var sum = invoiceTxn.Price * invoiceTxn.Quantity;
+    <table class="table mt-5 table-sm">
+        <thead>
             <tr>
-                <td>@Html.DisplayFor(o => invoiceTxn.Category)</td>
-                <td>@Html.DisplayFor(o => invoiceTxn.Name)</td>
-                <td>@Html.DisplayFor(o => invoiceTxn.Description)</td>
-                <td>@Html.DisplayFor(o => invoiceTxn.Price)</td>
-                <td>@Html.DisplayFor(o => invoiceTxn.Quantity)</td>
-                <td>@sum</td>
+                <th class="text-left">Type</th>
+                <th class="text-left">Name</th>
+                <th class="text-left">Description</th>
+                <th class="text-left">Unit Price</th>
+                <th class="text-left">Quantity</th>
+                <th class="text-left">Amount</th>
             </tr>
-        }
-        <tr class="table-active">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><strong>Subtotal:</strong></td>
-            <td><strong>@Model.InvoiceTransaction.Where(w => w.Type == "Debit").Sum(s => s.Quantity * s.Price)</strong></td>
-        </tr>
-        @foreach (var invoiceTxn in Model.InvoiceTransaction.Where(w => w.Type == "Credit" && w.Category == "Discount"))
-        {
-            var sum = invoiceTxn.Price * invoiceTxn.Quantity;
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td> - @invoiceTxn.Description</td>
-            <td>@(invoiceTxn.Price * invoiceTxn.Quantity)</td>
-        </tr>
-        }
-        @foreach (var invoiceTxn in Model.InvoiceTransaction.Where(w => w.Type == "Credit" && w.Category == "Payment"))
-        {
-            var sum = invoiceTxn.Price * invoiceTxn.Quantity;
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td> - @invoiceTxn.Description</td>
-            <td>@(invoiceTxn.Price * invoiceTxn.Quantity)</td>
-        </tr>
-        }
-        <tr class="table-active">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td class="border-top"><h5><strong>Balance Due:</strong></h5></td>
-            <td class="border-top"><h5><strong>@balance</strong></h5></td>
-        </tr>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var invoiceTxn in Model.InvoiceTransaction.Where(w => w.Type == "Debit"))
+            {
+                var sum = invoiceTxn.Price * invoiceTxn.Quantity;
+                <tr>
+                    <td>@Html.DisplayFor(o => invoiceTxn.Category)</td>
+                    <td>@Html.DisplayFor(o => invoiceTxn.Name)</td>
+                    <td>@Html.DisplayFor(o => invoiceTxn.Description)</td>
+                    <td>@Html.DisplayFor(o => invoiceTxn.Price)</td>
+                    <td>@Html.DisplayFor(o => invoiceTxn.Quantity)</td>
+                    <td>@sum</td>
+                </tr>
+            }
+            <tr class="table-active">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><strong>Subtotal:</strong></td>
+                <td><strong>@Model.InvoiceTransaction.Where(w => w.Type == "Debit").Sum(s => s.Quantity * s.Price)</strong></td>
+            </tr>
+            @foreach (var invoiceTxn in Model.InvoiceTransaction.Where(w => w.Type == "Credit" && w.Category == "Discount"))
+            {
+                var sum = invoiceTxn.Price * invoiceTxn.Quantity;
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td> - @invoiceTxn.Description</td>
+                    <td>@(invoiceTxn.Price * invoiceTxn.Quantity)</td>
+                </tr>
+            }
+            @foreach (var invoiceTxn in Model.InvoiceTransaction.Where(w => w.Type == "Credit" && w.Category == "Payment"))
+            {
+                var sum = invoiceTxn.Price * invoiceTxn.Quantity;
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td> - @invoiceTxn.Description</td>
+                    <td>@(invoiceTxn.Price * invoiceTxn.Quantity)</td>
+                </tr>
+            }
+            <tr class="table-active">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="border-top"><h5><strong>Balance Due:</strong></h5></td>
+                <td class="border-top"><h5><strong>@balance</strong></h5></td>
+            </tr>
+        </tbody>
+    </table>
 
-@*<div class="card mb-3">
-    <div class="card-header">Header</div>
-    <div class="card-body">
-        <h5 class="card-title">Info card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <div class="card mb-3">
+        <div class="card-header">Thank you for placing an order!</div>
+        <div class="card-body">
+            <h5 class="card-title">My banking details are as follows:</h5>
+            <p class="card-text">
+                @ViewData["Name"]<br />
+                <strong>@ViewData["Bank"]</strong><br />
+                Please use your confirmation number as the reference<br />
+                Thank you,<br />
+                Ewa
+            </p>
+        </div>
     </div>
-</div>*@

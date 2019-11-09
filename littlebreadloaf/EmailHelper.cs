@@ -32,6 +32,11 @@ namespace littlebreadloaf
                     { new StringContent(message), "html" }
                 };
 
+                if (!string.IsNullOrEmpty(configuration["LittleBreadLoad.InternalEmail"]))
+                {
+                    content.Add(new StringContent(configuration["LittleBreadLoad.InternalEmail"]), "bcc");
+                }
+                
                 if (attachment != null)
                 {
                     content.Add(CreateAttachmentContent(attachment, attachmentName, "application/pdf"));
