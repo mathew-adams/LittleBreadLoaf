@@ -39,12 +39,11 @@ namespace littlebreadloaf
                 options.EnableForHttps = true;
             });
 
-            //services.AddResponseCompression();
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
+                options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.Strict;
             });
 
             services.AddDbContext<ProductContext>
@@ -56,7 +55,7 @@ namespace littlebreadloaf
                 options => options.UseMySql(Configuration["ConnectionStrings:DefaultConnection"])
             );
             services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                    .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -72,8 +71,8 @@ namespace littlebreadloaf
             }
             else
             {
-                app.UseDeveloperExceptionPage();
-                //app.UseExceptionHandler("/Error");
+                //app.UseDeveloperExceptionPage();
+                app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
             

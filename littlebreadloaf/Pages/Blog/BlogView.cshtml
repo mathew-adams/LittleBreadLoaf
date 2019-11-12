@@ -3,9 +3,26 @@
 @{
     ViewData["Title"] = Model.Blog.Title;
     ViewData["ReturnURL"] = Url.Page("/Blog/BlogView", new { Model.Blog.BlogID });
+    ViewData["Description"] = @Model.Blog.Description;
+    ViewData["FullURL"] = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, ViewData["ReturnURL"]);
+
+    if (Model.BlogImage != null && !string.IsNullOrEmpty(Model.BlogImage.FileLocation))
+    {
+        var size = "";
+        if (Model.BlogImage.Mode == "SQUARE" || Model.BlogImage.Mode == "ASPECT")
+        {
+            size = "350";
+        }
+        else //Banner
+        {
+            size = "1110";
+        }
+
+        var blogImage = Model.BlogImage.FileLocation;
+        ViewData["Image"] = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, @Model.BlogImage.FileLocation.Replace("{1}",size));
+    }
 
     var published = (Model.Blog.Published < new DateTime(9999, 12, 31));
-
     var publishLabel = (published) ? "Unpublish" : "Publish";
     var publishImage = (published) ? "fa fa-low-vision" : "fa fa-podcast";
 }

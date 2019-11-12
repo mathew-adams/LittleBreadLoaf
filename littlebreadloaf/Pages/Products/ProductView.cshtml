@@ -3,9 +3,17 @@
 @{
     ViewData["Title"] = @Model.Product.Name;
     ViewData["ReturnURL"] = Url.Page("/Products/ProductView", new { productID = Model.Product.ProductID });
+    ViewData["Description"] = @Model.Product.Description;
 
     var productImage = Model.Images.FirstOrDefault(m => m.PrimaryImage == true);
     var outage = Model.ProductOrderOutages.Count > 0 && Model.ProductOrderOutages.Any(a => a.Start <= DateTime.Now && a.Stop >= DateTime.Now);
+
+    ViewData["FullURL"] = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, ViewData["ReturnURL"]);
+
+    if (!string.IsNullOrEmpty(productImage.FileLocation))
+    {
+        ViewData["Image"] =  string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, @productImage.FileLocation.Replace("{1}", "500"));
+    }
 }
 
 <nav aria-label="breadcrumb">
@@ -71,7 +79,6 @@
                              title="@productImage.Title" />
                     </a>
                 }
-
             </div>
         </div>
     </div>
@@ -127,20 +134,20 @@
                         </div>
                     }
                 </div>
-                
-                @if(!outage)
+
+                @if (!outage)
                 {
-                <form name="add_cart" class="add-cart" asp-page-handler="cartadd" asp-route-ProductID="@Model.Product.ProductID" method="post">
-                    <button class="btn btn-info btn-lg btn-block text-uppercase add-to-cart" type="submit">
-                        <i class="fa fa-cart-plus" aria-hidden="true" title="Add to cart"></i> Add to cart
-                    </button>
-                    @Html.HiddenFor(m => m.Product.ProductID)
-                    @Html.HiddenFor(m => m.Product.Price)
-                    @Html.HiddenFor(m => m.Product.Name, new { @id = "productName" })
-                    @Html.HiddenFor(m => m.Product.Description)
-                </form>
+                    <form name="add_cart" class="add-cart" asp-page-handler="cartadd" asp-route-ProductID="@Model.Product.ProductID" method="post">
+                        <button class="btn btn-info btn-lg btn-block text-uppercase add-to-cart" type="submit">
+                            <i class="fa fa-cart-plus" aria-hidden="true" title="Add to cart"></i> Add to cart
+                        </button>
+                        @Html.HiddenFor(m => m.Product.ProductID)
+                        @Html.HiddenFor(m => m.Product.Price)
+                        @Html.HiddenFor(m => m.Product.Name, new { @id = "productName" })
+                        @Html.HiddenFor(m => m.Product.Description)
+                    </form>
                 }
-                
+
 
             </div>
         </div>
