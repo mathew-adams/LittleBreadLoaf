@@ -30,14 +30,31 @@
             <td>@Html.LabelFor(p => p.ProductOrder.ContactPhone):</td>
             <td>@Html.DisplayFor(p => p.ProductOrder.ContactPhone)</td>
         </tr>
-        <tr>
-            <td>@Html.LabelFor(p => p.ProductOrder.ContactAddress):</td>
-            <td>@Html.DisplayFor(a => a.NzAddressDeliverable.full_address)</td>
-        </tr>
-        <tr>
-            <td>@Html.Label("Delivery"):</td>
-            <td>@Html.DisplayFor(d => d.ProductOrder.DeliveryDate) at @Html.DisplayFor(t => t.ProductOrder.DeliveryTime)</td>
-        </tr>
+        @if (Model.ProductOrder.DeliveryDate.Value < new DateTime(9999, 12, 31))
+        {
+            <tr>
+                <td>@Html.Label("Delivery"):</td>
+                <td>@Html.DisplayFor(d => d.ProductOrder.DeliveryDate) at @Html.DisplayFor(t => t.ProductOrder.DeliveryTime)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(p => p.ProductOrder.ContactAddress):</td>
+                <td>@Html.DisplayFor(a => a.NzAddressDeliverable.full_address)</td>
+            </tr>
+            @if (!string.IsNullOrEmpty(Model.ProductOrder.DeliveryInstructions))
+            {
+                <tr>
+                    <td>@Html.Label("Delivery instructions"):</td>
+                    <td>@Html.DisplayFor(a => a.ProductOrder.DeliveryInstructions)</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td>@Html.Label("Pickup"):</td>
+                <td>@Html.DisplayFor(d => d.ProductOrder.PickupDate) at @Html.DisplayFor(t => t.ProductOrder.PickupTime)</td>
+            </tr>
+        }
     </tbody>
 </table>
 

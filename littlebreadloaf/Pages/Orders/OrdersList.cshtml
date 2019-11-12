@@ -98,8 +98,9 @@
                 <th></th>
                 <th>Created</th>
                 <th>Code</th>
-                <th>Delivery Date</th>
-                <th>Pickup Date</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Time</th>
                 <th>Phone</th>
                 <th>Email</th>
                 <th>Method</th>
@@ -113,27 +114,39 @@
                 var image = paid ? "fa fa-check-circle" : "fa fa-exclamation-circle";
                 var status = paid ? "Paid" : "Payment outstanding";
                 var color = paid ? "text-success" : "text-danger";
-                <tr>
-                    <td class="@color"><i class="@image sr-icons" title="@status"></i></td>
-                    <td>@order.Created.Value.ToString("yyyy-MM-dd")</td>
-                    <td>@Html.DisplayFor(o => order.ConfirmationCode)</td>
-                    <td>
-                        @if (order.DeliveryDate.Value < new DateTime(9999, 12, 31))
-                        {
-                            @order.DeliveryDate.Value.ToString("yyyy-MM-dd")
-                        }
-                    </td>
-                    <td>
-                        @if (order.PickupDate.Value < new DateTime(9999, 12, 31))
-                        {
-                            @order.PickupDate.Value.ToString("yyyy-MM-dd")
-                        }
-                    </td>
-                    <td>@Html.DisplayFor(o => order.ContactPhone)</td>
-                    <td>@Html.DisplayFor(o => order.ContactEmail)</td>
-                    <td>@Html.DisplayFor(o => order.PaymentMethod)</td>
-                    <td><a class="btn btn-outline-secondary" asp-page="/Orders/OrderView" asp-route-OrderID="@order.OrderID"><i class="fa fa-shopping-basket" aria-hidden="true"></i> View</a></td>
-                </tr>
+                var type = (order.DeliveryDate.Value < new DateTime(9999, 12, 31)) ? "Delivery" : "Pickup";
+            <tr>
+                <td class="@color"><i class="@image sr-icons" title="@status"></i></td>
+                <td>@order.Created.Value.ToString("yyyy-MM-dd")</td>
+                <td>@Html.DisplayFor(o => order.ConfirmationCode)</td>
+                <td>
+                    @type
+                </td>
+                <td>
+                    @if (type == "Delivery")
+                    {
+                        @order.DeliveryDate.Value.ToString("yyyy-MM-dd")
+                    }
+                    @if (type == "Pickup")
+                    {
+                        @order.PickupDate.Value.ToString("yyyy-MM-dd")
+                    }
+                </td>
+                <td>
+                    @if (type == "Delivery")
+                    {
+                        @order.DeliveryTime
+                    }
+                    @if (type == "Pickup")
+                    {
+                        @order.PickupTime
+                    }
+                </td>
+                <td>@Html.DisplayFor(o => order.ContactPhone)</td>
+                <td>@Html.DisplayFor(o => order.ContactEmail)</td>
+                <td>@Html.DisplayFor(o => order.PaymentMethod)</td>
+                <td><a class="btn btn-outline-secondary" asp-page="/Orders/OrderView" asp-route-OrderID="@order.OrderID"><i class="fa fa-shopping-basket" aria-hidden="true"></i> View</a></td>
+            </tr>
             }
         </tbody>
     </table>
