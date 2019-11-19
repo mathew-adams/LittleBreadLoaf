@@ -36,7 +36,7 @@ namespace littlebreadloaf.Pages.Maintenance
             if (!From.HasValue)
                 From = DateTime.Now.Date.AddDays(-7);
             if (!To.HasValue)
-                To = DateTime.Now.Date;
+                To = DateTime.Now;
 
             if(SearchTerm != null)
             {
