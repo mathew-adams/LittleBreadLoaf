@@ -10,7 +10,7 @@
 
     ViewData["FullURL"] = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, ViewData["ReturnURL"]);
 
-    if (!string.IsNullOrEmpty(productImage.FileLocation))
+    if (productImage != null && !string.IsNullOrEmpty(productImage.FileLocation))
     {
         ViewData["Image"] =  string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, @productImage.FileLocation.Replace("{1}", "500"));
     }
@@ -147,7 +147,6 @@
                         @Html.HiddenFor(m => m.Product.Description)
                     </form>
                 }
-
 
             </div>
         </div>
