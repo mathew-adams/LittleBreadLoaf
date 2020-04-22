@@ -67,6 +67,8 @@ namespace littlebreadloaf.Pages.Orders
 
             ProductOrders = await query.ToListAsync();
 
+            ProductOrders = ProductOrders.OrderByDescending(o => o.Created).ToList();
+
             return Page();
         }
     }

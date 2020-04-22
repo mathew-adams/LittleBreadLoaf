@@ -77,7 +77,7 @@
     </div>
 
     <div class="col-md-6">
-        <strong>@Html.Label("Pickup (from Alice town bakery):")</strong> <a asp-page="/Bakery">View map</a>
+        <strong>@Html.Label("Pickup (from the bakery):")</strong> <a asp-page="/Bakery">View map</a>
         <div class="form-row">
             <div class="form-group col">
                 <div class="input-group">
@@ -109,7 +109,7 @@
             </h4>
         </div>
 
-        <strong>@Html.Label("Deliver (to Petone, Lower Hutt, or Wellington CBD):")</strong>
+        <strong>@Html.Label("Deliver (to Petone, Lower Hutt, or Wellington City):")</strong>
         <div class="form-row">
             <div class="form-group col">
                 <div class="input-group">
@@ -131,7 +131,7 @@
                     <div class="input-group-prepend">
                         <div class="input-group-text"><i class="fa fa-clock-o fa-fw" aria-hidden="true" title="Deliver time"></i></div>
                     </div>
-                    @Html.TextBoxFor(m => m.ProductOrder.DeliveryTime, new { @id = "delivery_time", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "108" })
+                    @Html.TextBoxFor(m => m.ProductOrder.DeliveryTime, new { @id = "delivery_time", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "108", disabled = "on" })
                 </div>
                 @Html.ValidationMessageFor(m => m.ProductOrder.DeliveryTime, "", new { @class = "text-danger" })
                 @Html.ValidationMessage("Validation.DeliveryTimeRequired", "", new { @class = "text-danger" }, "")
@@ -165,8 +165,6 @@
             </div>
         </div>
     </div>
-
-
 
 </div>
 

@@ -28,7 +28,7 @@ namespace littlebreadloaf.Data
 
         [StringLength(2000)]
         [DisplayFormat(NullDisplayText = "", ConvertEmptyStringToNull = false)]
-        [Display(Name = "Delivery instructions", Prompt = "Delivery instructions", Description = "Any additional delivery instructions you have")]
+        [Display(Name = "Delivery instructions", Prompt = "Delivery instructions, voucher number, or any comments", Description = "Any additional delivery instructions you have")]
         public string DeliveryInstructions { get; set; }
 
         [DataType(DataType.Date)]

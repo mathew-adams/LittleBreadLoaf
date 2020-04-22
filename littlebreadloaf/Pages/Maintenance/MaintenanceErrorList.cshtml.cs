@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using littlebreadloaf.Data;
 using Microsoft.AspNetCore.Authorization;
+using System.ComponentModel.DataAnnotations;
 
 namespace littlebreadloaf.Pages.Maintenance
 {
@@ -23,9 +24,13 @@ namespace littlebreadloaf.Pages.Maintenance
         public List<SystemError> SystemErrors { get; set; }
 
         [BindProperty(SupportsGet = true)]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? From { get; set; }
 
         [BindProperty(SupportsGet = true)]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? To { get; set; }
 
         [BindProperty(SupportsGet = true)]

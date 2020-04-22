@@ -1,0 +1,49 @@
+﻿@page
+@model littlebreadloaf.Pages.Orders.OrderConfirmationResendModel
+@{
+    ViewData["Title"] = "Resend confirmation email";
+    ViewData["ReturnURL"] = Url.Page("/Orders/OrderConfirmationResend", new { OrderID = @Model.OrderID });
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Orders/OrdersList">Orders</a></li>
+        <li class="breadcrumb-item"><a asp-page="/Orders/OrderView" asp-route-OrderID="@Model.ProductOrder.OrderID">View order</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Resend confirmation email</li>
+    </ol>
+</nav>
+
+@using (Html.BeginForm("OrderConfirmationResend", "OrderConfirmationResend", FormMethod.Post, new { @class = "form-group-sm" }))
+{
+    <div class="alert alert-primary" role="alert">
+        <i class="fa fa-question-circle" aria-hidden="true" title="Resend confirmation email?"></i> Resend confirmation email?
+    </div>
+
+    <div class="my-3">
+        <button type="submit" class="btn btn-info"><i class="fa fa-paper-plane" aria-hidden="true" title="Resend"></i> Yes, please resend</button>
+        <a class="btn btn-danger" asp-page="/Orders/OrderView" asp-route-blogID="@Model.ProductOrder.OrderID"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
+    </div>
+
+    @Html.HiddenFor(m => m.ProductOrder.OrderID)
+    @Html.HiddenFor(m => m.ProductOrder.CartID)
+    @Html.HiddenFor(m => m.ProductOrder.ConfirmationCode)
+    @Html.HiddenFor(m => m.ProductOrder.Confirmed)
+    @Html.HiddenFor(m => m.ProductOrder.ContactAddress)
+    @Html.HiddenFor(m => m.ProductOrder.ContactEmail)
+    @Html.HiddenFor(m => m.ProductOrder.ContactName)
+    @Html.HiddenFor(m => m.ProductOrder.ContactPhone)
+    @Html.HiddenFor(m => m.ProductOrder.Created)
+    @Html.HiddenFor(m => m.ProductOrder.DeliveryDate)
+    @Html.HiddenFor(m => m.ProductOrder.DeliveryInstructions)
+    @Html.HiddenFor(m => m.ProductOrder.DeliveryTime)
+    @Html.HiddenFor(m => m.ProductOrder.Payment)
+    @Html.HiddenFor(m => m.ProductOrder.PaymentMethod)
+    @Html.HiddenFor(m => m.ProductOrder.PickupDate)
+    @Html.HiddenFor(m => m.ProductOrder.PickupTime)
+
+}
+
+<br />
+<hr />
+
+@await Component.InvokeAsync("Order", new { orderID = Model.ProductOrder.OrderID.Value })

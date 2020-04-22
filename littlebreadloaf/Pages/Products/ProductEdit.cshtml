@@ -80,6 +80,17 @@
         </div>
     </div>
 
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <div class="form-control">
+                <div class="form-check">
+                    @Html.CheckBoxFor(f => f.Product.ShowOnFrontPage, new { @class = "form-check-input", autocomplete = "off", autofocus = "autofocus", @placeholder = "Show on front page" })
+                    @Html.LabelFor(f => f.Product.ShowOnFrontPage, "Show on front page", new { @class = "form-check-label" })
+                </div>
+            </div>
+        </div>
+    </div>
+
     @Html.HiddenFor(m => m.Product.ProductID)
     @Html.HiddenFor(m => m.Product.Created)
     @Html.HiddenFor(m => m.Product.LastUpdated)

@@ -65,6 +65,5 @@ namespace littlebreadloaf.Pages.Blog
             }
             return new RedirectToPageResult("/Blog/BlogView", new { Blog.BlogID });
         }
-
     }
 }

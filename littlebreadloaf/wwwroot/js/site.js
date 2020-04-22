@@ -63,7 +63,12 @@ $(document).ready(function () {
         maxDate: "10d",
         dateFormat: "yy-mm-dd",
         beforeShowDay: function (date) {
-            if (getDayOfWeek(date) === "Thursday" || getDayOfWeek(date) === "Friday"){
+            /*if (getDayOfWeek(date) === "Thursday" || getDayOfWeek(date) === "Friday"){
+                return [true, ""];
+            } else {
+                return [false, ""];
+            }*/
+            if (getDayOfWeek(date) === "Friday") {
                 return [true, ""];
             } else {
                 return [false, ""];
@@ -76,7 +81,12 @@ $(document).ready(function () {
         maxDate: "10d",
         dateFormat: "yy-mm-dd",
         beforeShowDay: function (date) {
-            if (getDayOfWeek(date) === "Thursday" || getDayOfWeek(date) === "Friday" || getDayOfWeek(date) === "Saturday") {
+            /*if (getDayOfWeek(date) === "Thursday" || getDayOfWeek(date) === "Friday" || getDayOfWeek(date) === "Saturday") {
+                return [true, ""];
+            } else {
+                return [false, ""];
+            }*/
+            if (getDayOfWeek(date) === "Friday") {
                 return [true, ""];
             } else {
                 return [false, ""];
@@ -115,6 +125,17 @@ $(document).ready(function () {
     });
 });
 
+$(document).ready(function () {
+    $("#ErrorList_From").datepicker({
+        dateFormat: "yy-mm-dd"
+    });
+});
+
+$(document).ready(function () {
+    $("#ErrorList_To").datepicker({
+        dateFormat: "yy-mm-dd"
+    });
+});
 
 $(document).ready(function () {
 

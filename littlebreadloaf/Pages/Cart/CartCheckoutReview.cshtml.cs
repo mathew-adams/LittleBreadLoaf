@@ -7,9 +7,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using littlebreadloaf.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System.IO;
-using SelectPdf;
-using Newtonsoft.Json;
 
 namespace littlebreadloaf.Pages.Cart
 {
@@ -114,73 +111,15 @@ namespace littlebreadloaf.Pages.Cart
             _context.InvoiceTransaction.AddRange(invoiceTransactions);
             _context.ProductOrder.Update(ProductOrder);
             await _context.SaveChangesAsync();
-
-            var url = Url.Page("/Orders/InvoicePrint", new { ProductOrder.OrderID });
-            var absUrl = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, url);
-
-            HtmlToPdf converter = new SelectPdf.HtmlToPdf();
-
-            converter.Options.MarginBottom = 20;
-            converter.Options.MarginTop = 20;
-            converter.Options.MarginRight = 20;
-            converter.Options.MarginLeft = 20;
-            PdfDocument doc = converter.ConvertUrl(absUrl);
             
-            using (var msInvoice = new System.IO.MemoryStream())
-            {
-                doc.Save(msInvoice);
-                // close pdf document
-                doc.Close();
-                
-                msInvoice.Position = 0;
+            var url = Url.Page("/Orders/InvoicePrint", new { ProductOrder.OrderID });
 
-                //Send confirmation email
-                var emailBody = _config["LittleBreadLoaf.ConfirmationEmailBody"].Replace("{{CONFIRMATION_CODE}}", ProductOrder.ConfirmationCode);
-                var emailSubject = _config["LittleBreadLoaf.ConfirmationEmailSubject"].Replace("{{CONFIRMATION_CODE}}", ProductOrder.ConfirmationCode);
-                var attachmentName = _config["LittleBreadLoaf.ConfirmationAttachmentName"].Replace("{{CONFIRMATION_CODE}}", ProductOrder.ConfirmationCode);
-
-                var emailResponse = await EmailHelper.SendEmail(_config,
-                                                                $"{_config["LittleBreadLoaf.Name"]} <mailgun@{_config["Mailgun.Uri.Request"]}>",
-                                                                ProductOrder.ContactEmail,
-                                                                emailSubject,
-                                                                emailBody,
-                                                                attachmentName,
-                                                                msInvoice);
-                var successful = true;
-                var message = "";
-                if (emailResponse.IsSuccessStatusCode)
-                {
-                    using (Stream receiveStream = await emailResponse.Content.ReadAsStreamAsync())
-                    {
-                        using (StreamReader readStream = new StreamReader(receiveStream, System.Text.Encoding.UTF8))
-                        {
-                            var response = JsonConvert.DeserializeObject<MailGunResponse>(readStream.ReadToEnd());
-                            successful = response.message.Contains("queued", StringComparison.OrdinalIgnoreCase);
-                            message = response.message;
-                        }
-                    }
-                }
-                else
-                {
-                    successful = false;
-                }
-
-                if(!successful)
-                {
-                    var systemError = new SystemError()
-                    {
-                        ErrorID = Guid.NewGuid(),
-                        RequestID = ProductOrder.ConfirmationCode,
-                        Path = "CartCheckoutReview.SendEmail",
-                        Error = $"Status:{emailResponse.StatusCode}, Message:{message}",
-                        Occurred = DateTime.Now
-                    };
-
-                    _context.SystemError.Add(systemError);
-                    await _context.SaveChangesAsync();
-                }
-            }            
-
+            var rslt = await ConfirmationHelper.SendConfirmation(_config,
+                                                                   _context,
+                                                                   ProductOrder,
+                                                                   HttpContext,
+                                                                   url);
+            
             // Clear cart cookies
             HttpContext.Response.Cookies.Delete(littlebreadloaf.CartHelper.CartCookieName);
             

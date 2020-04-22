@@ -6,5 +6,7 @@ CREATE TABLE `product` (
   `Unit` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `Created` datetime NOT NULL,
   `LastUpdated` datetime NOT NULL,
+  `SortOrder` int(11) NOT NULL,
+  `ShowOnFrontPage` tinyint(1) NOT NULL,
   PRIMARY KEY (`ProductID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;

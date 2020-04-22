@@ -4,6 +4,11 @@ main {
     min-height:33em;
 }
 
+input[type=checkbox] {
+    transform: scale(2);
+}
+
+
 .admin_background {
     background-color:#e9ecef;
 }

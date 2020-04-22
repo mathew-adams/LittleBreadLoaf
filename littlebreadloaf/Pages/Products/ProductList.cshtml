@@ -5,6 +5,8 @@
     ViewData["ReturnURL"] = Url.Page("/Products/ProductList");
 
     var outage = Model.ProductOrderOutages.Count > 0 && Model.ProductOrderOutages.Any(a => a.Start <= DateTime.Now && a.Stop >= DateTime.Now);
+
+    var products = Model.Products;
 }
 
 <nav aria-label="breadcrumb">
@@ -18,8 +20,11 @@
     <div class="alert alert-secondary border-0 admin_background" role="alert">
         <div class="text-muted mb-1">Admin</div>
         <a class="btn btn-outline-secondary" asp-page="/Products/ProductAdd"><i class="fa fa-plus" aria-hidden="true" title="Add product"></i> Add product</a>
-        <a class="btn btn-outline-secondary" asp-page="/Reports/ProductsReport"><i class="fa fa-bar-chart" aria-hidden="true" title="View reports"></i> View reports</a>
     </div>
+}
+else
+{
+    products = products.Where(w => w.ShowOnFrontPage == true).ToList();
 }
 
 @if (outage)
@@ -33,7 +38,7 @@
 <div id="cartItemAdded" class="alert alert-success d-none" role="alert"></div>
 
 <div class="row justify-content-center">
-    @foreach (var product in Model.Products)
+    @foreach (var product in products)
     {
         <div class="col-md-4 mt-0 px-2">
             <div class="product-grid">
@@ -44,7 +49,7 @@
                     }
                     @if (productImage == null)
                     {
-                        source = "https://dummyimage.com/350x350/000/fff"; //TODO: Do not make a referal out to another domain??
+                        source = "https://dummyimage.com/350x350/000/fff";
                         title = "350X350";
                     }
                     else
@@ -71,6 +76,20 @@
 
                 </div>
                 <div class="product-content">
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @if (product.ShowOnFrontPage)
+                        {
+                            <i class="fa fa-eye" aria-hidden="true" title="Visble"></i>
+                        }
+                        else
+                        {
+                            <i class="fa fa-eye-slash" aria-hidden="true" title="Not visible"></i>
+                        }
+                        <span class="badge badge-info" title="Sort order">@product.SortOrder</span>
+                    }
+
                     <h3 class="title"><a asp-page="/Products/ProductView" asp-route-ProductID="@product.ProductID"> @product.Name</a></h3>
                     <div class="price">
                         $@product.Price

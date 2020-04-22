@@ -22,6 +22,9 @@ namespace littlebreadloaf.Pages.Orders
         [BindProperty(SupportsGet = true)]
         public string OrderID { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public bool ResendEmailSuccess { get; set; }
+
         [BindProperty]
         public ProductOrder ProductOrder { get; set; }
 

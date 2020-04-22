@@ -81,9 +81,11 @@
             <ul class="navbar-nav mr-auto">
                 @*<li class="nav-item"><a class="nav-link" asp-page="/Products/ProductList"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true" title="Online shopping"></i> Online shopping</a></li>*@
                 <li class="nav-item"><a class="nav-link" asp-page="/Bakery"><i class="fa fa-map-marker fa-fw" aria-hidden="true" title="Bakery"></i> Bakery</a></li>
+                @*@<li class="nav-item"><a class="nav-link" asp-page="/Service/Service"><i class="fa fa-car fa-fw" aria-hidden="true" title="Service"></i> Service</a></li>*@
                 <li class="nav-item"><a class="nav-link" asp-page="/Markets"><i class="fa fa-shopping-basket fa-fw" aria-hidden="true" title="Farmers markets"></i> Farmers markets</a></li>
                 <li class="nav-item"><a class="nav-link" asp-page="/Blog/BlogList"><i class="fa fa-book fa-fw" aria-hidden="true" title="Blog"></i> Blog</a></li>
                 <li class="nav-item"><a class="nav-link" asp-page="/About"><i class="fa fa-question-circle-o" aria-hidden="true" title="About me"></i> About me</a></li>
+                                              
                 @if (User.Identity.IsAuthenticated)
                 {
                     <li class="nav-item"><a class="nav-link" asp-page="/Orders/OrdersList"><i class="fa fa-thumb-tack" aria-hidden="true" title="Orders"></i> Orders</a></li>

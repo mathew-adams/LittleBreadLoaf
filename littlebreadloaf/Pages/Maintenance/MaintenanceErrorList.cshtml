@@ -24,7 +24,7 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text"><i class="fa fa-arrow-right fa-fw" aria-hidden="true" title="From"></i></div>
                         </div>
-                        @Html.TextBoxFor(f => f.From, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "From" })
+                        @Html.TextBoxFor(f => f.From, "{0:yyyy-MM-dd}", new { @class = "form-control", @id = "ErrorList_From", autocomplete = "off", autofocus = "autofocus", @placeholder = "From" })
                     </div>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text"><i class="fa fa-arrow-left fa-fw" aria-hidden="true" title="To"></i></div>
                         </div>
-                        @Html.TextBoxFor(f => f.To, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "To" })
+                        @Html.TextBoxFor(f => f.To, "{0:yyyy-MM-dd}", new { @class = "form-control",@id = "ErrorList_To", autocomplete = "off", autofocus = "autofocus", @placeholder = "To" })
                     </div>
                 </div>
             </div>

@@ -1,0 +1,98 @@
+﻿@page
+@model littlebreadloaf.Pages.Service.ServiceModel
+@{
+    ViewData["Title"] = "Service order";
+    ViewData["ReturnURL"] = Url.Page("/Service/Service");
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Service</li>
+    </ol>
+</nav>
+
+@using (Html.BeginForm("ServiceCheckout", "ServiceCheckout", FormMethod.Post, new { @id = "cart_checkout", @class = "block-form-submit" }))
+{
+    <div class="form-row">
+
+        <div class="col-md-6">
+            <strong>@Html.Label("Your information:")</strong>
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-map-marker fa-fw" aria-hidden="true" title="Company address"></i></div>
+                        </div>
+                        @Html.TextBoxFor(m => m.Service.ServiceAddress, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "101" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Service.ServiceAddress, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <div class="form-control">
+                        <div class="form-check">
+                            @Html.CheckBoxFor(m => m.Service.ParkingAvailable, new { @class = "form-check-input", autocomplete = "off", autofocus = "autofocus"})
+                            @Html.LabelFor(m => m.Service.ParkingAvailable, "Parking is available?", new { @class = "form-check-label" })
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Service.ParkingAvailable, "", new { @class = "text-danger" })
+                </div>
+
+
+                <div class="form-group col-md-6">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-mobile fa-fw" aria-hidden="true" title="Estimated number of employees"></i></div>
+                        </div>
+
+                        @Html.TextBoxFor(m => m.Service.Employees, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "103" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Service.Employees, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <strong>@Html.Label("Service day(s) and time:")</strong>
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-money fa-fw" aria-hidden="true" title="Payment method"></i></div>
+                        </div>
+                        @Html.DropDownListFor(m => m.Service.ParkingAvailable,
+                                              Model.ParkingOptions,
+                                              "",
+                                              new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "104" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Service.ParkingAvailable, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    /*
+    @Html.HiddenFor(h => h.ProductOrder.OrderID)
+    @Html.HiddenFor(h => h.ProductOrder.ContactAddress, new { @id = "address_id" })
+    @Html.HiddenFor(h => h.ProductOrder.CartID)
+    @Html.HiddenFor(h => h.ProductOrder.Payment)
+    @Html.HiddenFor(h => h.ProductOrder.Created)
+    @Html.HiddenFor(h => h.ProductOrder.ConfirmationCode)
+    @Html.HiddenFor(h => h.ProductOrder.Confirmed)
+    @Html.HiddenFor(h => h.GoogleRecaptchaToken, new { @id = "g-recaptcha-response" })
+    */
+
+    <div class="clearfix mb-3">
+        <div class="text-right float-right">
+            <a class="btn btn-danger btn-lg" asp-page="/Cart/CartView"><i class="fa fa-times" aria-hidden="true" title="Cancel" tabindex="-1"></i> Cancel</a>
+            <button id="review_order"
+                    type="submit"
+                    class="btn btn-success btn-lg block-form-submit-button"
+                    tabindex="112"
+                    disabled>
+                Review order <i class="fa fa-arrow-right" aria-hidden="true" title="Review order"></i>
+            </button>
+        </div>
+    </div>
+}
+

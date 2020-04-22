@@ -58,9 +58,6 @@ namespace littlebreadloaf
             fileContent.Headers.ContentType = new MediaTypeHeaderValue(contentType);
             return fileContent;
         }
-
-
-
     }
 
     public class MailGunResponse

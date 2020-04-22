@@ -41,5 +41,8 @@ namespace littlebreadloaf.Data
 
         [Display(Name = "Sort Order", Prompt = "Enter sort order", Description = "The order in which the product will be sorted in the catalogue")]
         public int SortOrder { get; set; }
+
+        [Display(Name = "Show on front page", Prompt = "Show on page?", Description = "Determines whether the product should be shown on the main page")]
+        public bool ShowOnFrontPage { get; set; }
     }
 }

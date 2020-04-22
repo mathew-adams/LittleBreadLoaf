@@ -68,15 +68,21 @@ namespace littlebreadloaf.Pages.Cart
                 if (ProductOrder.PickupDate == new DateTime(9999, 12, 31))
                     ProductOrder.PickupDate = null;
             }
+            else
+            {
+                ProductOrder = new ProductOrder();
+                ProductOrder.DeliveryTime = "Between 14:00 and 18:00";
+
+            }
 
             PaymentMethodOptions = new SelectList(new List<SelectListItem>()
             {
-                new SelectListItem(){ Text = "CASH", Value = "Cash - on delivery / pickup", Selected = false },
-                new SelectListItem(){ Text = "EFTPOS", Value = "EFTPOS - on delivery / pickup - no credit cards", Selected = false },
-                new SelectListItem(){ Text = "BANK", Value = "Bank transfer", Selected = false }
+                //new SelectListItem(){ Text = "CASH", Value = "Cash - on delivery / pickup", Selected = false },
+                //new SelectListItem(){ Text = "EFTPOS", Value = "EFTPOS - on delivery / pickup - no credit cards", Selected = false },
+                new SelectListItem(){ Text = "BANK", Value = "Bank transfer (only option during level 3)", Selected = false }
             },"Text","Value",null);
-            
-            return Page();
+
+                        return Page();
         }
 
         public JsonResult OnGetAddressSearch(string addressFilter)
