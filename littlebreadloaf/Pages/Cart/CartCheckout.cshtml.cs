@@ -103,15 +103,12 @@ namespace littlebreadloaf.Pages.Cart
         {
             var validDeliveryDaysOfWeek = new List<DayOfWeek>()
             {
-                DayOfWeek.Thursday,
                 DayOfWeek.Friday
             };
 
             var validPickupDaysOfWeek = new List<DayOfWeek>()
             {
-                DayOfWeek.Thursday,
-                DayOfWeek.Friday,
-                DayOfWeek.Saturday
+                DayOfWeek.Friday
             };
 
             PaymentMethodOptions = new SelectList(new List<SelectListItem>()
@@ -183,16 +180,16 @@ namespace littlebreadloaf.Pages.Cart
                 var dayOfWeek = ProductOrder.PickupDate.Value.DayOfWeek;
                 if (!validPickupDaysOfWeek.Contains(dayOfWeek))
                 {
-                    ModelState.AddModelError("Validation.PickupDayOfWeek", "Pickup date must be either Thursday, Friday or Saturday.");
+                    ModelState.AddModelError("Validation.PickupDayOfWeek", "Pickup date must be Friday.");
                     return Page();
                 }
             }
 
             if(validDeliveryDate) //Delivery must have an address
             {
-                if(ProductOrder.ContactAddress == 0)
+                if(ProductOrder.ContactAddress == null || ProductOrder.ContactAddress == 0)
                 {
-                    ModelState.AddModelError("Address.Missing", "Please select an address to be delivered to.");
+                    ModelState.AddModelError("Address.Missing", "Begin typing your address to validate.");
                     return Page();
                 }
 
@@ -204,7 +201,7 @@ namespace littlebreadloaf.Pages.Cart
                 var dayOfWeek = ProductOrder.DeliveryDate.Value.DayOfWeek;
                 if (!validDeliveryDaysOfWeek.Contains(dayOfWeek))
                 {
-                    ModelState.AddModelError("Validation.DeliveryDayOfWeek", "Delivery date must be either Thursday or Friday.");
+                    ModelState.AddModelError("Validation.DeliveryDayOfWeek", "Delivery date must be Friday.");
                     return Page();
                 }
 
