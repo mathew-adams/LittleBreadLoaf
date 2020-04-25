@@ -171,8 +171,9 @@ namespace littlebreadloaf.Pages.Cart
 
             if(validDeliveryDate && string.IsNullOrEmpty(ProductOrder.DeliveryTime))
             {
-                ModelState.AddModelError("Validation.DeliveryTimeRequired", "A delivery time is required.");
-                return Page();
+                //ModelState.AddModelError("Validation.DeliveryTimeRequired", "A delivery time is required.");
+                //return Page();
+                ProductOrder.DeliveryTime = "";
             }
 
             if(validPickupDate) 
