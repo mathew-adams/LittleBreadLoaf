@@ -2,6 +2,7 @@
 
 # Little Bread Loaf
 A Polish Bread company based in Wellington, NZ
+- https://popper.js.org/
 
 ## Technical Features
 - Brotli compression for very small text files (e.g. CSS, HTML, javascript, etc)
