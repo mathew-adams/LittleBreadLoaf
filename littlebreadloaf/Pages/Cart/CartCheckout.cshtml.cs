@@ -37,8 +37,8 @@ namespace littlebreadloaf.Pages.Cart
         [BindProperty]
         public string Full_Address { get; set; }
 
-        [BindProperty]
-        public string GoogleRecaptchaToken { get; set; }
+        //[BindProperty]
+        //public string GoogleRecaptchaToken { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -71,7 +71,7 @@ namespace littlebreadloaf.Pages.Cart
             else
             {
                 ProductOrder = new ProductOrder();
-                ProductOrder.DeliveryTime = "Between 14:00 and 18:00";
+                ProductOrder.DeliveryTime = "14:00 to 18:00";
 
             }
 
@@ -170,7 +170,7 @@ namespace littlebreadloaf.Pages.Cart
             {
                 //ModelState.AddModelError("Validation.DeliveryTimeRequired", "A delivery time is required.");
                 //return Page();
-                ProductOrder.DeliveryTime = "";
+                ProductOrder.DeliveryTime = "14:00 to 18:00";
             }
 
             if(validPickupDate) 
@@ -223,7 +223,7 @@ namespace littlebreadloaf.Pages.Cart
                 return new RedirectResult("/Cart/CartView");
             }
 
-            if(string.IsNullOrEmpty(GoogleRecaptchaToken))
+            /*if(string.IsNullOrEmpty(GoogleRecaptchaToken))
             {
                 ModelState.AddModelError("Google.Recaptcha.TokenMissing", "You are missing a token.");
                 return Page();
@@ -232,7 +232,7 @@ namespace littlebreadloaf.Pages.Cart
             {
                 ModelState.AddModelError("Google.Recaptcha.TokenInvalid", "You are not a human!");
                 return Page();
-            }
+            }*/
 
             if (ProductOrder.DeliveryInstructions == null)
                 ProductOrder.DeliveryInstructions = "";
@@ -276,7 +276,7 @@ namespace littlebreadloaf.Pages.Cart
             return new RedirectToPageResult("/Cart/CartCheckoutReview", new { ProductOrderID = ProductOrder.OrderID, CartID = ProductOrder.CartID });
         }
 
-        private async Task<bool> ValidateGoogleRecaptchaAsync(string ipAddress, string recaptchaResponse)
+        /*private async Task<bool> ValidateGoogleRecaptchaAsync(string ipAddress, string recaptchaResponse)
         {
             //Validate google recaptcha
             using (var client = new HttpClient { BaseAddress = new Uri("https://www.google.com") })
@@ -312,7 +312,7 @@ namespace littlebreadloaf.Pages.Cart
             public string Hostname { get; set; }
             [DataMember(Name = "error-codes")]
             public IEnumerable<string> ErrorCodes { get; set; }
-        }
+        }*/
 
 
        // {

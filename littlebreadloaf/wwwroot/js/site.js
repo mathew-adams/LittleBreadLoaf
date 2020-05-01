@@ -254,7 +254,7 @@ $(document).ready(function () {
     }
 });
 
-$(document).ready(function () {
+/*$(document).ready(function () {
     if ($('#cart_checkout').length > 0)
     {
         grecaptcha.ready(function () {
@@ -266,5 +266,5 @@ $(document).ready(function () {
             });
         });
     }
-});
+});*/
 
