@@ -101,6 +101,9 @@ namespace littlebreadloaf.Pages.Cart
 
         public async Task<IActionResult> OnPostAsync()
         {
+
+            ProductOrder.DeliveryTime = "14:00 to 18:00"; //Temporary during COVID-19 level 3
+
             var validDeliveryDaysOfWeek = new List<DayOfWeek>()
             {
                 DayOfWeek.Friday
@@ -113,8 +116,8 @@ namespace littlebreadloaf.Pages.Cart
 
             PaymentMethodOptions = new SelectList(new List<SelectListItem>()
             {
-                new SelectListItem(){ Text = "CASH", Value = "Cash - on delivery", Selected = false },
-                new SelectListItem(){ Text = "EFTPOS", Value = "EFTPOS - on delivery - no credit cards", Selected = false },
+                //new SelectListItem(){ Text = "CASH", Value = "Cash - on delivery", Selected = false },
+                //new SelectListItem(){ Text = "EFTPOS", Value = "EFTPOS - on delivery - no credit cards", Selected = false },
                 new SelectListItem(){ Text = "BANK", Value = "Bank transfer", Selected = false }
             }, "Text", "Value", null);
 
