@@ -88,10 +88,11 @@ namespace littlebreadloaf.Pages.Cart
                                        .ToListAsync();
             }
 
-            ViewData["MinumumDelivery"] = _config["LittleBreadLoad.MinimumDelivery"];
+            var businessSettings = await _context.BusinessSettings.AsNoTracking().FirstOrDefaultAsync();
+
+            ViewData["MinumumDelivery"] = businessSettings.MinimumDeliveryOrderAmount;
 
             return Page();
-
         }
         
         public async Task<IActionResult> OnPostIncreaseAsync(string cartItemID)

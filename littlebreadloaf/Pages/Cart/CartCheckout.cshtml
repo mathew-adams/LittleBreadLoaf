@@ -84,7 +84,16 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text"><i class="fa fa-calendar fa-fw" aria-hidden="true" title="Pickup date"></i></div>
                         </div>
-                        @Html.TextBoxFor(m => m.ProductOrder.PickupDate, "{0:yyyy-MM-dd}", new { @id = "pickup_date", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Pickup date", @tabindex = "105" })
+
+                        @if (Model.BusinessSettings.PickupEnabled)
+                        {
+                            @Html.TextBoxFor(m => m.ProductOrder.PickupDate, "{0:yyyy-MM-dd}", new { @id = "pickup_date", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Pickup date", @tabindex = "105" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.ProductOrder.PickupDate, "{0:yyyy-MM-dd}", new { @id = "pickup_date", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Pickup date", @tabindex = "105", disabled = "on" })
+                        }
+
                     </div>
                     @Html.ValidationMessageFor(m => m.ProductOrder.PickupDate, "", new { @class = "text-danger" })
                     @Html.ValidationMessage("Validation.DeliveryOrPickup", "", new { @class = "text-danger" }, "")
@@ -96,18 +105,34 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text"><i class="fa fa-clock-o fa-fw" aria-hidden="true" title="Pickup time"></i></div>
                         </div>
-                        @Html.TextBoxFor(m => m.ProductOrder.PickupTime, new { @id = "pickup_time", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "106" })
+                        @if (Model.BusinessSettings.PickupEnabled)
+                        {
+                            @Html.TextBoxFor(m => m.ProductOrder.PickupTime, new { @id = "pickup_time", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "106" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.ProductOrder.PickupTime, new { @id = "pickup_time", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "106", disabled = "on" })
+                        }
+
                     </div>
                     @Html.ValidationMessageFor(m => m.ProductOrder.PickupTime, "", new { @class = "text-danger" })
                     @Html.ValidationMessage("Validation.PickupTimeRequired", "", new { @class = "text-danger" }, "")
                 </div>
             </div>
 
+
             <div class="form-row d-flex justify-content-center text-muted">
                 <h4>
                     --- OR ---
                 </h4>
             </div>
+
+            @if (!Model.BusinessSettings.DeliveryEnabled)
+            {
+                <div class="alert alert-info" role="alert">
+                    <i class="fa fa-info-circle" aria-hidden="true"></i> Delivery is currently disabled
+                </div>
+            }
 
             <strong>@Html.Label("Deliver (to Petone, Lower Hutt, or Wellington City):")</strong>
             <div class="form-row">
@@ -116,7 +141,15 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text"><i class="fa fa-calendar fa-fw" aria-hidden="true" title="Deliver date"></i></div>
                         </div>
-                        @Html.TextBoxFor(m => m.ProductOrder.DeliveryDate, "{0:yyyy-MM-dd}", new { @id = "delivery_date", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Deliver date", @tabindex = "107" })
+
+                        @if (Model.BusinessSettings.DeliveryEnabled)
+                        {
+                            @Html.TextBoxFor(m => m.ProductOrder.DeliveryDate, "{0:yyyy-MM-dd}", new { @id = "delivery_date", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Deliver date", @tabindex = "107" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.ProductOrder.DeliveryDate, "{0:yyyy-MM-dd}", new { @id = "delivery_date", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Deliver date", @tabindex = "107", disabled = "on" })
+                        }
 
                     </div>
                     @Html.ValidationMessageFor(m => m.ProductOrder.DeliveryDate, "", new { @class = "text-danger" })
@@ -131,7 +164,9 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text"><i class="fa fa-clock-o fa-fw" aria-hidden="true" title="Deliver time"></i></div>
                         </div>
+
                         @Html.TextBoxFor(m => m.ProductOrder.DeliveryTime, new { @id = "delivery_time", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "108", disabled = "on" })
+
                     </div>
                     @Html.ValidationMessageFor(m => m.ProductOrder.DeliveryTime, "", new { @class = "text-danger" })
                     @Html.ValidationMessage("Validation.DeliveryTimeRequired", "", new { @class = "text-danger" }, "")
@@ -144,7 +179,17 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text"><i class="fa fa-map-marker fa-fw" aria-hidden="true" title="Delivery address"></i></div>
                         </div>
-                        @Html.TextBoxFor(m => m.Full_Address, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @id = "delivery_address", @placeholder = "Enter the address to deliver", @tabindex = "109" })
+
+                        @if (Model.BusinessSettings.DeliveryEnabled)
+                        {
+                            @Html.TextBoxFor(m => m.Full_Address, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @id = "delivery_address", @placeholder = "Enter the address to deliver", @tabindex = "109" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.Full_Address, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @id = "delivery_address", @placeholder = "Enter the address to deliver", @tabindex = "109", disabled = "on" })
+                        }
+
+
                     </div>
                     @Html.ValidationMessage("Address.Missing", "", new { @class = "text-danger" }, "")
                 </div>
@@ -159,7 +204,14 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text"><i class="fa fa-life-ring fa-fw" aria-hidden="true" title="Delivery instructions"></i></div>
                         </div>
-                        @Html.TextAreaFor(m => m.ProductOrder.DeliveryInstructions, new { @id = "delivery_instructions", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "110" })
+                        @if (Model.BusinessSettings.DeliveryEnabled)
+                        {
+                            @Html.TextAreaFor(m => m.ProductOrder.DeliveryInstructions, new { @id = "delivery_instructions", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "110" })
+                        }
+                        else
+                        {
+                            @Html.TextAreaFor(m => m.ProductOrder.DeliveryInstructions, new { @id = "delivery_instructions", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "110", disabled = "on" })
+                        }
                     </div>
                     @Html.ValidationMessageFor(m => m.ProductOrder.DeliveryInstructions, "", new { @class = "text-danger" })
                 </div>

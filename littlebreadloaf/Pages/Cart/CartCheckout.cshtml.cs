@@ -37,6 +37,9 @@ namespace littlebreadloaf.Pages.Cart
         [BindProperty]
         public string Full_Address { get; set; }
 
+        [BindProperty]
+        public BusinessSettings BusinessSettings { get; set; }
+
         //[BindProperty]
         //public string GoogleRecaptchaToken { get; set; }
 
@@ -82,7 +85,9 @@ namespace littlebreadloaf.Pages.Cart
                 new SelectListItem(){ Text = "BANK", Value = "Bank transfer (only option during level 3)", Selected = false }
             },"Text","Value",null);
 
-                        return Page();
+            BusinessSettings = await _context.BusinessSettings.AsNoTracking().FirstOrDefaultAsync();
+
+            return Page();
         }
 
         public JsonResult OnGetAddressSearch(string addressFilter)
@@ -101,6 +106,8 @@ namespace littlebreadloaf.Pages.Cart
 
         public async Task<IActionResult> OnPostAsync()
         {
+
+            BusinessSettings = await _context.BusinessSettings.AsNoTracking().FirstOrDefaultAsync();
 
             ProductOrder.DeliveryTime = "14:00 to 18:00"; //Temporary during COVID-19 level 3
 
@@ -196,11 +203,6 @@ namespace littlebreadloaf.Pages.Cart
                     return Page();
                 }
 
-                if (!Decimal.TryParse(_config["LittleBreadLoad.MinimumDelivery"], out decimal minDeliveryAmount))
-                {
-                    throw new Exception("LittleBreadLoad.MinimumDelivery is not configured.");
-                }
-
                 var dayOfWeek = ProductOrder.DeliveryDate.Value.DayOfWeek;
                 if (!validDeliveryDaysOfWeek.Contains(dayOfWeek))
                 {
@@ -214,9 +216,9 @@ namespace littlebreadloaf.Pages.Cart
                                         .Select(s => new { s.Price, s.Quantity })
                                         .ToListAsync();
 
-                if (cartItems.Sum(s => s.Price * s.Quantity) < minDeliveryAmount)
+                if (cartItems.Sum(s => s.Price * s.Quantity) < BusinessSettings.MinimumDeliveryOrderAmount)
                 {
-                    ModelState.AddModelError("Validation.DeliveryMinNotMet", $"The minimum delivery amount is ${_config["LittleBreadLoad.MinimumDelivery"]}");
+                    ModelState.AddModelError("Validation.DeliveryMinNotMet", $"The minimum delivery amount is ${BusinessSettings.MinimumDeliveryOrderAmount}");
                     return Page();
                 }
             }

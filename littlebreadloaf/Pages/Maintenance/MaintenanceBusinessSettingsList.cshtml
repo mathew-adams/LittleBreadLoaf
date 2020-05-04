@@ -1,0 +1,66 @@
+﻿@page
+@model littlebreadloaf.Pages.Maintenance.MaintenanceBusinessSettingsListModel
+@{
+    ViewData["Title"] = "Business settings";
+    ViewData["ReturnURL"] = Url.Page("/Maintenance/MaintenanceBusinessSettingsList");
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Maintenance/MaintenanceList">Maintenance</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+    </ol>
+</nav>
+
+<div class="form-row">
+    <div class="form-group col-6">
+        @Html.LabelFor(m => m.BusinessSettings.MinimumDeliveryOrderAmount)
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text"><i class="fa fa-usd fa-fw" aria-hidden="true" title="Minimum delivery order amount"></i></div>
+            </div>
+            @Html.TextBoxFor(m => m.BusinessSettings.MinimumDeliveryOrderAmount, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", disabled="on" })
+        </div>
+        @Html.ValidationMessageFor(m => m.BusinessSettings.MinimumDeliveryOrderAmount, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group col-6">
+        @Html.LabelFor(m => m.BusinessSettings.MinimumPickupOrderAmount)
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text"><i class="fa fa-usd fa-fw" aria-hidden="true" title="Minimum delivery order amount"></i></div>
+            </div>
+            @Html.TextBoxFor(m => m.BusinessSettings.MinimumPickupOrderAmount, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", disabled="on" })
+        </div>
+        @Html.ValidationMessageFor(m => m.BusinessSettings.MinimumPickupOrderAmount, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <div class="form-control">
+            <div class="form-check">
+                @Html.CheckBoxFor(f => f.BusinessSettings.DeliveryEnabled, new { @class = "form-check-input", autocomplete = "off", autofocus = "autofocus", @placeholder = "Delivery enabled", disabled="on" })
+                @Html.LabelFor(f => f.BusinessSettings.DeliveryEnabled, "Delivery enabled", new { @class = "form-check-label" })
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <div class="form-control">
+            <div class="form-check">
+                @Html.CheckBoxFor(f => f.BusinessSettings.PickupEnabled, new { @class = "form-check-input", autocomplete = "off", autofocus = "autofocus", @placeholder = "Pickup enabled", disabled="on" })
+                @Html.LabelFor(f => f.BusinessSettings.PickupEnabled, "Pickup enabled", new { @class = "form-check-label" })
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.HiddenFor(h => h.BusinessSettings.BusinessSettingID)
+
+<a class="btn btn-outline-secondary" asp-page="/Maintenance/MaintenanceBusinessSettingsEdit" asp-route-businessSettingID="@Model.BusinessSettings.BusinessSettingID"><i class="fa fa-pencil fa-fw" aria-hidden="true" title="Edit"></i> Edit</a>
+<a class="btn btn-danger" asp-page="/Maintenance/MaintenanceList"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>

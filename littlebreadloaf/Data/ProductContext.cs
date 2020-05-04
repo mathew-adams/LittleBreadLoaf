@@ -37,6 +37,8 @@ namespace littlebreadloaf.Data
 
         public virtual DbSet<UserProfile> UserProfile { get; set; }
 
+        public virtual DbSet<BusinessSettings> BusinessSettings { get; set; }
+
         public virtual DbSet<littlebreadloaf.ConfigurationProvider.LittleBreadLoafSystem> LittleBreadLoafSystem { get; set; }
         public virtual DbSet<SystemError> SystemError { get; set; }
     }
