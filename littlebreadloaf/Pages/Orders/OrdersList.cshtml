@@ -2,7 +2,7 @@
 @model littlebreadloaf.Pages.Orders.OrdersListModel
 @{
     ViewData["Title"] = "Orders";
-    ViewData["ReturnURL"] = Url.Page("/Orders/OrderList");
+    ViewData["ReturnURL"] = Url.Page("/Orders/OrdersList");
 }
 
 <nav aria-label="breadcrumb">
@@ -90,16 +90,17 @@
             </div>
         </div>
     </div>
+
     <div class="clearfix">
         <div class="float-right mb-3">
-            <button class="btn btn-outline-secondary"><i class="fa fa-search" aria-hidden="true" title="Search"></i> Search</button>
+            <button type="submit" class="btn btn-outline-secondary"><i class="fa fa-search" aria-hidden="true" title="Search"></i> Search</button>
         </div>
     </div>
 }
 
 @if (Model.ProductOrders.Count > 0)
 {
-    <table class="table table-striped">
+    <table class="table table-striped table-sm">
         <thead>
             <tr>
                 <th></th>
@@ -108,9 +109,8 @@
                 <th>Type</th>
                 <th>Date</th>
                 <th>Time</th>
-                <th>Phone</th>
                 <th>Email</th>
-                <th>Method</th>
+                <th></th>
                 <th></th>
             </tr>
         </thead>
@@ -149,10 +149,13 @@
                             @order.PickupTime
                         }
                     </td>
-                    <td>@Html.DisplayFor(o => order.ContactPhone)</td>
                     <td>@Html.DisplayFor(o => order.ContactEmail)</td>
-                    <td>@Html.DisplayFor(o => order.PaymentMethod)</td>
-                    <td><a class="btn btn-outline-secondary" asp-page="/Orders/OrderView" asp-route-OrderID="@order.OrderID"><i class="fa fa-shopping-basket" aria-hidden="true"></i> View</a></td>
+                    <td><a class="btn btn-outline-secondary btn-sm" asp-page="/Orders/OrderView" asp-route-OrderID="@order.OrderID">View</a></td>
+                    <td>
+                        <form method="post" asp-page-handler="QuickPay" asp-route-OrderID="@order.OrderID">
+                            <button class="btn btn-outline-secondary btn-sm">Quick Pay</button>
+                        </form>
+                    </td>
                 </tr>
             }
         </tbody>

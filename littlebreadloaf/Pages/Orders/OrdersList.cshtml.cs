@@ -80,22 +80,22 @@ namespace littlebreadloaf.Pages.Orders
 
         public async Task<ActionResult> OnPostExportExcelAsync()
         {
-            var orders = await _context.ProductOrder
-                                        .Join(_context.CartItem,
+            var orders = await _context.ProductOrder.AsNoTracking()
+                                        .Join(_context.CartItem.AsNoTracking(),
                                                 po => po.CartID,
                                                 ci => ci.CartID, (po, ci) => new
                                                 {
                                                     po.Created, po.Confirmed, po.DeliveryDate, po.DeliveryTime, po.DeliveryInstructions, po.PickupDate, po.ContactAddress,
                                                     po.PickupTime, po.ContactName, po.ContactEmail, po.ContactPhone, po.ConfirmationCode, po.Payment, ci.ProductID, ci.Quantity, ci.Price                                              
                                                 })
-                                        .Join(_context.Product,
+                                        .Join(_context.Product.AsNoTracking(),
                                                 ci => ci.ProductID, 
                                                 p=>p.ProductID,(ci, p)=> new
                                                 {
                                                     ci.Created, ci.Confirmed, ci.DeliveryDate, ci.DeliveryTime, ci.DeliveryInstructions, ci.PickupDate, ci.ContactAddress, 
                                                     ci.PickupTime, ci.ContactName, ci.ContactEmail, ci.ContactPhone, ci.ConfirmationCode, ci.Payment, p.Name, ci.Quantity, ci.Price
                                                 })
-                                        .GroupJoin(_context.NzAddressDeliverable,
+                                        .GroupJoin(_context.NzAddressDeliverable.AsNoTracking(),
                                                     ci => ci.ContactAddress,
                                                     ad => ad.address_id,
                                                     (ci, ad) => new { ad, ci })
@@ -169,5 +169,62 @@ namespace littlebreadloaf.Pages.Orders
             }
         }
 
+        public async Task<ActionResult> OnPostQuickPayAsync(string orderID)
+        {
+            if (String.IsNullOrEmpty(orderID) || !Guid.TryParse(orderID, out Guid parsedID))
+            {
+                return new RedirectResult("/Orders/OrdersList");
+            }
+
+            if (!await _context.ProductOrder.AnyAsync(p => p.OrderID == parsedID))
+            {
+                return new RedirectResult("/Orders/OrdersList");
+            }
+
+            var order = await _context.ProductOrder.FirstOrDefaultAsync(f => f.OrderID == parsedID);
+            if (order == null)
+                return new RedirectResult("/Orders/OrdersList");
+
+            var invoice = await _context.Invoice.FirstOrDefaultAsync(f => f.ProductOrderID == parsedID);
+            if(invoice == null)
+                return new RedirectResult("/Orders/OrdersList");
+            var balance = await _context.InvoiceTransaction
+                                        .Where(w => w.InvoiceID == invoice.InvoiceID)
+                                        .SumAsync(s => s.Quantity * s.Price);
+
+            if (balance == 0) //Check existing balance amount without taking into effect the new transaction amount
+            {
+                ModelState.AddModelError("BalanceZero", "Cannot add transaction. The order balance is already zero.");
+                return Page();
+            }
+
+            var InvoiceTransaction = new InvoiceTransaction()
+            {
+                InvoiceID = invoice.InvoiceID,
+                Type = InvoiceHelper.Transaction_Type_Credit,
+                Category = InvoiceHelper.Transaction_Category_Payment,
+                Price = -1 * balance,
+                Quantity = 1,
+                Name = "Payment",
+                Description = "Payment in full"
+            };
+
+            balance += InvoiceTransaction.Price;
+
+            if (balance < 0)
+            {
+                ModelState.AddModelError("BalanceCredit", "Cannot add transaction. The balance cannot be less than zero.");
+                return Page();
+            }
+
+            if (balance == 0)
+            {
+                order.Payment = DateTime.Now;
+                _context.ProductOrder.Update(order);
+            }
+            await _context.InvoiceTransaction.AddAsync(InvoiceTransaction);
+            await _context.SaveChangesAsync();
+            return new RedirectToPageResult("/Orders/OrdersList");
+        }
     }
 }
