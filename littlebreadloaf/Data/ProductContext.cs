@@ -22,7 +22,7 @@ namespace littlebreadloaf.Data
         public virtual DbSet<ProductBundle> ProductBundle { get; set; }
         public virtual DbSet<ProductBundleItem> ProductBundleItem { get; set; }
 
-        public virtual DbSet<Cart> Cart { get; set; }
+        public virtual DbSet<littlebreadloaf.Data.Cart> Cart { get; set; }
         public virtual DbSet<CartItem> CartItem { get; set; }
         public virtual DbSet<Invoice> Invoice { get; set; }
         public virtual DbSet<InvoiceTransaction> InvoiceTransaction { get; set; }
