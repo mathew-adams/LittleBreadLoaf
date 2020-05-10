@@ -160,6 +160,13 @@ namespace littlebreadloaf.Pages.Orders
                     var worksheet = document.Worksheets.Add(dtCustomers, "Orders");
 
                     worksheet.Table(0).Theme = XLTableTheme.TableStyleMedium2;
+                    worksheet.Table(0).ShowTotalsRow = true;
+                    worksheet.Table(0).Field("Quantity").TotalsRowFunction = XLTotalsRowFunction.Sum;
+                    worksheet.Table(0).Field("Price").TotalsRowFunction = XLTotalsRowFunction.Sum;
+                    worksheet.Table(0).Field("ProductSum").TotalsRowFunction = XLTotalsRowFunction.Sum;
+                    worksheet.Column(15).Style.NumberFormat.Format = "#,##0"; //Quantity = 15
+                    worksheet.Column(16).Style.NumberFormat.Format = "#,##0.00"; //Price = 16
+                    worksheet.Column(17).Style.NumberFormat.Format = "#,##0.00"; //Product Sum = 17
                     worksheet.Columns().AdjustToContents();
                     document.SaveAs(ms);
                 }
