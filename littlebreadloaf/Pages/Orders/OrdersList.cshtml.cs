@@ -80,49 +80,7 @@ namespace littlebreadloaf.Pages.Orders
 
         public async Task<ActionResult> OnPostExportExcelAsync()
         {
-            var orders = await _context.ProductOrder.AsNoTracking()
-                                        .Join(_context.CartItem.AsNoTracking(),
-                                                po => po.CartID,
-                                                ci => ci.CartID, (po, ci) => new
-                                                {
-                                                    po.Created, po.Confirmed, po.DeliveryDate, po.DeliveryTime, po.DeliveryInstructions, po.PickupDate, po.ContactAddress,
-                                                    po.PickupTime, po.ContactName, po.ContactEmail, po.ContactPhone, po.ConfirmationCode, po.Payment, ci.ProductID, ci.Quantity, ci.Price                                              
-                                                })
-                                        .Join(_context.Product.AsNoTracking(),
-                                                ci => ci.ProductID, 
-                                                p=>p.ProductID,(ci, p)=> new
-                                                {
-                                                    ci.Created, ci.Confirmed, ci.DeliveryDate, ci.DeliveryTime, ci.DeliveryInstructions, ci.PickupDate, ci.ContactAddress, 
-                                                    ci.PickupTime, ci.ContactName, ci.ContactEmail, ci.ContactPhone, ci.ConfirmationCode, ci.Payment, p.Name, ci.Quantity, ci.Price
-                                                })
-                                        .GroupJoin(_context.NzAddressDeliverable.AsNoTracking(),
-                                                    ci => ci.ContactAddress,
-                                                    ad => ad.address_id,
-                                                    (ci, ad) => new { ad, ci })
-                                        .SelectMany(ad => ad.ad.DefaultIfEmpty(),
-                                                    (x, y) => new {y, x.ci})
-                                        .Where(a => a.ci.Payment == new DateTime(9999,12,31) && a.ci.Confirmed < new DateTime(9999,12,31))
-                                        .Select(a => new
-                                        {
-                                            a.ci.Created,
-                                            a.ci.Confirmed,
-                                            a.ci.DeliveryDate,
-                                            a.ci.DeliveryTime,
-                                            a.ci.DeliveryInstructions,
-                                            a.ci.PickupDate,
-                                            a.ci.PickupTime,
-                                            a.ci.ContactName,
-                                            a.ci.ContactEmail,
-                                            a.ci.ContactPhone,
-                                            a.ci.ConfirmationCode,
-                                            a.y.full_address,
-                                            a.y.suburb_locality,
-                                            a.y.town_city,
-                                            a.ci.Name,
-                                            a.ci.Quantity,
-                                            a.ci.Price,
-                                            ProductSum = a.ci.Quantity * a.ci.Price
-                                        }).ToListAsync();
+            var orders = await OrdersHelper.GetActiveOrders(_context);
 
             var dtCustomers = new DataTable();
             dtCustomers.Columns.AddRange(new DataColumn[]

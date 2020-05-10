@@ -13,9 +13,11 @@
 
 <div class="alert alert-secondary border-0 admin_background" role="alert">
     <div class="text-muted mb-1">Admin</div>
-    <form method="post" asp-page-handler="ExportExcel">
-        <button class="btn btn-outline-secondary">Export Excel</button>
+    <form class="d-inline" method="post" asp-page-handler="ExportExcel">
+        <span><button class="btn btn-outline-secondary"><i class="fa fa-table" aria-hidden="true" title="Excel export"></i> Export Excel</button></span>
     </form>
+   
+    <a class="btn btn-outline-secondary" asp-page="/Orders/OrderStatementUpload"><i class="fa fa-upload" aria-hidden="true" title="Statement upload"></i> Statement upload</a>
 </div>
 
 @using (Html.BeginForm("OrderList", "Search", FormMethod.Get, new { @class = "form-group-sm" }))
@@ -97,6 +99,7 @@
         </div>
     </div>
 }
+
 
 @if (Model.ProductOrders.Count > 0)
 {
