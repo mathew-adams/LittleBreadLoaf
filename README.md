@@ -15,4 +15,6 @@ A Polish Bread company based in Wellington, NZ
 - JQuery BlockUI - http://malsup.com/jquery/block/
 - Popper.js - https://popper.js.org/
 - Select2.js - https://select2.org/
+- Closed XML - https://github.com/closedxml/closedxml
+- Select HTML to PDF - https://www.nuget.org/packages/Select.HtmlToPdf
 - This work is based on/includes LINZ’s data which are licensed by Land Information New Zealand (LINZ) for re-use under the Creative Commons Attribution 4.0 International licence. - https://www.linz.govt.nz/
