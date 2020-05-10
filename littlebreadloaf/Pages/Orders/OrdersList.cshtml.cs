@@ -168,6 +168,7 @@ namespace littlebreadloaf.Pages.Orders
                     worksheet.Column(16).Style.NumberFormat.Format = "#,##0.00"; //Price = 16
                     worksheet.Column(17).Style.NumberFormat.Format = "#,##0.00"; //Product Sum = 17
                     worksheet.Columns().AdjustToContents();
+                    worksheet.LastRowUsed();
                     document.SaveAs(ms);
                 }
 
