@@ -31,7 +31,7 @@ else
 {
     <div class="alert alert-warning" role="alert">
         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> 
-        We are not taking orders between @Model.ProductOrderOutages.Min(s => s.Start).ToString("dddd, dd MMMM yyyy") and @Model.ProductOrderOutages.Max(m => m.Stop).ToString("dddd, dd MMMM yyyy")
+        We are not taking any more orders between @Model.ProductOrderOutages.Min(s => s.Start).ToString("dddd, dd MMMM yyyy") and @Model.ProductOrderOutages.Max(m => m.Stop).ToString("dddd, dd MMMM yyyy")
     </div>
 }
 
