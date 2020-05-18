@@ -77,15 +77,22 @@ namespace littlebreadloaf.Pages.Orders
                     foreach (var row in rows)
                     {
                         decimal amount = 0;
+                        DateTime transactionDate = new DateTime(9999, 12, 31);
+                        DateTime processedDate = new DateTime(9999, 12, 31);
+
                         if(!String.IsNullOrEmpty(row.Cell((int)StatementColumns.Amount).Value.ToString()))
-                        {
                             amount = Decimal.Parse(row.Cell((int)StatementColumns.Amount).Value.ToString().Replace("$", ""));
-                        }
+
+                        if (!string.IsNullOrEmpty(row.Cell((int)StatementColumns.TransactionDate).Value.ToString()))
+                            transactionDate = DateTime.Parse(row.Cell((int)StatementColumns.TransactionDate).Value.ToString());
+
+                        if(!string.IsNullOrEmpty(row.Cell((int)StatementColumns.ProcessedDate).Value.ToString()))
+                            processedDate = DateTime.Parse(row.Cell((int)StatementColumns.ProcessedDate).Value.ToString());
 
                         StatementTransactions.Add(new StatementTransaction()
                         {
-                            TransactionDate = DateTime.Parse(row.Cell((int)StatementColumns.TransactionDate).Value.ToString()),
-                            ProcessedDate = DateTime.Parse(row.Cell((int)StatementColumns.ProcessedDate).Value.ToString()),
+                            TransactionDate = transactionDate,
+                            ProcessedDate = processedDate,
                             Details = row.Cell((int)StatementColumns.Details).Value.ToString(),
                             Particulars = row.Cell((int)StatementColumns.Particulars).Value.ToString().ToUpper(),
                             Code = row.Cell((int)StatementColumns.Code).Value.ToString().ToUpper(),
