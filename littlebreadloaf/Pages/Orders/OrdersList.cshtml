@@ -13,10 +13,14 @@
 
 <div class="alert alert-secondary border-0 admin_background" role="alert">
     <div class="text-muted mb-1">Admin</div>
-    <form class="d-inline" method="post" asp-page-handler="ExportExcel">
-        <span><button class="btn btn-outline-secondary"><i class="fa fa-table" aria-hidden="true" title="Excel export"></i> Export Excel</button></span>
+    <form class="d-inline" method="post" asp-page-handler="ExportExcel" asp-route-ShowAll="false">
+        <span><button class="btn btn-outline-secondary"><i class="fa fa-table" aria-hidden="true" title="Excel export"></i> Export active orders</button></span>
     </form>
-   
+
+    <form class="d-inline" method="post" asp-page-handler="ExportExcel" asp-route-ShowAll="true">
+        <span><button class="btn btn-outline-secondary"><i class="fa fa-table" aria-hidden="true" title="Excel export"></i> Export all orders</button></span>
+    </form>
+
     <a class="btn btn-outline-secondary" asp-page="/Orders/OrderStatementUpload"><i class="fa fa-upload" aria-hidden="true" title="Statement upload"></i> Statement upload</a>
 </div>
 

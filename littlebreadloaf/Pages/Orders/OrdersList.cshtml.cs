@@ -78,9 +78,17 @@ namespace littlebreadloaf.Pages.Orders
             return Page();
         }
 
-        public async Task<ActionResult> OnPostExportExcelAsync()
+        public async Task<ActionResult> OnPostExportExcelAsync(bool showAll)
         {
-            var orders = await OrdersHelper.GetActiveOrders(_context);
+            List<ExcelOrders> orders;
+            if(showAll)
+            {
+                orders = await OrdersHelper.GetAllOrders(_context);
+            }
+            else
+            {
+                orders = await OrdersHelper.GetActiveOrders(_context);
+            }
 
             var dtCustomers = new DataTable();
             dtCustomers.Columns.AddRange(new DataColumn[]

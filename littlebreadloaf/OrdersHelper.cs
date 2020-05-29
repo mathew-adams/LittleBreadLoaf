@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace littlebreadloaf
 {
-    public class ActiveOrders
+    public class ExcelOrders
     {
         public DateTime? Created { get; set; }
         public DateTime? Confirmed { get; set; }
@@ -33,7 +33,7 @@ namespace littlebreadloaf
 
     public class OrdersHelper
     {
-        public static async Task<List<ActiveOrders>> GetActiveOrders(ProductContext context)
+        public static async Task<List<ExcelOrders>> GetActiveOrders(ProductContext context)
         {
             var orders = await context.ProductOrder.AsNoTracking()
                                         .Join(context.CartItem.AsNoTracking(),
@@ -87,7 +87,7 @@ namespace littlebreadloaf
                                         .SelectMany(ad => ad.ad.DefaultIfEmpty(),
                                                     (x, y) => new { y, x.ci })
                                         .Where(a => a.ci.Payment == new DateTime(9999, 12, 31) && a.ci.Confirmed < new DateTime(9999, 12, 31))
-                                        .Select(a => new ActiveOrders
+                                        .Select(a => new ExcelOrders
                                         {
                                             Created = a.ci.Created,
                                             Confirmed = a.ci.Confirmed,
@@ -109,7 +109,86 @@ namespace littlebreadloaf
                                             ProductSum = a.ci.Quantity * a.ci.Price,
                                             OrderID = a.ci.OrderID
                                         }).ToListAsync();
-
+            orders.OrderByDescending(s => s.Created);
+            return orders;
+        }
+        public static async Task<List<ExcelOrders>> GetAllOrders(ProductContext context)
+        {
+            var orders = await context.ProductOrder.AsNoTracking()
+                                        .Join(context.CartItem.AsNoTracking(),
+                                                po => po.CartID,
+                                                ci => ci.CartID, (po, ci) => new
+                                                {
+                                                    po.Created,
+                                                    po.Confirmed,
+                                                    po.DeliveryDate,
+                                                    po.DeliveryTime,
+                                                    po.DeliveryInstructions,
+                                                    po.PickupDate,
+                                                    po.ContactAddress,
+                                                    po.PickupTime,
+                                                    po.ContactName,
+                                                    po.ContactEmail,
+                                                    po.ContactPhone,
+                                                    po.ConfirmationCode,
+                                                    po.Payment,
+                                                    po.OrderID,
+                                                    ci.ProductID,
+                                                    ci.Quantity,
+                                                    ci.Price
+                                                })
+                                        .Join(context.Product.AsNoTracking(),
+                                                ci => ci.ProductID,
+                                                p => p.ProductID, (ci, p) => new
+                                                {
+                                                    ci.Created,
+                                                    ci.Confirmed,
+                                                    ci.DeliveryDate,
+                                                    ci.DeliveryTime,
+                                                    ci.DeliveryInstructions,
+                                                    ci.PickupDate,
+                                                    ci.ContactAddress,
+                                                    ci.PickupTime,
+                                                    ci.ContactName,
+                                                    ci.ContactEmail,
+                                                    ci.ContactPhone,
+                                                    ci.ConfirmationCode,
+                                                    ci.Payment,
+                                                    ci.OrderID,
+                                                    p.Name,
+                                                    ci.Quantity,
+                                                    ci.Price
+                                                })
+                                        .GroupJoin(context.NzAddressDeliverable.AsNoTracking(),
+                                                    ci => ci.ContactAddress,
+                                                    ad => ad.address_id,
+                                                    (ci, ad) => new { ad, ci })
+                                        .SelectMany(ad => ad.ad.DefaultIfEmpty(),
+                                                    (x, y) => new { y, x.ci })
+                                        .Where(a => a.ci.Confirmed < new DateTime(9999, 12, 31))
+                                        .Select(a => new ExcelOrders
+                                        {
+                                            Created = a.ci.Created,
+                                            Confirmed = a.ci.Confirmed,
+                                            DeliveryDate = a.ci.DeliveryDate,
+                                            DeliveryTime = a.ci.DeliveryTime,
+                                            DeliveryInstructions = a.ci.DeliveryInstructions,
+                                            PickupDate = a.ci.PickupDate,
+                                            PickupTime = a.ci.PickupTime,
+                                            ContactName = a.ci.ContactName,
+                                            ContactEmail = a.ci.ContactEmail,
+                                            ContactPhone = a.ci.ContactPhone,
+                                            ConfirmationCode = a.ci.ConfirmationCode,
+                                            full_address = a.y.full_address,
+                                            suburb_locality = a.y.suburb_locality,
+                                            town_city = a.y.town_city,
+                                            Name = a.ci.Name,
+                                            Quantity = a.ci.Quantity,
+                                            Price = a.ci.Price,
+                                            ProductSum = a.ci.Quantity * a.ci.Price,
+                                            OrderID = a.ci.OrderID
+                                        }).ToListAsync();
+            orders.OrderByDescending(s => s.Created);
             return orders;
         }
     }
