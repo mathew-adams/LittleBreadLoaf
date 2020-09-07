@@ -114,12 +114,12 @@ namespace littlebreadloaf.Pages.Cart
 
             var validDeliveryDaysOfWeek = new List<DayOfWeek>()
             {
-                DayOfWeek.Friday
+                DayOfWeek.Saturday
             };
 
             var validPickupDaysOfWeek = new List<DayOfWeek>()
             {
-                DayOfWeek.Friday
+                DayOfWeek.Saturday
             };
 
             PaymentMethodOptions = new SelectList(new List<SelectListItem>()

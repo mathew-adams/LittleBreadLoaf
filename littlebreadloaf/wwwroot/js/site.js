@@ -68,7 +68,7 @@ $(document).ready(function () {
             } else {
                 return [false, ""];
             }*/
-            if (getDayOfWeek(date) === "Friday") {
+            if (getDayOfWeek(date) === "Saturday") {
                 return [true, ""];
             } else {
                 return [false, ""];
@@ -86,7 +86,7 @@ $(document).ready(function () {
             } else {
                 return [false, ""];
             }*/
-            if (getDayOfWeek(date) === "Friday") {
+            if (getDayOfWeek(date) === "Saturday") {
                 return [true, ""];
             } else {
                 return [false, ""];
