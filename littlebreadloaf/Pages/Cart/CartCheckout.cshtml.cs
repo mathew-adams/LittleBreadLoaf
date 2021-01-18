@@ -75,7 +75,6 @@ namespace littlebreadloaf.Pages.Cart
             {
                 ProductOrder = new ProductOrder();
                 ProductOrder.DeliveryTime = "14:00 to 18:00";
-
             }
 
             PaymentMethodOptions = new SelectList(new List<SelectListItem>()
@@ -119,7 +118,8 @@ namespace littlebreadloaf.Pages.Cart
 
             var validPickupDaysOfWeek = new List<DayOfWeek>()
             {
-                DayOfWeek.Saturday
+                DayOfWeek.Thursday,
+                DayOfWeek.Friday
             };
 
             PaymentMethodOptions = new SelectList(new List<SelectListItem>()

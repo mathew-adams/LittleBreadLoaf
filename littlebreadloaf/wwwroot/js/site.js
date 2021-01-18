@@ -81,16 +81,16 @@ $(document).ready(function () {
         maxDate: "10d",
         dateFormat: "yy-mm-dd",
         beforeShowDay: function (date) {
-            /*if (getDayOfWeek(date) === "Thursday" || getDayOfWeek(date) === "Friday" || getDayOfWeek(date) === "Saturday") {
-                return [true, ""];
-            } else {
-                return [false, ""];
-            }*/
-            if (getDayOfWeek(date) === "Saturday") {
+            if (getDayOfWeek(date) === "Thursday" || getDayOfWeek(date) === "Friday") {
                 return [true, ""];
             } else {
                 return [false, ""];
             }
+            //if (getDayOfWeek(date) === "Saturday") {
+            //    return [true, ""];
+            //} else {
+            //    return [false, ""];
+            //}
         }
     });
 });
@@ -148,7 +148,7 @@ $(document).ready(function () {
     $('#pickup_time').timepicker({
         'timeFormat': 'H:i a',
         'minTime': '11:00am',
-        'maxTime': '2:00pm'
+        'maxTime': '5:30pm'
     });
 });
 
