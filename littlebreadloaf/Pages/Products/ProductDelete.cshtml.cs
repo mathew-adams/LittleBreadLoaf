@@ -23,42 +23,51 @@ namespace littlebreadloaf.Pages.Products
 
         public IActionResult OnGet(string ProductID)
         {
-            if (String.IsNullOrEmpty(ProductID) || !Guid.TryParse(ProductID, out Guid parsedID))
-            {
-                return new RedirectResult("/Products/ProductList");
-            }
 
-            Product = _context.Product.FirstOrDefault(m => m.ProductID == parsedID);
-            if (Product == null)
-            {
-                return new RedirectResult("/Products/ProductList");
-            }
+            return new RedirectResult("/Products/ProductList");
 
-            return Page();
+            //We don't want to delete products so we can preserve older orders
+
+            //if (String.IsNullOrEmpty(ProductID) || !Guid.TryParse(ProductID, out Guid parsedID))
+            //{
+            //    return new RedirectResult("/Products/ProductList");
+            //}
+
+            //Product = _context.Product.FirstOrDefault(m => m.ProductID == parsedID);
+            //if (Product == null)
+            //{
+            //    return new RedirectResult("/Products/ProductList");
+            //}
+
+            //return Page();
         }
 
 
         public async Task<IActionResult> OnPost()
         {
-            if(Product == null || Product.ProductID == null)
-            {
-                return new RedirectResult("/Products/ProductList");
-            }
-
-            Product = _context.Product.FirstOrDefault(m => m.ProductID == Product.ProductID);
-            if (Product != null)
-            {
-                var imgHel = new ImageHelper(Product.ProductID.ToString());
-                imgHel.DeleteAll();
-
-                _context.RemoveRange(_context.ProductBadge.Where(b => b.ProductID == Product.ProductID));
-                _context.RemoveRange(_context.ProductIngredient.Where(b => b.ProductID == Product.ProductID));
-                _context.RemoveRange(_context.ProductSuggestion.Where(b => b.ProductID == Product.ProductID));
-                _context.RemoveRange(_context.ProductImage.Where(b => b.ProductID == Product.ProductID));
-                _context.Remove(Product);
-                await _context.SaveChangesAsync();
-            }
             return new RedirectResult("/Products/ProductList");
+
+            //We don't want to delete products so we can preserve older orders
+
+            //if(Product == null || Product.ProductID == null)
+            //{
+            //    return new RedirectResult("/Products/ProductList");
+            //}
+
+            //Product = _context.Product.FirstOrDefault(m => m.ProductID == Product.ProductID);
+            //if (Product != null)
+            //{
+            //    var imgHel = new ImageHelper(Product.ProductID.ToString());
+            //    imgHel.DeleteAll();
+
+            //    _context.RemoveRange(_context.ProductBadge.Where(b => b.ProductID == Product.ProductID));
+            //    _context.RemoveRange(_context.ProductIngredient.Where(b => b.ProductID == Product.ProductID));
+            //    _context.RemoveRange(_context.ProductSuggestion.Where(b => b.ProductID == Product.ProductID));
+            //    _context.RemoveRange(_context.ProductImage.Where(b => b.ProductID == Product.ProductID));
+            //    _context.Remove(Product);
+            //    await _context.SaveChangesAsync();
+            //}
+            //return new RedirectResult("/Products/ProductList");
         }
 
     }

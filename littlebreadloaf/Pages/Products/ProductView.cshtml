@@ -31,7 +31,7 @@
                 <div class="card-body">
                     <div class="text-muted mb-1">Admin</div>
                     <a class="btn btn-outline-secondary" asp-page="/Products/ProductEdit" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-pencil" aria-hidden="true" title="Edit product"></i> Edit product</a>
-                    <a class="btn btn-outline-secondary" asp-page="/Products/ProductDelete" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-trash" aria-hidden="true" title="Delete product"></i> Delete product</a>
+                    @*<a class="btn btn-outline-secondary" asp-page="/Products/ProductDelete" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-trash" aria-hidden="true" title="Delete product"></i> Delete product</a>*@
                     <a class="btn btn-outline-secondary" asp-page="/Products/ProductBadgeList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-flag-o" aria-hidden="true" title="Edit badges"></i> Edit badges</a>
                     <a class="btn btn-outline-secondary" asp-page="/Products/ProductIngredientList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-birthday-cake" aria-hidden="true" title="Edit ingredients"></i> Edit ingredients</a>
                     <a class="btn btn-outline-secondary" asp-page="/Products/ProductSuggestionList" asp-route-ProductID="@Model.Product.ProductID"><i class="fa fa-lightbulb-o" aria-hidden="true" title="Edit suggestions"></i> Edit suggestions</a>
