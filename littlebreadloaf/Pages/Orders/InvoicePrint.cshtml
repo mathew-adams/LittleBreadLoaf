@@ -59,7 +59,7 @@
     <div class="row mt-1">
         <div class="col-8">
             <div class="row pl-3">
-                <table class="table col-4 table-sm">
+                <table class="table col-6 table-sm">
                     <tr>
                         <td>@Html.Label("Invoice ID", "Invoice ID:", new { @class = "m-0" })</td>
                         <td class="font-weight-bold">@Html.DisplayFor(i => i.ProductOrder.ConfirmationCode)</td>
@@ -72,6 +72,20 @@
                         <td>@Html.Label("Due Date", "Due Date:", new { @class = "m-0" })</td>
                         <td>@Html.DisplayFor(i => i.Invoice.Due)</td>
                     </tr>
+                    @if (Model.ProductOrder.DeliveryDate < new DateTime(9999, 12, 31))
+                    {
+                        <tr>
+                            <td>@Html.Label("Delivery", "Delivery:", new { @class = "m-0" })</td>
+                            <td>@Html.DisplayFor(i => i.ProductOrder.DeliveryDate) @Html.DisplayFor(i => i.ProductOrder.DeliveryTime)</td>
+                        </tr>
+                    }
+                    @if (Model.ProductOrder.PickupDate < new DateTime(9999, 12, 31))
+                    {
+                        <tr>
+                            <td>@Html.Label("Pickup", "Pickup:", new { @class = "m-0" })</td>
+                            <td>@Html.DisplayFor(i => i.ProductOrder.PickupDate) @@ @Html.DisplayFor(i => i.ProductOrder.PickupTime)</td>
+                        </tr>
+                    }
                     <tr>
                         <td>@Html.Label("Status", "Status:", new { @class = "m-0" })</td>
                         <td class="@statusStyle font-weight-bold">@status</td>
