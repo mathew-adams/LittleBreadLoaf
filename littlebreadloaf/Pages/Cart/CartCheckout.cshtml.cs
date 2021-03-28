@@ -130,8 +130,6 @@ namespace littlebreadloaf.Pages.Cart
             BusinessSettings = await _context.BusinessSettings.AsNoTracking().FirstOrDefaultAsync();
 
             ProductOrder.DeliveryTime = DeliveryTime;
-            if (IsPreOrder)
-                ProductOrder.DeliveryTime = DeliveryTimePreOrder;
 
             var validDeliveryDaysOfWeek = new List<DayOfWeek>();
             if (BusinessSettings.DeliverSunday) validDeliveryDaysOfWeek.Add(DayOfWeek.Sunday);
@@ -157,6 +155,20 @@ namespace littlebreadloaf.Pages.Cart
                     if (preOrder.Friday) validDeliveryDaysOfWeek.Add(DayOfWeek.Friday);
                     if (preOrder.Saturday) validDeliveryDaysOfWeek.Add(DayOfWeek.Saturday);
                 }
+
+                ProductOrder.DeliveryTime = DeliveryTimePreOrder;
+                var preOrderSource = await _context.PreOrderSource.AsNoTracking().Where(w => w.Source == source).FirstOrDefaultAsync();
+                if (preOrderSource != null)
+                {
+                    PreOrderSource = preOrderSource.Source;
+                    ProductOrder.DeliveryInstructions = $"Pre order: {source}";
+                    ProductOrder.ContactAddress = preOrderSource.AddressID;
+
+                    var address = await _context.NzAddressDeliverable.Where(w => w.address_id == preOrderSource.AddressID).FirstOrDefaultAsync();
+                    if (address != null)
+                        Full_Address = address.full_address;
+                }
+
             }
 
             var validPickupDaysOfWeek = new List<DayOfWeek>();
@@ -274,16 +286,19 @@ namespace littlebreadloaf.Pages.Cart
                     return Page();
                 }
 
-                var cartItems = await _context
-                                        .CartItem
-                                        .Where(w => w.CartID == parsedCartID)
-                                        .Select(s => new { s.Price, s.Quantity })
-                                        .ToListAsync();
-
-                if (cartItems.Sum(s => s.Price * s.Quantity) < BusinessSettings.MinimumDeliveryOrderAmount)
+                if(!IsPreOrder)
                 {
-                    ModelState.AddModelError("Validation.DeliveryMinNotMet", $"The minimum delivery amount is ${BusinessSettings.MinimumDeliveryOrderAmount}");
-                    return Page();
+                    var cartItems = await _context
+                                            .CartItem
+                                            .Where(w => w.CartID == parsedCartID)
+                                            .Select(s => new { s.Price, s.Quantity })
+                                            .ToListAsync();
+
+                    if (cartItems.Sum(s => s.Price * s.Quantity) < BusinessSettings.MinimumDeliveryOrderAmount)
+                    {
+                        ModelState.AddModelError("Validation.DeliveryMinNotMet", $"The minimum delivery amount is ${BusinessSettings.MinimumDeliveryOrderAmount}");
+                        return Page();
+                    }
                 }
             }
 

@@ -35,7 +35,8 @@ namespace littlebreadloaf.Pages.Products
         public async Task<IActionResult> OnGetAsync()
         {
             IsPreOrder = HttpContext.Request.Cookies[CartHelper.PreOrderCookie] != null;
-
+            if (IsPreOrder)
+                return new RedirectToPageResult("/Products/ProductPreOrder", new { Source = HttpContext.Request.Cookies[CartHelper.PreOrderCookie] });
             Products = await _context
                             .Product
                             .AsNoTracking()
