@@ -44,5 +44,8 @@ namespace littlebreadloaf.Data
 
         [Display(Name = "Show on front page", Prompt = "Show on page?", Description = "Determines whether the product should be shown on the main page")]
         public bool ShowOnFrontPage { get; set; }
+
+        [Display(Name = "Pre Order", Prompt = "Can be pre-ordered?", Description = "Determines whether the product can be pre-ordered")]
+        public bool PreOrder { get; set; }
     }
 }

@@ -5,6 +5,7 @@
     ViewData["ReturnURL"] = Url.Page("/Blog/BlogView", new { Model.Blog.BlogID });
     ViewData["Description"] = @Model.Blog.Description;
     ViewData["FullURL"] = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, ViewData["ReturnURL"]);
+    ViewData["PreOrder"] = Model.IsPreOrder;
 
     if (Model.BlogImage != null && !string.IsNullOrEmpty(Model.BlogImage.FileLocation))
     {

@@ -19,8 +19,15 @@ namespace littlebreadloaf.Pages
             _context = context;
             _config = config;
         }
+
+        [BindProperty]
+        public bool IsPreOrder { get; set; }
+
+
         public async Task<IActionResult> OnGetAsync()
         {
+            IsPreOrder = HttpContext.Request.Cookies[CartHelper.PreOrderCookie] != null;
+
             ViewData["MinumumDelivery"] = _config["LittleBreadLoad.MinimumDelivery"];
             return Page();
         }

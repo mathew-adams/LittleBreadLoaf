@@ -24,5 +24,22 @@ namespace littlebreadloaf.Data
 
         [Display(Name = "Pickup enabled", Prompt = "Select if Pickup is enabled", Description = "Pickup is currently enabled")]
         public bool PickupEnabled { get; set; }
+
+        public bool PickupSunday { get; set; }
+        public bool PickupMonday { get; set; }
+        public bool PickupTuesday { get; set; }
+        public bool PickupWednesday { get; set; }
+        public bool PickupThursday { get; set; }
+        public bool PickupFriday { get; set; }
+        public bool PickupSaturday { get; set; }
+
+        public bool DeliverSunday { get; set; }
+        public bool DeliverMonday { get; set; }
+        public bool DeliverTuesday { get; set; }
+        public bool DeliverWednesday { get; set; }
+        public bool DeliverThursday { get; set; }
+        public bool DeliverFriday { get; set; }
+        public bool DeliverSaturday { get; set; }
+
     }
 }

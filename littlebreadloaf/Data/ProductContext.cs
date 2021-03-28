@@ -41,5 +41,7 @@ namespace littlebreadloaf.Data
 
         public virtual DbSet<littlebreadloaf.ConfigurationProvider.LittleBreadLoafSystem> LittleBreadLoafSystem { get; set; }
         public virtual DbSet<SystemError> SystemError { get; set; }
+
+        public virtual DbSet<PreOrderSource> PreOrderSource { get; set; }
     }
 }

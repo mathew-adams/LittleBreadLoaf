@@ -57,6 +57,9 @@ namespace littlebreadloaf.Pages.Blog
         [BindProperty(SupportsGet = true)]
         public string FilterCategoryID { get; set; }
 
+        [BindProperty]
+        public bool IsPreOrder { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
             if (!string.IsNullOrEmpty(FilterTagID) && Guid.TryParse(FilterTagID, out Guid parsedTagID))
@@ -79,7 +82,9 @@ namespace littlebreadloaf.Pages.Blog
             {
                 Blogs = await GetAllBlogs();
             }
-            
+            IsPreOrder = HttpContext.Request.Cookies[CartHelper.PreOrderCookie] != null;
+
+
             Blogs = Blogs.OrderByDescending(d => d.Created).ToList();
 
             var allBlogs = await GetAllBlogs();

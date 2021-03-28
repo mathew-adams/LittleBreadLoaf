@@ -90,6 +90,17 @@
         </div>
     </div>
 
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <div class="form-control">
+                <div class="form-check">
+                    @Html.CheckBoxFor(f => f.Product.PreOrder, new { @class = "form-check-input", autocomplete = "off", autofocus = "autofocus", @placeholder = "Show on front page" })
+                    @Html.LabelFor(f => f.Product.PreOrder, "Can be pre-ordered", new { @class = "form-check-label" })
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="my-3">
         <button type="submit" class="btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true" title="Save"></i> Save</button>
         <a class="btn btn-danger" asp-page="/Products/ProductList"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>

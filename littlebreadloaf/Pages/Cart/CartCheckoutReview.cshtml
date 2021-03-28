@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Checkout review";
     ViewData["ReturnURL"] = Url.Page("/Cart/CartCheckoutConfirmation", new { ProductOrderID = Model.ProductOrder.OrderID, CartID = Model.ProductOrder.CartID });
+    ViewData["PreOrder"] = Model.IsPreOrder;
 }
 
 <nav aria-label="breadcrumb">
@@ -67,31 +68,34 @@
 
     <div class="col-md-6">
 
-        <strong>@Html.Label("Pickup (from Alice town bakery):")</strong>
-        <div class="form-row">
-            <div class="form-group col">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text"><i class="fa fa-calendar fa-fw" aria-hidden="true" title="Pickup date"></i></div>
+        @if (!Model.IsPreOrder)
+        {
+            <strong>@Html.Label("Pickup (from Alice town bakery):")</strong>
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-calendar fa-fw" aria-hidden="true" title="Pickup date"></i></div>
+                        </div>
+                        @Html.TextBoxFor(m => m.ProductOrder.PickupDate, "{0:yyyy-MM-dd}", new { @id = "pickup_date", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Pickup date", disabled = "on" })
                     </div>
-                    @Html.TextBoxFor(m => m.ProductOrder.PickupDate, "{0:yyyy-MM-dd}", new { @id = "pickup_date", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Pickup date", disabled = "on" })
+                </div>
+                <div class="form-group col">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-clock-o fa-fw" aria-hidden="true" title="Pickup time"></i></div>
+                        </div>
+                        @Html.TextBoxFor(m => m.ProductOrder.PickupTime, new { @id = "pickup_time", @class = "form-control", autocomplete = "off", autofocus = "autofocus", disabled = "on" })
+                    </div>
                 </div>
             </div>
-            <div class="form-group col">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text"><i class="fa fa-clock-o fa-fw" aria-hidden="true" title="Pickup time"></i></div>
-                    </div>
-                    @Html.TextBoxFor(m => m.ProductOrder.PickupTime, new { @id = "pickup_time", @class = "form-control", autocomplete = "off", autofocus = "autofocus", disabled = "on" })
-                </div>
-            </div>
-        </div>
 
-        <div class="form-row d-flex justify-content-center text-muted">
-            <h4>
-                --- OR ---
-            </h4>
-        </div>
+            <div class="form-row d-flex justify-content-center text-muted">
+                <h4>
+                    --- OR ---
+                </h4>
+            </div>
+        }
 
         <strong>@Html.Label("Delivery:")</strong>
         <div class="form-row">

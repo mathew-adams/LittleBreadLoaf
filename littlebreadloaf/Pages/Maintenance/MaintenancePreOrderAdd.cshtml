@@ -1,0 +1,86 @@
+﻿@page
+@model littlebreadloaf.Pages.Maintenance.MaintenancePreOrderAddModel
+@{
+    ViewData["Title"] = "Add Pre-order";
+    ViewData["ReturnURL"] = Url.Page("/Maintenance/MaintenancePreOrderAdd");
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Maintenance/MaintenanceList">Maintenance</a></li>
+        <li class="breadcrumb-item"><a asp-page="/Maintenance/MaintenancePreOrderList">Pre-orders</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+    </ol>
+</nav>
+
+<form method="post">
+    <div class="form-row">
+        <div class="form-group col-6">
+            @Html.LabelFor(m => m.PreOrderSource.Source)
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-handshake-o" aria-hidden="true" title="Pre-order source"></i></div>
+                </div>
+                @Html.TextBoxFor(m => m.PreOrderSource.Source, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "100" })
+            </div>
+            @Html.ValidationMessageFor(m => m.PreOrderSource.Source, "", new { @class = "text-danger" })
+            @Html.ValidationMessage("Duplicate", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-6">
+            @Html.Label("Address")
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-map-marker fa-fw" aria-hidden="true" title="Minimum delivery order amount"></i></div>
+                </div>
+                @Html.TextBoxFor(m => m.Full_Address, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @id = "delivery_address", @placeholder = "Enter the address to deliver", @tabindex = "101" })
+            </div>
+            @Html.ValidationMessageFor(m => m.Full_Address, "", new { @class = "text-danger" })
+            @Html.ValidationMessage("AddressRequired", new { @class = "text-danger" })
+
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-6">
+            <div class="input-group">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Sun</th>
+                            <th>Mon</th>
+                            <th>Tues</th>
+                            <th>Wed</th>
+                            <th>Thu</th>
+                            <th>Fri</th>
+                            <th>Sat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Html.CheckBoxFor(s => s.PreOrderSource.Sunday, new { @tabindex = "102" })</td>
+                            <td>@Html.CheckBoxFor(s => s.PreOrderSource.Monday, new { @tabindex = "103" })</td>
+                            <td>@Html.CheckBoxFor(s => s.PreOrderSource.Tuesday, new { @tabindex = "104" })</td>
+                            <td>@Html.CheckBoxFor(s => s.PreOrderSource.Wednesday, new { @tabindex = "105" })</td>
+                            <td>@Html.CheckBoxFor(s => s.PreOrderSource.Thursday, new { @tabindex = "106" })</td>
+                            <td>@Html.CheckBoxFor(s => s.PreOrderSource.Friday, new { @tabindex = "107" })</td>
+                            <td>@Html.CheckBoxFor(s => s.PreOrderSource.Saturday, new { @tabindex = "108" })</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            @Html.ValidationMessageFor(m => m.Full_Address, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @Html.HiddenFor(h => h.PreOrderSource.AddressID, new { @id = "address_id" })
+
+    <div class="my-3">
+        <button type="submit" class="btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true" title="Save"></i> Save</button>
+        <a class="btn btn-danger" asp-page="/Maintenance/MaintenancePreOrderList"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
+    </div>
+</form>
+
+

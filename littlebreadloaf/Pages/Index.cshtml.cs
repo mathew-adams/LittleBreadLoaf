@@ -25,13 +25,16 @@ namespace littlebreadloaf.Pages
         }
         public async Task<IActionResult> OnGetAsync()
         {
+            var source = HttpContext.Request.Cookies[CartHelper.PreOrderCookie];
+
+            if (source != null)
+            {
+                new RedirectToPageResult("/Products/ProductPreOrder",new { Source = source });
+            }
             //Doesn't need to be async
             return new RedirectToPageResult("/Products/ProductList");
-            //return Redirect("/Welcome");
 
-        //    ViewData["MinumumDelivery"] = _config["LittleBreadLoad.MinimumDelivery"];
 
         }
-
     }
 }

@@ -9,10 +9,10 @@ using littlebreadloaf.Data;
 
 namespace littlebreadloaf.Pages.Products
 {
-    public class ProductListModel : PageModel
+    public class ProductPreOrderModel : PageModel
     {
         private readonly ProductContext _context;
-        public ProductListModel(ProductContext context)
+        public ProductPreOrderModel(ProductContext context)
         {
             _context = context;
         }
@@ -29,12 +29,25 @@ namespace littlebreadloaf.Pages.Products
         [BindProperty]
         public List<ProductOrderOutage> ProductOrderOutages { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public string Source { get; set; }
+
         [BindProperty]
         public bool IsPreOrder { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            IsPreOrder = HttpContext.Request.Cookies[CartHelper.PreOrderCookie] != null;
+            if (string.IsNullOrEmpty(Source))
+                return new RedirectToPageResult("/Products/ProductList");
+
+            if(! await _context.PreOrderSource.AnyAsync(a => a.Source == Source))
+            {
+                return new RedirectToPageResult("/Products/ProductList");
+            }
+
+            HttpContext.Response.Cookies.Append(CartHelper.PreOrderCookie, Source);
+
+            IsPreOrder = true;
 
             Products = await _context
                             .Product
@@ -51,13 +64,19 @@ namespace littlebreadloaf.Pages.Products
         {
             if (String.IsNullOrEmpty(productID) || !Guid.TryParse(productID, out Guid parsedID))
             {
-                return new RedirectResult("/Products/ProductList");
+                return new RedirectResult("/Products/ProductPreOrder");
             }
 
             return await CartHelper.AddToCart(_context,
                                               parsedID,
                                               User,
                                               HttpContext);
+        }
+
+        public async Task<IActionResult> OnPostViewFullSiteAsync()
+        {
+            HttpContext.Response.Cookies.Delete(CartHelper.PreOrderCookie);
+            return new RedirectResult("/Products/ProductList");
         }
     }
 }

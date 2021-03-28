@@ -19,7 +19,7 @@
             <div class="input-group-prepend">
                 <div class="input-group-text"><i class="fa fa-usd fa-fw" aria-hidden="true" title="Minimum delivery order amount"></i></div>
             </div>
-            @Html.TextBoxFor(m => m.BusinessSettings.MinimumDeliveryOrderAmount, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", disabled="on" })
+            @Html.TextBoxFor(m => m.BusinessSettings.MinimumDeliveryOrderAmount, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", disabled = "on" })
         </div>
         @Html.ValidationMessageFor(m => m.BusinessSettings.MinimumDeliveryOrderAmount, "", new { @class = "text-danger" })
     </div>
@@ -32,7 +32,7 @@
             <div class="input-group-prepend">
                 <div class="input-group-text"><i class="fa fa-usd fa-fw" aria-hidden="true" title="Minimum delivery order amount"></i></div>
             </div>
-            @Html.TextBoxFor(m => m.BusinessSettings.MinimumPickupOrderAmount, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", disabled="on" })
+            @Html.TextBoxFor(m => m.BusinessSettings.MinimumPickupOrderAmount, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", disabled = "on" })
         </div>
         @Html.ValidationMessageFor(m => m.BusinessSettings.MinimumPickupOrderAmount, "", new { @class = "text-danger" })
     </div>
@@ -42,7 +42,7 @@
     <div class="form-group col-md-6">
         <div class="form-control">
             <div class="form-check">
-                @Html.CheckBoxFor(f => f.BusinessSettings.DeliveryEnabled, new { @class = "form-check-input", autocomplete = "off", autofocus = "autofocus", @placeholder = "Delivery enabled", disabled="on" })
+                @Html.CheckBoxFor(f => f.BusinessSettings.DeliveryEnabled, new { @class = "form-check-input", autocomplete = "off", autofocus = "autofocus", @placeholder = "Delivery enabled", disabled = "on" })
                 @Html.LabelFor(f => f.BusinessSettings.DeliveryEnabled, "Delivery enabled", new { @class = "form-check-label" })
             </div>
         </div>
@@ -53,14 +53,79 @@
     <div class="form-group col-md-6">
         <div class="form-control">
             <div class="form-check">
-                @Html.CheckBoxFor(f => f.BusinessSettings.PickupEnabled, new { @class = "form-check-input", autocomplete = "off", autofocus = "autofocus", @placeholder = "Pickup enabled", disabled="on" })
+                @Html.CheckBoxFor(f => f.BusinessSettings.PickupEnabled, new { @class = "form-check-input", autocomplete = "off", autofocus = "autofocus", @placeholder = "Pickup enabled", disabled = "on" })
                 @Html.LabelFor(f => f.BusinessSettings.PickupEnabled, "Pickup enabled", new { @class = "form-check-label" })
             </div>
         </div>
     </div>
 </div>
 
-@Html.HiddenFor(h => h.BusinessSettings.BusinessSettingID)
+<div class="form-row">
+    <div class="form-group col-6">
+        <strong>@Html.Label("Pickup")</strong>
+        <div class="input-group">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Sun</th>
+                        <th>Mon</th>
+                        <th>Tues</th>
+                        <th>Wed</th>
+                        <th>Thu</th>
+                        <th>Fri</th>
+                        <th>Sat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Html.CheckBoxFor(s => s.BusinessSettings.PickupSunday, new { @tabindex = "102", disabled = "on" })</td>
+                        <td>@Html.CheckBoxFor(s => s.BusinessSettings.PickupMonday, new { @tabindex = "103", disabled = "on" })</td>
+                        <td>@Html.CheckBoxFor(s => s.BusinessSettings.PickupTuesday, new { @tabindex = "104", disabled = "on" })</td>
+                        <td>@Html.CheckBoxFor(s => s.BusinessSettings.PickupWednesday, new { @tabindex = "105", disabled = "on" })</td>
+                        <td>@Html.CheckBoxFor(s => s.BusinessSettings.PickupThursday, new { @tabindex = "106", disabled = "on" })</td>
+                        <td>@Html.CheckBoxFor(s => s.BusinessSettings.PickupFriday, new { @tabindex = "107", disabled = "on" })</td>
+                        <td>@Html.CheckBoxFor(s => s.BusinessSettings.PickupSaturday, new { @tabindex = "108", disabled = "on" })</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-<a class="btn btn-outline-secondary" asp-page="/Maintenance/MaintenanceBusinessSettingsEdit" asp-route-businessSettingID="@Model.BusinessSettings.BusinessSettingID"><i class="fa fa-pencil fa-fw" aria-hidden="true" title="Edit"></i> Edit</a>
-<a class="btn btn-danger" asp-page="/Maintenance/MaintenanceList"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
+<div class="form-row">
+    <div class="form-group col-6">
+        <strong>@Html.Label("Delivery")</strong>
+        <div class="input-group">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Sun</th>
+                        <th>Mon</th>
+                        <th>Tues</th>
+                        <th>Wed</th>
+                        <th>Thu</th>
+                        <th>Fri</th>
+                        <th>Sat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Html.CheckBoxFor(s => s.BusinessSettings.DeliverSunday, new { @tabindex = "202", disabled = "on" })</td>
+                        <td>@Html.CheckBoxFor(s => s.BusinessSettings.DeliverMonday, new { @tabindex = "203", disabled = "on" });</td>
+                        <td>@Html.CheckBoxFor(s => s.BusinessSettings.DeliverTuesday, new { @tabindex = "204", disabled = "on" })</td>
+                        <td>@Html.CheckBoxFor(s => s.BusinessSettings.DeliverWednesday, new { @tabindex = "205", disabled = "on" })</td>
+                        <td>@Html.CheckBoxFor(s => s.BusinessSettings.DeliverThursday, new { @tabindex = "206", disabled = "on" })</td>
+                        <td>@Html.CheckBoxFor(s => s.BusinessSettings.DeliverFriday, new { @tabindex = "207", disabled = "on" })</td>
+                        <td>@Html.CheckBoxFor(s => s.BusinessSettings.DeliverSaturday, new { @tabindex = "208", disabled = "on" })</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@Html.HiddenFor(h => h.BusinessSettings.BusinessSettingID)
+<div class="my-3">
+    <a class="btn btn-outline-secondary" asp-page="/Maintenance/MaintenanceBusinessSettingsEdit" asp-route-businessSettingID="@Model.BusinessSettings.BusinessSettingID"><i class="fa fa-pencil fa-fw" aria-hidden="true" title="Edit"></i> Edit</a>
+    <a class="btn btn-danger" asp-page="/Maintenance/MaintenanceList"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
+</div>

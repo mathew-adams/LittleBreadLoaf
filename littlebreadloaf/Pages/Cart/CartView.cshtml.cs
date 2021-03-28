@@ -35,8 +35,13 @@ namespace littlebreadloaf.Pages.Cart
         [BindProperty]
         public bool HasCart { get; set; }
 
+        [BindProperty]
+        public bool IsPreOrder { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
+            IsPreOrder = HttpContext.Request.Cookies[CartHelper.PreOrderCookie] != null;
+
             if (HttpContext.Request.Cookies[CartHelper.CartCookieName] == null)
             {
                 HasCart = false;
@@ -91,6 +96,8 @@ namespace littlebreadloaf.Pages.Cart
             var businessSettings = await _context.BusinessSettings.AsNoTracking().FirstOrDefaultAsync();
 
             ViewData["MinumumDelivery"] = businessSettings.MinimumDeliveryOrderAmount;
+
+
 
             return Page();
         }

@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "Terms and conditions";
     ViewData["ReturnURL"] = Url.Page("/TermsAndConditions");
+    ViewData["PreOrder"] = Model.IsPreOrder;
+
 }
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">

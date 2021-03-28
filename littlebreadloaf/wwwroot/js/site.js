@@ -21,7 +21,7 @@ $(document).ready(function () {
         source: function (request, response) {
             $.ajax(
                 {
-                    url: "?handler=AddressSearch",
+                    url: "/api/address-auto-fill",
                     dataType: "json",
                     data:
                     {
@@ -58,41 +58,79 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-    $("#delivery_date").datepicker({
-        minDate: "1d",
-        maxDate: "10d",
-        dateFormat: "yy-mm-dd",
-        beforeShowDay: function (date) {
-            /*if (getDayOfWeek(date) === "Thursday" || getDayOfWeek(date) === "Friday"){
-                return [true, ""];
-            } else {
-                return [false, ""];
-            }*/
-            if (getDayOfWeek(date) === "Saturday") {
-                return [true, ""];
-            } else {
-                return [false, ""];
-            }
-        }
-    });
 
-    $("#pickup_date").datepicker({
-        minDate: "1d",
-        maxDate: "10d",
-        dateFormat: "yy-mm-dd",
-        beforeShowDay: function (date) {
-            if (getDayOfWeek(date) === "Thursday" || getDayOfWeek(date) === "Friday") {
-                return [true, ""];
-            } else {
-                return [false, ""];
+    if ($('#delivery_date_preorder').length > 0) {
+        var dates;
+        var source = $("#pre_order_source").val();
+        $.ajax({
+            type: "GET",
+            url: "/api/dates?type=" + source,
+            success: function (data) {
+                dates = data.filter(element => element.type == source)[0].dates;
             }
-            //if (getDayOfWeek(date) === "Saturday") {
-            //    return [true, ""];
-            //} else {
-            //    return [false, ""];
-            //}
-        }
-    });
+        });
+
+        $("#delivery_date_preorder").datepicker({
+            minDate: "1d",
+            maxDate: "10d",
+            dateFormat: "yy-mm-dd",
+            beforeShowDay: function (date) {
+                if (dates.includes(getDayOfWeek(date))) {
+                    return [true, ""];
+                } else {
+                    return [false, ""];
+                }
+            }
+        });
+    }
+   
+    if ($('#delivery_date').length > 0) {
+        var deliveryDates;
+        $.ajax({
+            type: "GET",
+            url: "/api/dates",
+            success: function (data) {
+                deliveryDates = data.filter(element => element.type == "DELIVERY")[0].dates;
+            }
+        });
+
+        $("#delivery_date").datepicker({
+            minDate: "1d",
+            maxDate: "10d",
+            dateFormat: "yy-mm-dd",
+            beforeShowDay: function (date) {
+                if (deliveryDates.includes(getDayOfWeek(date))) {
+                    return [true, ""];
+                } else {
+                    return [false, ""];
+                }
+            }
+        });
+    }
+    
+    if ($('#pickup_date').length > 0) {
+        var pickupDates;
+        $.ajax({
+            type: "GET",
+            url: "/api/dates",
+            success: function (data) {
+                pickupDates = data.filter(element => element.type == "PICKUP")[0].dates;
+            }
+        });
+
+        $("#pickup_date").datepicker({
+            minDate: "1d",
+            maxDate: "10d",
+            dateFormat: "yy-mm-dd",
+            beforeShowDay: function (date) {
+                if (pickupDates.includes(getDayOfWeek(date))) {
+                    return [true, ""];
+                } else {
+                    return [false, ""];
+                }
+            }
+        });
+    }
 });
 
 function getDayOfWeek(date) {

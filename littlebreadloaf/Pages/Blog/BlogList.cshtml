@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Blog";
     ViewData["ReturnURL"] = Url.Page("/Blog/BlogList");
+    ViewData["PreOrder"] = Model.IsPreOrder;
 }
 
 @if (!string.IsNullOrEmpty(Model.BlogSearchTerm))

@@ -9,8 +9,13 @@ namespace littlebreadloaf.Pages
 {
     public class PrivacyModel : PageModel
     {
+        [BindProperty]
+        public bool IsPreOrder { get; set; }
+
         public void OnGet()
         {
+            IsPreOrder = HttpContext.Request.Cookies[CartHelper.PreOrderCookie] != null;
+
         }
     }
 }

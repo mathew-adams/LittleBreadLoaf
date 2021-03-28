@@ -26,12 +26,17 @@ namespace littlebreadloaf.Pages.Cart
         [BindProperty]
         public NzAddressDeliverable NzAddressDeliverable { get; set; }
 
+        [BindProperty]
+        public bool IsPreOrder { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
             if (string.IsNullOrEmpty(ProductOrderID) || !Guid.TryParse(ProductOrderID, out Guid productOrderID))
             {
                 return new RedirectToPageResult("/Cart/CartView");
             }
+
+            IsPreOrder = HttpContext.Request.Cookies[CartHelper.PreOrderCookie] != null;
 
             ProductOrder = await _context.ProductOrder.FirstOrDefaultAsync(f => f.OrderID == productOrderID);
             if (ProductOrder == null)

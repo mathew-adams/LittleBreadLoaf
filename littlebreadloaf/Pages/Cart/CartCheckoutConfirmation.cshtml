@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Checkout confirmation";
     ViewData["ReturnURL"] = Url.Page("/Cart/CartCheckoutConfirmation", new { ProductOrderID = Model.ProductOrder.OrderID, CartID = Model.ProductOrder.CartID });
+    ViewData["PreOrder"] = Model.IsPreOrder;
 
     var getOrderMethod = (Model.ProductOrder.PickupDate.HasValue && Model.ProductOrder.PickupDate.Value < new DateTime(9999,12,31)) ? "In-store pickup:" : "Delivery:";
 }

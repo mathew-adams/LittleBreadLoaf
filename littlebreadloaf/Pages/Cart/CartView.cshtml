@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Cart";
     ViewData["ReturnURL"] = Url.Page("/Cart/CartView");
+    ViewData["PreOrder"] = Model.IsPreOrder;
 }
 
 <nav aria-label="breadcrumb">
@@ -128,10 +129,19 @@
         </div>
     </div>
 }
+else if (Model.IsPreOrder)
+{
+    //No cart
+    <div class="alert alert-info" role="alert">
+        You do not have any items in your cart.
+        <a asp-page="/Products/ProductPreOrder">Shop online</a>
+    </div>
+}
 else
 {
     //No cart
     <div class="alert alert-info" role="alert">
-        You do not have any items in your cart. <a asp-page="/Products/ProductList">Shop online</a>
+        You do not have any items in your cart.
+        <a asp-page="/Products/ProductList">Shop online</a>
     </div>
 }

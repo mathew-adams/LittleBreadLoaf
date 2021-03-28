@@ -62,8 +62,78 @@
         </div>
     </div>
 
+
+    <div class="form-row">
+        <div class="form-group col-6">
+            <strong>@Html.Label("Pickup")</strong>
+            <div class="input-group">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Sun</th>
+                            <th>Mon</th>
+                            <th>Tues</th>
+                            <th>Wed</th>
+                            <th>Thu</th>
+                            <th>Fri</th>
+                            <th>Sat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Html.CheckBoxFor(s => s.BusinessSettings.PickupSunday, new { @tabindex = "102" })</td>
+                            <td>@Html.CheckBoxFor(s => s.BusinessSettings.PickupMonday, new { @tabindex = "103" })</td>
+                            <td>@Html.CheckBoxFor(s => s.BusinessSettings.PickupTuesday, new { @tabindex = "104" })</td>
+                            <td>@Html.CheckBoxFor(s => s.BusinessSettings.PickupWednesday, new { @tabindex = "105" })</td>
+                            <td>@Html.CheckBoxFor(s => s.BusinessSettings.PickupThursday, new { @tabindex = "106" })</td>
+                            <td>@Html.CheckBoxFor(s => s.BusinessSettings.PickupFriday, new { @tabindex = "107" })</td>
+                            <td>@Html.CheckBoxFor(s => s.BusinessSettings.PickupSaturday, new { @tabindex = "108" })</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-6">
+            <strong>@Html.Label("Delivery")</strong>
+            <div class="input-group">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Sun</th>
+                            <th>Mon</th>
+                            <th>Tues</th>
+                            <th>Wed</th>
+                            <th>Thu</th>
+                            <th>Fri</th>
+                            <th>Sat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Html.CheckBoxFor(s => s.BusinessSettings.DeliverSunday, new { @tabindex = "202" })</td>
+                            <td>@Html.CheckBoxFor(s => s.BusinessSettings.DeliverMonday, new { @tabindex = "203" });</td>
+                            <td>@Html.CheckBoxFor(s => s.BusinessSettings.DeliverTuesday, new { @tabindex = "204" })</td>
+                            <td>@Html.CheckBoxFor(s => s.BusinessSettings.DeliverWednesday, new { @tabindex = "205" })</td>
+                            <td>@Html.CheckBoxFor(s => s.BusinessSettings.DeliverThursday, new { @tabindex = "206" })</td>
+                            <td>@Html.CheckBoxFor(s => s.BusinessSettings.DeliverFriday, new { @tabindex = "207" })</td>
+                            <td>@Html.CheckBoxFor(s => s.BusinessSettings.DeliverSaturday, new { @tabindex = "208" })</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
     @Html.HiddenFor(h => h.BusinessSettings.BusinessSettingID)
 
-    <button type="submit" class="btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true" title="Save"></i> Save</button>
-    <a class="btn btn-danger" asp-page="/Maintenance/MaintenanceBusinessSettingsList"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
+    <div class="my-3">
+        <button type="submit" class="btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true" title="Save"></i> Save</button>
+        <a class="btn btn-danger" asp-page="/Maintenance/MaintenanceBusinessSettingsList"><i class="fa fa-times" aria-hidden="true" title="Cancel"></i> Cancel</a>
+    </div>
+
+
 }

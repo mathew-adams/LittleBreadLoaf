@@ -1,0 +1,61 @@
+﻿@page
+@model littlebreadloaf.Pages.Maintenance.MaintenancePreOrderListModel
+@{
+    ViewData["Title"] = "Pre-orders";
+    ViewData["ReturnURL"] = Url.Page("/Maintenance/MaintenancePreOrderList");
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Maintenance/MaintenanceList">Maintenance</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+    </ol>
+</nav>
+
+<div class="alert alert-secondary border-0 admin_background" role="alert">
+    <div class="text-muted mb-1">Admin</div>
+
+    <a class="btn btn-outline-secondary" asp-page="/Maintenance/MaintenancePreOrderAdd"><i class="fa fa-plus" aria-hidden="true" title="Add pre-order source"></i> Add pre-order source</a>
+</div>
+
+@if (Model.PreOrderSources.Count > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Source</th>
+                <th>Address</th>
+                <th>Sun</th>
+                <th>Mon</th>
+                <th>Tues</th>
+                <th>Wed</th>
+                <th>Thu</th>
+                <th>Fri</th>
+                <th>Sat</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            @foreach (var preOrder in Model.PreOrderSources)
+            {
+                <tr>
+                    <td><a asp-page="/Maintenance/MaintenancePreOrderView" asp-route-Source="@preOrder.PreOrderSource.Source">@Html.DisplayFor(s => preOrder.PreOrderSource.Source)</a></td>
+                    <td>@Html.DisplayFor(s => preOrder.Address)</td>
+                    <td>@Html.DisplayFor(s => preOrder.PreOrderSource.Sunday)</td>
+                    <td>@Html.DisplayFor(s => preOrder.PreOrderSource.Monday)</td>
+                    <td>@Html.DisplayFor(s => preOrder.PreOrderSource.Tuesday)</td>
+                    <td>@Html.DisplayFor(s => preOrder.PreOrderSource.Wednesday)</td>
+                    <td>@Html.DisplayFor(s => preOrder.PreOrderSource.Thursday)</td>
+                    <td>@Html.DisplayFor(s => preOrder.PreOrderSource.Friday)</td>
+                    <td>@Html.DisplayFor(s => preOrder.PreOrderSource.Saturday)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info" role="alert">
+        No pre-order sources to display.
+    </div>
+}

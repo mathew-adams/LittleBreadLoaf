@@ -4,6 +4,7 @@
     ViewData["Title"] = @Model.Product.Name;
     ViewData["ReturnURL"] = Url.Page("/Products/ProductView", new { productID = Model.Product.ProductID });
     ViewData["Description"] = @Model.Product.Description;
+    ViewData["PreOrder"] = Model.IsPreOrder;
 
     var productImage = Model.Images.FirstOrDefault(m => m.PrimaryImage == true);
     var outage = Model.ProductOrderOutages.Count > 0 && Model.ProductOrderOutages.Any(a => a.Start <= DateTime.Now && a.Stop >= DateTime.Now);
@@ -18,7 +19,14 @@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a asp-page="/Products/ProductList">Products</a></li>
+        @if (Model.IsPreOrder)
+        {
+            <li class="breadcrumb-item"><a asp-page="/Products/ProductPreOrder">Products</a></li>
+        }
+        else
+        {
+            <li class="breadcrumb-item"><a asp-page="/Products/ProductList">Products</a></li>
+        }
         <li class="breadcrumb-item active" aria-current="page">@Model.Product.Name</li>
     </ol>
 </nav>

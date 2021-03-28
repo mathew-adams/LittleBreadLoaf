@@ -23,6 +23,8 @@ namespace littlebreadloaf.Pages.Blog
         [BindProperty]
         public BlogImage BlogImage { get; set; }
 
+        [BindProperty]
+        public bool IsPreOrder { get; set; }
         public async Task<IActionResult> OnGetAsync(string blogID)
         {
             if (String.IsNullOrEmpty(blogID) || !Guid.TryParse(blogID, out Guid parsedID))
@@ -36,6 +38,9 @@ namespace littlebreadloaf.Pages.Blog
             {
                 return new RedirectToPageResult("/Blog/BlogList");
             }
+
+            IsPreOrder = HttpContext.Request.Cookies[CartHelper.PreOrderCookie] != null;
+
 
             BlogImage = await _context.BlogImage.FirstOrDefaultAsync(i => i.BlogID == parsedID);
 

@@ -14,6 +14,7 @@ namespace littlebreadloaf
     {
 
         public const string CartCookieName = "LittleBreadLoaf.CartID";
+        public const string PreOrderCookie = "LittleBreadLoaf.PreOrderMode";
         public static async Task<ObjectResult> AddToCart(ProductContext context, 
                                                          Guid productID,
                                                          ClaimsPrincipal user,

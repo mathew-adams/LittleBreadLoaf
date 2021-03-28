@@ -7,6 +7,7 @@
 @{
     ViewData["Title"] = "Checkout";
     ViewData["ReturnURL"] = Url.Page("/Cart/CartCheckout");
+    ViewData["PreOrder"] = Model.IsPreOrder;
 }
 
 <nav aria-label="breadcrumb">
@@ -15,10 +16,6 @@
         <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
     </ol>
 </nav>
-
-<!--<div id="alertReCaptca" class="alert alert-info" role="alert">
-    <i class="fa fa-shield" aria-hidden="true" title="Shield"></i> Please wait while we verify if you are human.
-</div>-->
 
 @using (Html.BeginForm("CartCheckout", "CartCheckout", FormMethod.Post, new { @id = "cart_checkout", @class = "block-form-submit" }))
 {
@@ -66,66 +63,83 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text"><i class="fa fa-money fa-fw" aria-hidden="true" title="Payment method"></i></div>
                         </div>
-                        @Html.DropDownListFor(m => m.ProductOrder.PaymentMethod,
-                                              Model.PaymentMethodOptions,
-                                              "",
-                                              new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "104" })
+
+
+                        @if (Model.IsPreOrder)
+                        {
+                            @Html.DropDownListFor(m => m.ProductOrder.PaymentMethod,
+                                                  Model.PaymentMethodOptions,
+                                                  "",
+                                                  new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "104", @disabled = "on" })
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(m => m.ProductOrder.PaymentMethod,
+                                                  Model.PaymentMethodOptions,
+                                                  "",
+                                                  new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "104" })
+                        }
+
                     </div>
                     @Html.ValidationMessageFor(m => m.ProductOrder.PaymentMethod, "", new { @class = "text-danger" })
                 </div>
             </div>
         </div>
 
+
         <div class="col-md-6">
-            <strong>@Html.Label("Pickup (from the bakery):")</strong> <a asp-page="/Bakery">View map</a>
-            <div class="form-row">
-                <div class="form-group col">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text"><i class="fa fa-calendar fa-fw" aria-hidden="true" title="Pickup date"></i></div>
+            @if (!Model.IsPreOrder)
+            {
+                <strong>@Html.Label("Pickup (from the bakery):")</strong> <a asp-page="/Bakery">View map</a>
+                <div class="form-row">
+                    <div class="form-group col">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i class="fa fa-calendar fa-fw" aria-hidden="true" title="Pickup date"></i></div>
+                            </div>
+
+                            @if (Model.BusinessSettings.PickupEnabled)
+                            {
+                                @Html.TextBoxFor(m => m.ProductOrder.PickupDate, "{0:yyyy-MM-dd}", new { @id = "pickup_date", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Pickup date", @tabindex = "105" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(m => m.ProductOrder.PickupDate, "{0:yyyy-MM-dd}", new { @id = "pickup_date", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Pickup date", @tabindex = "105", disabled = "on" })
+                            }
+
                         </div>
-
-                        @if (Model.BusinessSettings.PickupEnabled)
-                        {
-                            @Html.TextBoxFor(m => m.ProductOrder.PickupDate, "{0:yyyy-MM-dd}", new { @id = "pickup_date", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Pickup date", @tabindex = "105" })
-                        }
-                        else
-                        {
-                            @Html.TextBoxFor(m => m.ProductOrder.PickupDate, "{0:yyyy-MM-dd}", new { @id = "pickup_date", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Pickup date", @tabindex = "105", disabled = "on" })
-                        }
-
+                        @Html.ValidationMessageFor(m => m.ProductOrder.PickupDate, "", new { @class = "text-danger" })
+                        @Html.ValidationMessage("Validation.DeliveryOrPickup", "", new { @class = "text-danger" }, "")
+                        @Html.ValidationMessage("Validation.PickupDayOfWeek", "", new { @class = "text-danger" }, "")
+                        @Html.ValidationMessage("Validation.PickupDateInPast", "", new { @class = "text-danger" }, "")
                     </div>
-                    @Html.ValidationMessageFor(m => m.ProductOrder.PickupDate, "", new { @class = "text-danger" })
-                    @Html.ValidationMessage("Validation.DeliveryOrPickup", "", new { @class = "text-danger" }, "")
-                    @Html.ValidationMessage("Validation.PickupDayOfWeek", "", new { @class = "text-danger" }, "")
-                    @Html.ValidationMessage("Validation.PickupDateInPast", "", new { @class = "text-danger" }, "")
-                </div>
-                <div class="form-group col">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text"><i class="fa fa-clock-o fa-fw" aria-hidden="true" title="Pickup time"></i></div>
+                    <div class="form-group col">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i class="fa fa-clock-o fa-fw" aria-hidden="true" title="Pickup time"></i></div>
+                            </div>
+                            @if (Model.BusinessSettings.PickupEnabled)
+                            {
+                                @Html.TextBoxFor(m => m.ProductOrder.PickupTime, new { @id = "pickup_time", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "106" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(m => m.ProductOrder.PickupTime, new { @id = "pickup_time", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "106", disabled = "on" })
+                            }
+
                         </div>
-                        @if (Model.BusinessSettings.PickupEnabled)
-                        {
-                            @Html.TextBoxFor(m => m.ProductOrder.PickupTime, new { @id = "pickup_time", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "106" })
-                        }
-                        else
-                        {
-                            @Html.TextBoxFor(m => m.ProductOrder.PickupTime, new { @id = "pickup_time", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "106", disabled = "on" })
-                        }
-
+                        @Html.ValidationMessageFor(m => m.ProductOrder.PickupTime, "", new { @class = "text-danger" })
+                        @Html.ValidationMessage("Validation.PickupTimeRequired", "", new { @class = "text-danger" }, "")
                     </div>
-                    @Html.ValidationMessageFor(m => m.ProductOrder.PickupTime, "", new { @class = "text-danger" })
-                    @Html.ValidationMessage("Validation.PickupTimeRequired", "", new { @class = "text-danger" }, "")
                 </div>
-            </div>
 
+                <div class="form-row d-flex justify-content-center text-muted">
+                    <h4 class="m-0">
+                        --- OR ---
+                    </h4>
+                </div>
+            }
 
-            <div class="form-row d-flex justify-content-center text-muted">
-                <h4 class="m-0">
-                    --- OR ---
-                </h4>
-            </div>
 
             @if (!Model.BusinessSettings.DeliveryEnabled)
             {
@@ -136,7 +150,7 @@
 
             <strong>@Html.Label("Deliver to:")</strong>
             <div class="form-row">
-                @if (Model.BusinessSettings.DeliveryEnabled)
+                @if (Model.BusinessSettings.DeliveryEnabled && !Model.IsPreOrder)
                 {
                     <div class="mb-2">
                         <span class="badge badge-pill badge-info">Mount Victoria</span>
@@ -156,7 +170,14 @@
 
                         @if (Model.BusinessSettings.DeliveryEnabled)
                         {
-                            @Html.TextBoxFor(m => m.ProductOrder.DeliveryDate, "{0:yyyy-MM-dd}", new { @id = "delivery_date", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Deliver date", @tabindex = "107" })
+                            @if (Model.IsPreOrder)
+                            {
+                                @Html.TextBoxFor(m => m.ProductOrder.DeliveryDate, "{0:yyyy-MM-dd}", new { @id = "delivery_date_preorder", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Deliver date", @tabindex = "107" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(m => m.ProductOrder.DeliveryDate, "{0:yyyy-MM-dd}", new { @id = "delivery_date", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Deliver date", @tabindex = "107" })
+                            }
                         }
                         else
                         {
@@ -192,7 +213,7 @@
                             <div class="input-group-text"><i class="fa fa-map-marker fa-fw" aria-hidden="true" title="Delivery address"></i></div>
                         </div>
 
-                        @if (Model.BusinessSettings.DeliveryEnabled)
+                        @if (Model.BusinessSettings.DeliveryEnabled && !Model.IsPreOrder)
                         {
                             @Html.TextBoxFor(m => m.Full_Address, new { @class = "form-control", autocomplete = "off", autofocus = "autofocus", @id = "delivery_address", @placeholder = "Enter the address to deliver", @tabindex = "109" })
                         }
@@ -216,7 +237,7 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text"><i class="fa fa-life-ring fa-fw" aria-hidden="true" title="Delivery instructions"></i></div>
                         </div>
-                        @if (Model.BusinessSettings.DeliveryEnabled)
+                        @if (Model.BusinessSettings.DeliveryEnabled && !Model.IsPreOrder)
                         {
                             @Html.TextAreaFor(m => m.ProductOrder.DeliveryInstructions, new { @id = "delivery_instructions", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "110" })
                         }
@@ -239,7 +260,11 @@
     @Html.HiddenFor(h => h.ProductOrder.Created)
     @Html.HiddenFor(h => h.ProductOrder.ConfirmationCode)
     @Html.HiddenFor(h => h.ProductOrder.Confirmed)
-    //@Html.HiddenFor(h => h.GoogleRecaptchaToken, new { @id = "g-recaptcha-response" })
+    @Html.HiddenFor(h => h.PreOrderSource, new { @id = "pre_order_source" })
+    @if (Model.IsPreOrder)
+    {
+        @Html.Hidden("ProductOrder.PaymentMethod","BANK")
+    }
 
     <div class="clearfix mb-3">
         <div class="text-right float-right">

@@ -9,8 +9,15 @@ namespace littlebreadloaf.Pages
 {
     public class MarketsModel : PageModel
     {
+        [BindProperty]
+        public bool IsPreOrder { get; set; }
+
+
         public void OnGet()
         {
+            IsPreOrder = HttpContext.Request.Cookies[CartHelper.PreOrderCookie] != null;
+
+
         }
     }
 }

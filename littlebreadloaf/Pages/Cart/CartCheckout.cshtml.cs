@@ -17,6 +17,10 @@ namespace littlebreadloaf.Pages.Cart
 {
     public class CartCheckoutModel : PageModel
     {
+        private const string DeliveryTime = "14:00 to 18:00";
+        private const string DeliveryTimePreOrder = "Scheduled";
+
+
         private readonly ProductContext _context;
         private readonly IConfiguration _config;
         public CartCheckoutModel(ProductContext context, IConfiguration config)
@@ -40,14 +44,20 @@ namespace littlebreadloaf.Pages.Cart
         [BindProperty]
         public BusinessSettings BusinessSettings { get; set; }
 
-        //[BindProperty]
-        //public string GoogleRecaptchaToken { get; set; }
+        [BindProperty]
+        public bool IsPreOrder { get; set; }
+
+        [BindProperty]
+        public string PreOrderSource { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
+            IsPreOrder = HttpContext.Request.Cookies[CartHelper.PreOrderCookie] != null;
+
+            var source = HttpContext.Request.Cookies[CartHelper.PreOrderCookie];
             var cartID = HttpContext.Request.Cookies[CartHelper.CartCookieName];
 
-            if(string.IsNullOrEmpty(cartID))
+            if (string.IsNullOrEmpty(cartID))
             {
                 return new RedirectResult("/Cart/CartView");
             }
@@ -74,53 +84,89 @@ namespace littlebreadloaf.Pages.Cart
             else
             {
                 ProductOrder = new ProductOrder();
-                ProductOrder.DeliveryTime = "14:00 to 18:00";
+                ProductOrder.DeliveryTime = DeliveryTime;
+                if (IsPreOrder)
+                {
+                    ProductOrder.DeliveryTime = DeliveryTimePreOrder;
+                    var preOrderSource = await _context.PreOrderSource.AsNoTracking().Where(w => w.Source == source).FirstOrDefaultAsync();
+                    if (preOrderSource != null)
+                    {
+                        PreOrderSource = preOrderSource.Source;
+                        ProductOrder.DeliveryInstructions = $"Pre order: {source}";
+                        ProductOrder.ContactAddress = preOrderSource.AddressID;
+
+                        var address = await _context.NzAddressDeliverable.Where(w => w.address_id == preOrderSource.AddressID).FirstOrDefaultAsync();
+                        if (address != null)
+                            Full_Address = address.full_address;
+                    }
+                }
             }
 
             PaymentMethodOptions = new SelectList(new List<SelectListItem>()
             {
-                //new SelectListItem(){ Text = "CASH", Value = "Cash - on delivery / pickup", Selected = false },
                 new SelectListItem(){ Text = "BANK", Value = "Bank transfer", Selected = false },
                 new SelectListItem(){ Text = "VOUCHER", Value = "Voucher", Selected = false },
                 new SelectListItem(){ Text = "EFTPOS", Value = "EFTPOS - on delivery / pickup - no credit cards", Selected = false },
             },"Text","Value",null);
 
+            if (IsPreOrder)
+            {
+                PaymentMethodOptions = new SelectList(new List<SelectListItem>()
+                {
+                    new SelectListItem(){ Text = "BANK", Value = "Bank transfer", Selected = true }
+                }, "Text", "Value", "BANK");
+            }
+
             BusinessSettings = await _context.BusinessSettings.AsNoTracking().FirstOrDefaultAsync();
+
 
             return Page();
         }
 
-        public JsonResult OnGetAddressSearch(string addressFilter)
-        {
-            var addresses = _context.NzAddressDeliverable
-                                    .Where(w => w.full_address.Contains(addressFilter, StringComparison.OrdinalIgnoreCase))
-                                    .Take(10)
-                                    .Select(s => new
-                                    {
-                                        s.address_id,
-                                        s.full_address
-                                    })
-                                    .ToList();
-            return new JsonResult(addresses);
-        }
-
         public async Task<IActionResult> OnPostAsync()
         {
+            IsPreOrder = HttpContext.Request.Cookies[CartHelper.PreOrderCookie] != null;
 
             BusinessSettings = await _context.BusinessSettings.AsNoTracking().FirstOrDefaultAsync();
 
-            ProductOrder.DeliveryTime = "14:00 to 18:00"; //Temporary during COVID-19 level 3
+            ProductOrder.DeliveryTime = DeliveryTime;
+            if (IsPreOrder)
+                ProductOrder.DeliveryTime = DeliveryTimePreOrder;
 
-            var validDeliveryDaysOfWeek = new List<DayOfWeek>()
-            {
-                DayOfWeek.Saturday
-            };
+            var validDeliveryDaysOfWeek = new List<DayOfWeek>();
+            if (BusinessSettings.DeliverSunday) validDeliveryDaysOfWeek.Add(DayOfWeek.Sunday);
+            if (BusinessSettings.DeliverMonday) validDeliveryDaysOfWeek.Add(DayOfWeek.Monday);
+            if (BusinessSettings.DeliverTuesday) validDeliveryDaysOfWeek.Add(DayOfWeek.Tuesday);
+            if (BusinessSettings.DeliverWednesday) validDeliveryDaysOfWeek.Add(DayOfWeek.Wednesday);
+            if (BusinessSettings.DeliverThursday) validDeliveryDaysOfWeek.Add(DayOfWeek.Thursday);
+            if (BusinessSettings.DeliverFriday) validDeliveryDaysOfWeek.Add(DayOfWeek.Friday);
+            if (BusinessSettings.DeliverSaturday) validDeliveryDaysOfWeek.Add(DayOfWeek.Saturday);
 
-            var validPickupDaysOfWeek = new List<DayOfWeek>()
+            if(IsPreOrder)
             {
-                DayOfWeek.Thursday,
-                DayOfWeek.Friday
-            };
+                var source = HttpContext.Request.Cookies[CartHelper.PreOrderCookie];
+                var preOrder = await _context.PreOrderSource.Where(w => w.Source == source).FirstOrDefaultAsync();
+                if(preOrder != null)
+                {
+                    validDeliveryDaysOfWeek = new List<DayOfWeek>();
+                    if (preOrder.Sunday) validDeliveryDaysOfWeek.Add(DayOfWeek.Sunday);
+                    if (preOrder.Monday) validDeliveryDaysOfWeek.Add(DayOfWeek.Monday);
+                    if (preOrder.Tuesday) validDeliveryDaysOfWeek.Add(DayOfWeek.Tuesday);
+                    if (preOrder.Wednesday) validDeliveryDaysOfWeek.Add(DayOfWeek.Wednesday);
+                    if (preOrder.Thursday) validDeliveryDaysOfWeek.Add(DayOfWeek.Thursday);
+                    if (preOrder.Friday) validDeliveryDaysOfWeek.Add(DayOfWeek.Friday);
+                    if (preOrder.Saturday) validDeliveryDaysOfWeek.Add(DayOfWeek.Saturday);
+                }
+            }
+
+            var validPickupDaysOfWeek = new List<DayOfWeek>();
+            if (BusinessSettings.PickupSunday) validPickupDaysOfWeek.Add(DayOfWeek.Sunday);
+            if (BusinessSettings.PickupMonday) validPickupDaysOfWeek.Add(DayOfWeek.Monday);
+            if (BusinessSettings.PickupTuesday) validPickupDaysOfWeek.Add(DayOfWeek.Tuesday);
+            if (BusinessSettings.PickupWednesday) validPickupDaysOfWeek.Add(DayOfWeek.Wednesday);
+            if (BusinessSettings.PickupThursday) validPickupDaysOfWeek.Add(DayOfWeek.Thursday);
+            if (BusinessSettings.PickupFriday) validPickupDaysOfWeek.Add(DayOfWeek.Friday);
+            if (BusinessSettings.PickupSaturday) validPickupDaysOfWeek.Add(DayOfWeek.Saturday);
 
             PaymentMethodOptions = new SelectList(new List<SelectListItem>()
             {
@@ -129,6 +175,15 @@ namespace littlebreadloaf.Pages.Cart
                 new SelectListItem(){ Text = "VOUCHER", Value = "Voucher", Selected = false },
                 new SelectListItem(){ Text = "EFTPOS", Value = "EFTPOS - on delivery / pickup - no credit cards", Selected = false },
             }, "Text", "Value", null);
+
+            if(IsPreOrder)
+            {
+                PaymentMethodOptions = new SelectList(new List<SelectListItem>()
+                {
+                    new SelectListItem(){ Text = "BANK", Value = "Bank transfer", Selected = true }
+                }, "Text", "Value", "BANK");
+                var test = TryValidateModel(ProductOrder);
+            }
 
             if (!ModelState.IsValid)
             {
@@ -180,9 +235,9 @@ namespace littlebreadloaf.Pages.Cart
 
             if(validDeliveryDate && string.IsNullOrEmpty(ProductOrder.DeliveryTime))
             {
-                //ModelState.AddModelError("Validation.DeliveryTimeRequired", "A delivery time is required.");
-                //return Page();
-                ProductOrder.DeliveryTime = "14:00 to 18:00";
+                ProductOrder.DeliveryTime = DeliveryTime;
+                if (IsPreOrder)
+                    ProductOrder.DeliveryTime = DeliveryTimePreOrder;
             }
 
             if(validPickupDate) 
@@ -192,7 +247,14 @@ namespace littlebreadloaf.Pages.Cart
                 var dayOfWeek = ProductOrder.PickupDate.Value.DayOfWeek;
                 if (!validPickupDaysOfWeek.Contains(dayOfWeek))
                 {
-                    ModelState.AddModelError("Validation.PickupDayOfWeek", "Pickup date must be Friday.");
+                    if(IsPreOrder)
+                    {
+                        ModelState.AddModelError("Validation.PickupDayOfWeek", "Pickup date must be a weekday.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Validation.PickupDayOfWeek", "Invalid pickup date. The day chosen is not eligible for pickup.");
+                    }
                     return Page();
                 }
             }
@@ -208,7 +270,7 @@ namespace littlebreadloaf.Pages.Cart
                 var dayOfWeek = ProductOrder.DeliveryDate.Value.DayOfWeek;
                 if (!validDeliveryDaysOfWeek.Contains(dayOfWeek))
                 {
-                    ModelState.AddModelError("Validation.DeliveryDayOfWeek", "Delivery date must be Friday.");
+                    ModelState.AddModelError("Validation.DeliveryDayOfWeek", "Invalid delivery date. The day chosen is not eligible for delivery.");
                     return Page();
                 }
 
@@ -229,17 +291,6 @@ namespace littlebreadloaf.Pages.Cart
             {
                 return new RedirectResult("/Cart/CartView");
             }
-
-            /*if(string.IsNullOrEmpty(GoogleRecaptchaToken))
-            {
-                ModelState.AddModelError("Google.Recaptcha.TokenMissing", "You are missing a token.");
-                return Page();
-            }
-            if(!await ValidateGoogleRecaptchaAsync(HttpContext.Connection.RemoteIpAddress.ToString(), GoogleRecaptchaToken))
-            {
-                ModelState.AddModelError("Google.Recaptcha.TokenInvalid", "You are not a human!");
-                return Page();
-            }*/
 
             if (ProductOrder.DeliveryInstructions == null)
                 ProductOrder.DeliveryInstructions = "";
@@ -282,55 +333,5 @@ namespace littlebreadloaf.Pages.Cart
 
             return new RedirectToPageResult("/Cart/CartCheckoutReview", new { ProductOrderID = ProductOrder.OrderID, CartID = ProductOrder.CartID });
         }
-
-        /*private async Task<bool> ValidateGoogleRecaptchaAsync(string ipAddress, string recaptchaResponse)
-        {
-            //Validate google recaptcha
-            using (var client = new HttpClient { BaseAddress = new Uri("https://www.google.com") })
-            {
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                
-                var content = new FormUrlEncodedContent(new[]
-                {
-                    new KeyValuePair<string, string>("secret", _config["Google.Recaptcha.SecretKey"]),
-                    new KeyValuePair<string, string>("response", recaptchaResponse),
-                    new KeyValuePair<string, string>("remoteip", ipAddress)
-                });
-                var result = await client.PostAsync("/recaptcha/api/siteverify", content);
-                result.EnsureSuccessStatusCode();
-                string jsonString = await result.Content.ReadAsStringAsync();
-                var response = JsonConvert.DeserializeObject<RecaptchaResponse>(jsonString);
-                return response.Success;
-            }
-        }
-
-        [DataContract]
-        internal class RecaptchaResponse
-        {
-            [DataMember(Name = "success")]
-            public bool Success { get; set; }
-            [DataMember(Name = "score")]
-            public decimal Score { get; set; }
-            [DataMember(Name = "action")]
-            public string Action { get; set; }
-            [DataMember(Name = "challenge_ts")]
-            public DateTime ChallengeTimeStamp { get; set; }
-            [DataMember(Name = "hostname")]
-            public string Hostname { get; set; }
-            [DataMember(Name = "error-codes")]
-            public IEnumerable<string> ErrorCodes { get; set; }
-        }*/
-
-
-       // {
-       //   "success": true|false,      // whether this request was a valid reCAPTCHA token for your site
-       //   "score": number             // the score for this request (0.0 - 1.0)
-       //   "action": string            // the action name for this request (important to verify)
-       //   "challenge_ts": timestamp,  // timestamp of the challenge load (ISO format yyyy-MM-dd'T'HH:mm:ssZZ)
-       //   "hostname": string,         // the hostname of the site where the reCAPTCHA was solved
-       //   "error-codes": [...]        // optional
-       // }
-
-
-}
+    }
 }

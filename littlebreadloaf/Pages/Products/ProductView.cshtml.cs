@@ -36,19 +36,31 @@ namespace littlebreadloaf.Pages.Products
         [BindProperty]
         public List<ProductOrderOutage> ProductOrderOutages { get; set; }
 
+        [BindProperty]
+        public bool IsPreOrder { get; set; }
+
         public CartItem CartItem { get; set; }
         public littlebreadloaf.Data.Cart Cart { get; set; }
 
+        
         public async Task<IActionResult> OnGetAsync(string productID)
         {
+            IsPreOrder = HttpContext.Request.Cookies[CartHelper.PreOrderCookie] != null;
+
             if (string.IsNullOrEmpty(productID) || !Guid.TryParse(productID, out Guid parsedID))
             {
+                if(IsPreOrder)
+                    return new RedirectResult("/Products/ProductPreOrder");
+
                 return new RedirectResult("/Products/ProductList");
             }
 
             Product = await _context.Product.FirstOrDefaultAsync(m => m.ProductID == parsedID);
             if (Product == null)
             {
+                if (IsPreOrder)
+                    return new RedirectResult("/Products/ProductPreOrder");
+
                 return new RedirectResult("/Products/ProductList");
             }
 
