@@ -14,8 +14,13 @@
 
 <div class="alert alert-secondary border-0 admin_background" role="alert">
     <div class="text-muted mb-1">Admin</div>
+    <form name="add_cart" asp-page-handler="clear" method="post">
+        <a class="btn btn-outline-secondary" asp-page="/Maintenance/MaintenancePreOrderAdd"><i class="fa fa-plus" aria-hidden="true" title="Add pre-order source"></i> Add pre-order source</a>
 
-    <a class="btn btn-outline-secondary" asp-page="/Maintenance/MaintenancePreOrderAdd"><i class="fa fa-plus" aria-hidden="true" title="Add pre-order source"></i> Add pre-order source</a>
+        <button class="btn btn-outline-secondary" type="submit">
+            <i class="fa fa-eraser" aria-hidden="true" title="Clear pre-order mode"></i> Clear pre-order mode
+        </button>
+    </form>
 </div>
 
 @if (Model.PreOrderSources.Count > 0)

@@ -73,10 +73,5 @@ namespace littlebreadloaf.Pages.Products
                                               HttpContext);
         }
 
-        public async Task<IActionResult> OnPostViewFullSiteAsync()
-        {
-            HttpContext.Response.Cookies.Delete(CartHelper.PreOrderCookie);
-            return new RedirectResult("/Products/ProductList");
-        }
     }
 }

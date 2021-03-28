@@ -35,8 +35,12 @@ namespace littlebreadloaf.Pages.Maintenance
 
             return Page();
         }
+        public async Task<IActionResult> OnPostClearAsync()
+        {
+            HttpContext.Response.Cookies.Delete(CartHelper.PreOrderCookie);
+            return new RedirectToPageResult("/Products/ProductList");
+        }
 
-   
     }
     public class PreOrdersWithAddresses
     {
