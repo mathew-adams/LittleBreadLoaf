@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using littlebreadloaf.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace littlebreadloaf.Pages.Products
 {
@@ -45,7 +46,12 @@ namespace littlebreadloaf.Pages.Products
                 return new RedirectToPageResult("/Products/ProductList");
             }
 
-            HttpContext.Response.Cookies.Append(CartHelper.PreOrderCookie, Source);
+            var cookieOptions = new CookieOptions
+            {
+                IsEssential = true //Prevents the "accept cookies" dialog from preventing this cookie from being sent
+            };
+
+            HttpContext.Response.Cookies.Append(CartHelper.PreOrderCookie, Source, cookieOptions);
 
             IsPreOrder = true;
 
