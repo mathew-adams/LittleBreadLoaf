@@ -176,13 +176,13 @@
                         <div class="input-group-text"><i class="fa fa-calendar fa-fw" aria-hidden="true" title="Deliver date"></i></div>
                     </div>
 
-                    @if (Model.BusinessSettings.DeliveryEnabled)
-                    {
-                        @Html.TextBoxFor(m => m.ProductOrder.DeliveryDate, "{0:yyyy-MM-dd}", new { @id = "delivery_date", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Deliver date", @tabindex = "107" })
-                    }
-                    else if (Model.IsPreOrder)
+                    @if(Model.IsPreOrder)
                     {
                         @Html.TextBoxFor(m => m.ProductOrder.DeliveryDate, "{0:yyyy-MM-dd}", new { @id = "delivery_date_preorder", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Deliver date", @tabindex = "107" })
+                    }
+                    else if (Model.BusinessSettings.DeliveryEnabled)
+                    {
+                        @Html.TextBoxFor(m => m.ProductOrder.DeliveryDate, "{0:yyyy-MM-dd}", new { @id = "delivery_date", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Deliver date", @tabindex = "107" })
                     }
                     else
                     {
