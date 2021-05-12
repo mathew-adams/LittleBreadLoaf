@@ -42,7 +42,12 @@ namespace littlebreadloaf
 
                 context.Cart.Add(cart);
 
-                http.Response.Cookies.Append(CartCookieName, cart.CartID.ToString());
+                var cookieOptions = new CookieOptions
+                {
+                    IsEssential = true //Prevents the "accept cookies" dialog from preventing this cookie from being sent
+                };
+
+                http.Response.Cookies.Append(CartCookieName, cart.CartID.ToString(), cookieOptions);
             }
             else
             {
