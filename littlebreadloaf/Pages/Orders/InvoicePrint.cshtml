@@ -102,6 +102,7 @@
                     <div class="font-weight-bold">
                         @Html.DisplayFor(n => n.ProductOrder.ContactName)
                     </div>
+                    <div>Phone: @Html.DisplayFor(p => p.ProductOrder.ContactPhone)</div>
                     @if (Model.HasAddress)
                     {
                         <div>@Html.DisplayFor(a => a.NzAddressDeliverable.address_number) @Html.DisplayFor(a => a.NzAddressDeliverable.full_road_name)</div>
@@ -181,16 +182,38 @@
         </tbody>
     </table>
 
-    <div class="card mb-3">
-        <div class="card-header">Thank you for placing an order!</div>
-        <div class="card-body">
-            <h5 class="card-title">My banking details are as follows:</h5>
-            <p class="card-text">
-                @ViewData["Name"]<br />
-                <strong>@ViewData["Bank"]</strong><br />
-                Please use your confirmation number as the reference<br />
-                Thank you,<br />
-                Ewa
-            </p>
+
+    <div class="row">
+        <div class="col-6">
+            <div class="card mb-3">
+                <div class="card-header">Thank you for placing an order!</div>
+                <div class="card-body">
+                    <h5 class="card-title">My banking details are as follows:</h5>
+                    <p class="card-text">
+                        @ViewData["Name"]<br />
+                        <strong>@ViewData["Bank"]</strong><br />
+                        Please use your confirmation number as the reference<br />
+                        Thank you,<br />
+                        Ewa
+                    </p>
+                </div>
+            </div>
         </div>
+
+        @if (!string.IsNullOrEmpty(Model.ProductOrder.DeliveryInstructions))
+        {
+            <div class="col-6">
+                <div class="card mb-3">
+                    <div class="card-header">Delivery instructions</div>
+                    <div class="card-body">
+                        <p class="card-text">
+                           @Html.DisplayFor(d => d.ProductOrder.DeliveryInstructions)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+
+
     </div>
+</div>
