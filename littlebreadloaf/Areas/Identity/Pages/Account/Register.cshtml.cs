@@ -65,7 +65,7 @@ namespace littlebreadloaf.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-             return new NotFoundResult(); //Do not allow new registrations
+            return new NotFoundResult(); //Do not allow new registrations
 
 
             //returnUrl = returnUrl ?? Url.Content("~/");
@@ -96,8 +96,8 @@ namespace littlebreadloaf.Areas.Identity.Pages.Account
             //    }
             //}
 
-            //// If we got this far, something failed, redisplay form
-            //return Page();
+            // If we got this far, something failed, redisplay form
+           // return Page();
         }
     }
 }
