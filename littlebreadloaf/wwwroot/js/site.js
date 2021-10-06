@@ -186,7 +186,7 @@ $(document).ready(function () {
     $('#pickup_time').timepicker({
         'timeFormat': 'H:i a',
         'minTime': '11:00am',
-        'maxTime': '4:00pm'
+        'maxTime': '1:30pm'
     });
 });
 
