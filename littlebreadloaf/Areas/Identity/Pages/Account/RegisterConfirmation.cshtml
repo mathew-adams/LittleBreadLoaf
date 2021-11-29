@@ -1,0 +1,21 @@
+﻿@page
+@model littlebreadloaf.Areas.Identity.Pages.Account.RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Reset password confirmation";
+}
+
+<form method="post">
+    <h1 class="title has-text-centered">@ViewData["Title"]</h1>
+    <div class="columns is-centered">
+        <div class="column is-6">
+            <div class="field notification is-success is-light">
+                <span>
+                    Check your email for a link to complete your registration. If it doesn’t appear within a few minutes, check your spam folder.
+                </span>
+            </div>
+            <a class="button" asp-page="./Login">
+                <span>Continue to log in</span>
+            </a>
+        </div>
+    </div>
+</form>

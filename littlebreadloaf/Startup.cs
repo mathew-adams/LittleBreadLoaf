@@ -12,11 +12,13 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using littlebreadloaf.Data;
+using littlebreadloaf.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO.Compression;
 using System.IO;
 using Microsoft.Extensions.Primitives;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace littlebreadloaf
 {
@@ -54,9 +56,20 @@ namespace littlebreadloaf
             (
                 options => options.UseMySql(Configuration["ConnectionStrings:DefaultConnection"])
             );
-            services.AddDefaultIdentity<IdentityUser>()
-                    .AddEntityFrameworkStores<ApplicationDbContext>();
-
+            services.AddDefaultIdentity<IdentityUser>(options =>
+            {
+                options.SignIn.RequireConfirmedEmail = true;
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+/ ";
+                options.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<ApplicationDbContext>();
+            services.Configure<Extensions.EmailSettings>(options =>
+            {
+                options.ApiKey = Configuration["Mailgun.Private.APIKey"];
+                options.RequestUri = Configuration["Mailgun.Uri.Request"];
+                options.ApiBaseUri = Configuration["Mailgun.Uri.Base"];
+                options.From = $"{Configuration["LittleBreadLoaf.Name"]} <mailgun@{Configuration["Mailgun.Uri.Request"]}>"; //Configuration["Mailgun.From"];
+            });
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
