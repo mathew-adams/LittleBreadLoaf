@@ -106,7 +106,7 @@ namespace littlebreadloaf.Pages.Cart
             {
                 new SelectListItem(){ Text = "BANK", Value = "Bank transfer", Selected = false },
                 new SelectListItem(){ Text = "VOUCHER", Value = "Voucher", Selected = false },
-                new SelectListItem(){ Text = "EFTPOS", Value = "EFTPOS - on delivery / pickup - no credit cards", Selected = false },
+                new SelectListItem(){ Text = "EFTPOS", Value = "EFTPOS - on delivery / pickup", Selected = false },
             },"Text","Value",null);
 
             if (IsPreOrder)
@@ -185,7 +185,7 @@ namespace littlebreadloaf.Pages.Cart
                 //new SelectListItem(){ Text = "CASH", Value = "Cash - on delivery / pickup", Selected = false },
                 new SelectListItem(){ Text = "BANK", Value = "Bank transfer", Selected = false },
                 new SelectListItem(){ Text = "VOUCHER", Value = "Voucher", Selected = false },
-                new SelectListItem(){ Text = "EFTPOS", Value = "EFTPOS - on delivery / pickup - no credit cards", Selected = false },
+                new SelectListItem(){ Text = "EFTPOS", Value = "EFTPOS - on delivery / pickup", Selected = false },
             }, "Text", "Value", null);
 
             if(IsPreOrder)

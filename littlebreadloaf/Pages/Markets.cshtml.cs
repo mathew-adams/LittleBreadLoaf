@@ -13,11 +13,11 @@ namespace littlebreadloaf.Pages
         public bool IsPreOrder { get; set; }
 
 
-        public void OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
             IsPreOrder = HttpContext.Request.Cookies[CartHelper.PreOrderCookie] != null;
 
-
+            return new RedirectToPageResult("/Products/ProductList");
         }
     }
 }
