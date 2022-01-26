@@ -1,6 +1,8 @@
-﻿
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
 <footer id="footer" class="bg-dark p-3">
-    
+
     <div class="container">
         <div class="row text-center border-bottom">
             <div class="col-12">
@@ -50,7 +52,7 @@
                     <div class="row d-block mt-2">
                         <h6 class="text-uppercase">Contact</h6>
                         <address>
-                            <i class="fa fa-phone" aria-hidden="true" title="Phone"></i> 021 952 302
+                            <i class="fa fa-phone" aria-hidden="true" title="Phone"></i> @Configuration["LittleBreadLoaf.Phone"]
                             <br />
                             <i class="fa fa-map-marker" aria-hidden="true" title="Address"></i> 31a Railway Ave, Lower Hutt, New Zealand
                         </address>
@@ -76,6 +78,6 @@
                 </div>
             </div>
         </div>
-            </div>
+    </div>
 
-        </footer>
+</footer>

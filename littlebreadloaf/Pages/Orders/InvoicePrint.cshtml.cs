@@ -70,6 +70,7 @@ namespace littlebreadloaf.Pages.Orders
             ViewData["AddressLine2"] = _config["LittleBreadLoaf.AddressLine2"];
             ViewData["Name"] = _config["LittleBreadLoaf.Name"];
             ViewData["Bank"] = _config["LittleBreadLoaf.BankNumber"];
+            ViewData["Phone"] = _config["LittleBreadLoaf.Phone"];
 
             InvoiceTransaction = await _context
                                         .InvoiceTransaction

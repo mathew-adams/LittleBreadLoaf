@@ -179,8 +179,8 @@ $(document).ready(function () {
 
     $('#delivery_time').timepicker({
         'timeFormat': 'H:i a',
-        'minTime': '7:30am',
-        'maxTime': '8:30am'
+        'minTime': '1:00pm',
+        'maxTime': '4:00pm'
     });
 
     $('#pickup_time').timepicker({

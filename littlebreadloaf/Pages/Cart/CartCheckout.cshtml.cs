@@ -17,9 +17,9 @@ namespace littlebreadloaf.Pages.Cart
 {
     public class CartCheckoutModel : PageModel
     {
-        private const string DeliveryTime = "14:00 to 18:00";
-        private const string DeliveryTimePreOrder = "Scheduled";
+        private const string EftPosDisplay = "EFTPOS - on delivery / pickup - credit card accepted";
 
+        private const string DeliveryTimePreOrder = "Scheduled";
 
         private readonly ProductContext _context;
         private readonly IConfiguration _config;
@@ -84,7 +84,7 @@ namespace littlebreadloaf.Pages.Cart
             else
             {
                 ProductOrder = new ProductOrder();
-                ProductOrder.DeliveryTime = DeliveryTime;
+                //ProductOrder.DeliveryTime = DeliveryTime;
                 if (IsPreOrder)
                 {
                     ProductOrder.DeliveryTime = DeliveryTimePreOrder;
@@ -106,7 +106,7 @@ namespace littlebreadloaf.Pages.Cart
             {
                 new SelectListItem(){ Text = "BANK", Value = "Bank transfer", Selected = false },
                 new SelectListItem(){ Text = "VOUCHER", Value = "Voucher", Selected = false },
-                new SelectListItem(){ Text = "EFTPOS", Value = "EFTPOS - on delivery / pickup", Selected = false },
+                new SelectListItem(){ Text = "EFTPOS", Value = EftPosDisplay, Selected = false },
             },"Text","Value",null);
 
             if (IsPreOrder)
@@ -129,7 +129,7 @@ namespace littlebreadloaf.Pages.Cart
 
             BusinessSettings = await _context.BusinessSettings.AsNoTracking().FirstOrDefaultAsync();
 
-            ProductOrder.DeliveryTime = DeliveryTime;
+            //ProductOrder.DeliveryTime = DeliveryTime;
 
             var validDeliveryDaysOfWeek = new List<DayOfWeek>();
             if (BusinessSettings.DeliverSunday) validDeliveryDaysOfWeek.Add(DayOfWeek.Sunday);
@@ -185,7 +185,7 @@ namespace littlebreadloaf.Pages.Cart
                 //new SelectListItem(){ Text = "CASH", Value = "Cash - on delivery / pickup", Selected = false },
                 new SelectListItem(){ Text = "BANK", Value = "Bank transfer", Selected = false },
                 new SelectListItem(){ Text = "VOUCHER", Value = "Voucher", Selected = false },
-                new SelectListItem(){ Text = "EFTPOS", Value = "EFTPOS - on delivery / pickup", Selected = false },
+                new SelectListItem(){ Text = "EFTPOS", Value = EftPosDisplay, Selected = false },
             }, "Text", "Value", null);
 
             if(IsPreOrder)
@@ -247,9 +247,16 @@ namespace littlebreadloaf.Pages.Cart
 
             if(validDeliveryDate && string.IsNullOrEmpty(ProductOrder.DeliveryTime))
             {
-                ProductOrder.DeliveryTime = DeliveryTime;
-                if (IsPreOrder)
-                    ProductOrder.DeliveryTime = DeliveryTimePreOrder;
+                if (!IsPreOrder)
+                {
+                    ModelState.AddModelError("Validation.DeliveryTimeRequired", "A delivery time is required.");
+                    return Page();
+                }
+                else
+                {
+                    if (IsPreOrder)
+                        ProductOrder.DeliveryTime = DeliveryTimePreOrder;
+                }
             }
 
             if(validPickupDate) 

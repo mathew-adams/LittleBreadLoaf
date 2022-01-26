@@ -160,14 +160,20 @@
         <div class="form-row">
             @if (Model.BusinessSettings.DeliveryEnabled && !Model.IsPreOrder)
             {
-                <div class="mb-2">
-                    <span class="badge badge-pill badge-info">Mount Victoria</span>
-                    <span class="badge badge-pill badge-info">Newtown</span>
-                    <span class="badge badge-pill badge-info">Oriental Bay</span>
-                    <span class="badge badge-pill badge-info">Te Aro</span>
-                    <span class="badge badge-pill badge-info">Thorndon</span>
-                    <span class="badge badge-pill badge-info">Wellington Central</span>
-                </div>
+            <div class="mb-2">
+                <span class="badge badge-pill badge-info">Mount Victoria</span>
+                <span class="badge badge-pill badge-info">Newtown</span>
+                <span class="badge badge-pill badge-info">Oriental Bay</span>
+                <span class="badge badge-pill badge-info">Te Aro</span>
+                <span class="badge badge-pill badge-info">Thorndon</span>
+                <span class="badge badge-pill badge-info">Wellington Central</span>
+                <span class="badge badge-pill badge-info">Kilbirnie</span>
+                <span class="badge badge-pill badge-info">Lyall Bay</span>
+                <span class="badge badge-pill badge-info">Miramar</span>
+                <span class="badge badge-pill badge-info">Rongotai</span>
+                <span class="badge badge-pill badge-info">Newlands</span>
+                <span class="badge badge-pill badge-info">Johnsonville</span>
+            </div>
             }
 
             <div class="form-group col">
@@ -186,7 +192,7 @@
                     }
                     else
                     {
-                        @Html.TextBoxFor(m => m.ProductOrder.DeliveryDate, "{0:yyyy-MM-dd}", new { @id = "delivery_date", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Deliver date", @tabindex = "107", disabled = "on" })
+                        @Html.TextBoxFor(m => m.ProductOrder.DeliveryDate, "{0:yyyy-MM-dd}", new { @id = "delivery_date", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @placeholder = "Deliver date", @tabindex = "107" })
                     }
 
                 </div>
@@ -203,7 +209,7 @@
                         <div class="input-group-text"><i class="fa fa-clock-o fa-fw" aria-hidden="true" title="Deliver time"></i></div>
                     </div>
 
-                    @Html.TextBoxFor(m => m.ProductOrder.DeliveryTime, new { @id = "delivery_time", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "108", disabled = "on" })
+                    @Html.TextBoxFor(m => m.ProductOrder.DeliveryTime, new { @id = "delivery_time", @class = "form-control", autocomplete = "off", autofocus = "autofocus", @tabindex = "108" })
 
                 </div>
                 @Html.ValidationMessageFor(m => m.ProductOrder.DeliveryTime, "", new { @class = "text-danger" })
