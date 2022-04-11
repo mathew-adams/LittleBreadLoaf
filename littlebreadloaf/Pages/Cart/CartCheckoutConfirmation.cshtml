@@ -5,7 +5,7 @@
     ViewData["ReturnURL"] = Url.Page("/Cart/CartCheckoutConfirmation", new { ProductOrderID = Model.ProductOrder.OrderID, CartID = Model.ProductOrder.CartID });
     ViewData["PreOrder"] = Model.IsPreOrder;
 
-    var getOrderMethod = (Model.ProductOrder.PickupDate.HasValue && Model.ProductOrder.PickupDate.Value < new DateTime(9999,12,31)) ? "In-store pickup:" : "Delivery:";
+    var getOrderMethod = (Model.ProductOrder.PickupDate.HasValue && Model.ProductOrder.PickupDate.Value < new DateTime(9999, 12, 31)) ? "In-store pickup:" : "Delivery:";
 }
 
 <nav aria-label="breadcrumb">
@@ -18,6 +18,13 @@
 
 <div class="jumbotron">
     <h1 class="display-4"><i class="fa fa-check-circle sr-icons text-success" title="Order received"></i> We have received your order!</h1>
+
+    <div class="alert alert-secondary border-0 admin_background" role="alert">
+        <a class="btn btn-info btn-lg" asp-page="" asp-page-handler="Print" asp-route-ProductOrderID=@Model.ProductOrder.OrderID target="_blank">
+            Print invoice
+        </a>
+    </div>
+
     <hr class="my-4">
     <h3>Your confirmation number / voucher is: @Model.ProductOrder.ConfirmationCode</h3>
 
@@ -39,7 +46,7 @@
                 <td>Phone:</td>
                 <td>@Html.DisplayFor(p => p.ProductOrder.ContactPhone)</td>
             </tr>
-            @if ((bool)ViewData["HasAddress"])
+            @if (ViewData["HasAddress"] != null && (bool)ViewData["HasAddress"])
             {
                 <tr>
                     <td>Delivery Address:</td>
@@ -49,7 +56,7 @@
 
             <tr>
                 <td>@getOrderMethod</td>
-                @if (Model.ProductOrder.DeliveryDate.HasValue && Model.ProductOrder.DeliveryDate.Value < new DateTime(9999,12,31))
+                @if (Model.ProductOrder.DeliveryDate.HasValue && Model.ProductOrder.DeliveryDate.Value < new DateTime(9999, 12, 31))
                 {
                     <td>@Html.DisplayFor(d => d.ProductOrder.DeliveryDate) at @Html.DisplayFor(t => t.ProductOrder.DeliveryTime)</td>
                 }
@@ -60,5 +67,11 @@
             </tr>
         </tbody>
     </table>
-    @await Component.InvokeAsync("Cart", new { cartID = Model.ProductOrder.CartID.ToString() })
+
+    @if (Model != null && Model.ProductOrder !=null && Model.ProductOrder.CartID != null)
+    {
+        @await Component.InvokeAsync("Cart", new { cartID = Model.ProductOrder.CartID.ToString() })
+    }
+
+
 </div>
