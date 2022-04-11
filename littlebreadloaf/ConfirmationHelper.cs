@@ -10,19 +10,20 @@ using SelectPdf;
 using System.IO;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
+using littlebreadloaf.Services;
+using littlebreadloaf.ViewComponents;
 
 namespace littlebreadloaf
 {
     public static class ConfirmationHelper
     {
-        public static async Task<ObjectResult> SendConfirmation(IConfiguration config,
+        public static async Task<ObjectResult> SendConfirmation(RenderViewComponentService renderer,
+                                                                IConfiguration config,
                                                                 ProductContext context,
-                                                                ProductOrder order,
-                                                                HttpContext http,
-                                                                string url)
+                                                                ProductOrder order)
         {
 
-            var absUrl = string.Format("{0}://{1}{2}", http.Request.Scheme, http.Request.Host, url);
+            var html = await renderer.RenderViewComponentToStringAsync<InvoiceViewComponent>(order.OrderID);
 
             HtmlToPdf converter = new SelectPdf.HtmlToPdf();
 
@@ -30,7 +31,8 @@ namespace littlebreadloaf
             converter.Options.MarginTop = 20;
             converter.Options.MarginRight = 20;
             converter.Options.MarginLeft = 20;
-            PdfDocument doc = converter.ConvertUrl(absUrl);
+
+            PdfDocument doc = converter.ConvertHtmlString(html);
 
             using (var msInvoice = new System.IO.MemoryStream())
             {

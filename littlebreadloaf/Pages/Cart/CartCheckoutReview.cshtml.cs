@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using littlebreadloaf.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using littlebreadloaf.Services;
 
 namespace littlebreadloaf.Pages.Cart
 {
@@ -14,13 +15,15 @@ namespace littlebreadloaf.Pages.Cart
     {
         private readonly ProductContext _context;
         private readonly IConfiguration _config;
+        private readonly RenderViewComponentService _renderer;
 
         private const int Number_of_days_till_due = 14;
 
-        public CartCheckoutReviewModel(ProductContext context, IConfiguration config)
+        public CartCheckoutReviewModel(ProductContext context, IConfiguration config, RenderViewComponentService renderer)
         {
             _context = context;
             _config = config;
+            _renderer = renderer;
         }
 
         [BindProperty]
@@ -116,14 +119,11 @@ namespace littlebreadloaf.Pages.Cart
             _context.InvoiceTransaction.AddRange(invoiceTransactions);
             _context.ProductOrder.Update(ProductOrder);
             await _context.SaveChangesAsync();
-            
-            var url = Url.Page("/Orders/InvoicePrint", new { ProductOrder.OrderID });
-
-            //var rslt = await ConfirmationHelper.SendConfirmation(_config,
-            //                                                       _context,
-            //                                                       ProductOrder,
-            //                                                       HttpContext,
-            //                                                       url);
+           
+            var rslt = await ConfirmationHelper.SendConfirmation(_renderer,
+                                                                 _config,
+                                                                 _context,
+                                                                 ProductOrder);
             
             // Clear cart cookies
             HttpContext.Response.Cookies.Delete(littlebreadloaf.CartHelper.CartCookieName);

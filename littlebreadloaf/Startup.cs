@@ -19,6 +19,7 @@ using System.IO.Compression;
 using System.IO;
 using Microsoft.Extensions.Primitives;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using littlebreadloaf.Services;
 
 namespace littlebreadloaf
 {
@@ -69,6 +70,8 @@ namespace littlebreadloaf
                 options.ApiBaseUri = Configuration["Mailgun.Uri.Base"];
                 options.From = $"{Configuration["LittleBreadLoaf.Name"]} <mailgun@{Configuration["Mailgun.Uri.Request"]}>"; //Configuration["Mailgun.From"];
             });
+            // services.AddScoped<IRazorViewToStringRenderer, RazorViewToStringRenderer>();
+            services.AddScoped<RenderViewComponentService>();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

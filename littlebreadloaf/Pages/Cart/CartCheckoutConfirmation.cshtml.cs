@@ -8,15 +8,25 @@ using littlebreadloaf.Data;
 using Microsoft.EntityFrameworkCore;
 using SelectPdf;
 using System.IO;
+using littlebreadloaf.Pages.Orders;
+using Microsoft.Extensions.Configuration;
+using littlebreadloaf.Services;
+using littlebreadloaf.ViewComponents;
 
 namespace littlebreadloaf.Pages.Cart
 {
     public class CartCheckoutConfirmationModel : PageModel
     {
         private readonly ProductContext _context;
-        public CartCheckoutConfirmationModel(ProductContext context)
+        private readonly IConfiguration _config;
+        private readonly RenderViewComponentService _renderer;
+        public CartCheckoutConfirmationModel(ProductContext context, 
+                                             IConfiguration config,
+                                             RenderViewComponentService renderer)
         {
             _context = context;
+            _config = config;
+            _renderer = renderer;
         }
 
         [BindProperty]
@@ -76,9 +86,7 @@ namespace littlebreadloaf.Pages.Cart
                 NzAddressDeliverable = await _context.NzAddressDeliverable.FirstOrDefaultAsync(f => f.address_id == ProductOrder.ContactAddress);
             }
 
-            var url = Url.Page("/Orders/InvoicePrint", new { ProductOrder.OrderID });
-
-            var absUrl = string.Format("{0}://{1}{2}", HttpContext.Request.Scheme, HttpContext.Request.Host, url);
+            var html = await _renderer.RenderViewComponentToStringAsync<InvoiceViewComponent>(ProductOrder.OrderID);
 
             HtmlToPdf converter = new SelectPdf.HtmlToPdf();
 
@@ -86,7 +94,8 @@ namespace littlebreadloaf.Pages.Cart
             converter.Options.MarginTop = 20;
             converter.Options.MarginRight = 20;
             converter.Options.MarginLeft = 20;
-            PdfDocument doc = converter.ConvertUrl(absUrl);
+
+            PdfDocument doc = converter.ConvertHtmlString(html);
 
             using (var msInvoice = new System.IO.MemoryStream())
             {

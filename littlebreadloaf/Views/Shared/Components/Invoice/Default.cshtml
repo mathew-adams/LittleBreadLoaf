@@ -1,25 +1,13 @@
-﻿@page
-@model littlebreadloaf.Pages.Orders.InvoicePrintModel
+﻿@model littlebreadloaf.ViewComponents.InvoiceViewComponent.ViewInvoice
 @{
     Layout = null;
 
-
-    if(ViewData != null)
-    {
-        ViewData["Title"] = "Print invoice";
-        ViewData["ReturnURL"] = Url.Page("/Orders/InvoicePrint", new { ProductOrderID = Model.ProductOrder.OrderID });
-    }
-
-
-
-
-    var balance = @Model.InvoiceTransaction.Sum(s => s.Quantity * s.Price);
-
-    var status = (balance == 0) ? "PAID" : "DUE";
-    var statusStyle = (balance == 0) ? "text-success" : "text-danger";
+    var statusStyle = (Model.Balance == 0) ? "text-success" : "text-danger";
 
 }
-<link rel="stylesheet" type="text/css" href="~/lib/twitter-bootstrap/css/bootstrap.min.css" />
+@*<link rel="stylesheet" type="text/css" href="~/lib/twitter-bootstrap/css/bootstrap.min.css" />*@
+<link rel="stylesheet" href="https://cdn.usebootstrap.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
 <style type="text/css" media="print">
     @@page {
         margin: 0;
@@ -48,7 +36,7 @@
             <h1 class="display-3 font-weight-bold">Invoice</h1>
         </div>
         <div class="col-4 text-center">
-            <img src="~/images/little-bread-loaf-logo-blue.svg" height="200" width="200" />
+            <img src="https://littlebreadloaf.com/images/little-bread-loaf-logo-blue.svg" height="200" width="200" />
         </div>
         <div class="col-4">
             <div class="row mt-2">
@@ -56,10 +44,10 @@
                     From
                 </div>
                 <div class="border-left col-9">
-                    <div class="font-weight-bold">@ViewData["Name"]</div>
-                    <div>@ViewData["AddressLine1"]</div>
-                    <div>@ViewData["AddressLine2"]</div>
-                    <div>@ViewData["Phone"]</div>
+                    <div class="font-weight-bold">@Html.DisplayFor(d => d.Name)</div>
+                    <div>@Html.DisplayFor(d => d.AddressLine1)</div>
+                    <div>@Html.DisplayFor(d => d.AddressLine2)</div>
+                    <div>@Html.DisplayFor(d => d.Phone)</div>
                 </div>
             </div>
         </div>
@@ -96,7 +84,7 @@
                     }
                     <tr>
                         <td>@Html.Label("Status", "Status:", new { @class = "m-0" })</td>
-                        <td class="@statusStyle font-weight-bold">@status</td>
+                        <td class="@statusStyle font-weight-bold">@Html.DisplayFor(d => d.Status)</td>
                     </tr>
                 </table>
             </div>
@@ -135,7 +123,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var invoiceTxn in Model.InvoiceTransaction.Where(w => w.Type == "Debit"))
+            @foreach (var invoiceTxn in Model.InvoiceTransactions.Where(w => w.Type == "Debit"))
             {
                 var sum = invoiceTxn.Price * invoiceTxn.Quantity;
                 <tr>
@@ -151,31 +139,28 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td><strong>Subtotal:</strong></td>
-                <td><strong>@Model.InvoiceTransaction.Where(w => w.Type == "Debit").Sum(s => s.Quantity * s.Price)</strong></td>
+                <td colspan="2"><strong>Subtotal:</strong></td>
+                <td><strong>@Model.InvoiceTransactions.Where(w => w.Type == "Debit").Sum(s => s.Quantity * s.Price)</strong></td>
             </tr>
-            @foreach (var invoiceTxn in Model.InvoiceTransaction.Where(w => w.Type == "Credit" && w.Category == "Discount"))
+            @foreach (var invoiceTxn in Model.InvoiceTransactions.Where(w => w.Type == "Credit" && w.Category == "Discount"))
             {
                 var sum = invoiceTxn.Price * invoiceTxn.Quantity;
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td> - @invoiceTxn.Description</td>
+                    <td colspan="2">- @invoiceTxn.Description</td>
                     <td>@(invoiceTxn.Price * invoiceTxn.Quantity)</td>
                 </tr>
             }
-            @foreach (var invoiceTxn in Model.InvoiceTransaction.Where(w => w.Type == "Credit" && w.Category == "Payment"))
+            @foreach (var invoiceTxn in Model.InvoiceTransactions.Where(w => w.Type == "Credit" && w.Category == "Payment"))
             {
                 var sum = invoiceTxn.Price * invoiceTxn.Quantity;
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td> - @invoiceTxn.Description</td>
+                    <td colspan="2">- @invoiceTxn.Description</td>
                     <td>@(invoiceTxn.Price * invoiceTxn.Quantity)</td>
                 </tr>
             }
@@ -183,9 +168,8 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td class="border-top"><h5><strong>Balance Due:</strong></h5></td>
-                <td class="border-top"><h5><strong>@balance</strong></h5></td>
+                <td colspan ="2" class="border-top"><h5><strong>Balance Due:</strong></h5></td>
+                <td class="border-top"><h5><strong>@Html.DisplayFor(d => d.Balance)</strong></h5></td>
             </tr>
         </tbody>
     </table>
@@ -198,8 +182,8 @@
                 <div class="card-body">
                     <h5 class="card-title">Our banking details are as follows:</h5>
                     <p class="card-text">
-                        @ViewData["Name"]<br />
-                        <strong>@ViewData["Bank"]</strong><br />
+                        @Html.DisplayFor(d => d.Name)<br />
+                        <strong>@Html.DisplayFor(d => d.BankNumber)</strong><br />
                         Please use your confirmation number as the reference<br />
                         Thank you,<br />
                         Lynda and Lillian
@@ -215,7 +199,7 @@
                     <div class="card-header">Delivery instructions</div>
                     <div class="card-body">
                         <p class="card-text">
-                           @Html.DisplayFor(d => d.ProductOrder.DeliveryInstructions)
+                            @Html.DisplayFor(d => d.ProductOrder.DeliveryInstructions)
                         </p>
                     </div>
                 </div>
@@ -225,3 +209,4 @@
 
     </div>
 </div>
+

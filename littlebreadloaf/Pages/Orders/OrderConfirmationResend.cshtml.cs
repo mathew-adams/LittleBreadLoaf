@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using littlebreadloaf.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using littlebreadloaf.Services;
 
 namespace littlebreadloaf.Pages.Orders
 {
@@ -18,11 +19,15 @@ namespace littlebreadloaf.Pages.Orders
 
         private readonly ProductContext _context;
         private readonly IConfiguration _config;
+        private readonly RenderViewComponentService _renderer;
 
-        public OrderConfirmationResendModel(ProductContext context, IConfiguration config)
+        public OrderConfirmationResendModel(ProductContext context, 
+                                            IConfiguration config,
+                                            RenderViewComponentService renderer)
         {
             _context = context;
             _config = config;
+            _renderer = renderer;
         }
 
         [BindProperty(SupportsGet = true)]
@@ -54,13 +59,10 @@ namespace littlebreadloaf.Pages.Orders
                 return new RedirectResult("/Orders/OrdersList");
             }
 
-            //TODO add centralized logic here
-            var url = Url.Page("/Orders/InvoicePrint", new { ProductOrder.OrderID });
-            var rslt = await ConfirmationHelper.SendConfirmation(_config, 
+            var rslt = await ConfirmationHelper.SendConfirmation(_renderer,
+                                                                 _config, 
                                                                  _context, 
-                                                                 ProductOrder, 
-                                                                 HttpContext, 
-                                                                 url);
+                                                                 ProductOrder);
 
             return new RedirectToPageResult("/Orders/OrderView", new { ProductOrder.OrderID, ResendEmailSuccess = rslt.StatusCode==200 });
         }
