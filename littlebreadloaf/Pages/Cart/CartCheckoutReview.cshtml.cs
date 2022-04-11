@@ -119,11 +119,11 @@ namespace littlebreadloaf.Pages.Cart
             
             var url = Url.Page("/Orders/InvoicePrint", new { ProductOrder.OrderID });
 
-            var rslt = await ConfirmationHelper.SendConfirmation(_config,
-                                                                   _context,
-                                                                   ProductOrder,
-                                                                   HttpContext,
-                                                                   url);
+            //var rslt = await ConfirmationHelper.SendConfirmation(_config,
+            //                                                       _context,
+            //                                                       ProductOrder,
+            //                                                       HttpContext,
+            //                                                       url);
             
             // Clear cart cookies
             HttpContext.Response.Cookies.Delete(littlebreadloaf.CartHelper.CartCookieName);
