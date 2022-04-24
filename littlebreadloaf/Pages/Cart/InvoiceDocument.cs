@@ -44,7 +44,13 @@ namespace littlebreadloaf.Pages.Cart
                         {
                             Column.Item().Text("Invoice").FontFamily("Arial").Bold().FontSize(48);
                         });
+                        if(!File.Exists(_logoPath))
+                            throw new Exception($"Logo does not exist at path: {_logoPath}");
+
                         var bytLogo = System.IO.File.ReadAllBytes(_logoPath);
+                        if (bytLogo.Length == 0)
+                            throw new Exception($"Zero bytes found at location: {_logoPath}");
+
 
                         row.ConstantItem(80).Height(80).Image(bytLogo);
 
