@@ -12,34 +12,52 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
 using littlebreadloaf.Services;
 using littlebreadloaf.ViewComponents;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using littlebreadloaf.Pages.Cart;
+using QuestPDF.Fluent;
 
 namespace littlebreadloaf
 {
     public static class ConfirmationHelper
     {
-        public static async Task<ObjectResult> SendConfirmation(RenderViewComponentService renderer,
-                                                                IConfiguration config,
+        public static async Task<ObjectResult> SendConfirmation(IConfiguration config,
+                                                                Invoice invoice,
+                                                                List<InvoiceTransaction> invoiceTransactions,
+                                                                ProductOrder order,
                                                                 ProductContext context,
-                                                                ProductOrder order)
+                                                                IHostingEnvironment env)
         {
+            //Build PDF
+            var invoiceView = new InvoiceModel();
 
-            var html = await renderer.RenderViewComponentToStringAsync<InvoiceViewComponent>(order.OrderID);
+            invoiceView.Name = config["LittleBreadLoaf.Name"];
+            invoiceView.AddressLine1 = config["LittleBreadLoaf.AddressLine1"];
+            invoiceView.AddressLine2 = config["LittleBreadLoaf.AddressLine2"];
+            invoiceView.BankNumber = config["LittleBreadLoaf.BankNumber"];
+            invoiceView.Phone = config["LittleBreadLoaf.Phone"];
+            invoiceView.ProductOrder = await context.ProductOrder.FirstOrDefaultAsync(p => p.OrderID == order.OrderID);
+            invoiceView.HasAddress = false;
+            if (invoiceView.ProductOrder.ContactAddress > 0)
+            {
+                invoiceView.NzAddressDeliverable = await context.NzAddressDeliverable.FirstOrDefaultAsync(a => a.address_id == invoiceView.ProductOrder.ContactAddress);
+                invoiceView.HasAddress = true;
+            }
+            invoiceView.Invoice = await context.Invoice.FirstOrDefaultAsync(f => f.ProductOrderID == order.OrderID);
+            invoiceView.InvoiceTransactions = await context
+                                                    .InvoiceTransaction
+                                                    .AsNoTracking()
+                                                    .Where(w => w.InvoiceID == invoiceView.Invoice.InvoiceID)
+                                                    .ToListAsync();
 
-            HtmlToPdf converter = new SelectPdf.HtmlToPdf();
-
-            converter.Options.MarginBottom = 20;
-            converter.Options.MarginTop = 20;
-            converter.Options.MarginRight = 20;
-            converter.Options.MarginLeft = 20;
-
-            PdfDocument doc = converter.ConvertHtmlString(html);
+            invoiceView.Balance = invoiceView.InvoiceTransactions.Sum(s => s.Quantity * s.Price);
+            invoiceView.Status = (invoiceView.Balance == 0) ? "PAID" : "DUE";
 
             using (var msInvoice = new System.IO.MemoryStream())
             {
-                doc.Save(msInvoice);
-                // close pdf document
-                doc.Close();
+                var document = new InvoiceDocument(invoiceView, invoiceView.GetLogoUrl(env));
 
+                document.GeneratePdf(msInvoice);
                 msInvoice.Position = 0;
 
                 //Send confirmation email
@@ -88,8 +106,9 @@ namespace littlebreadloaf
                     await context.SaveChangesAsync();
                     return new UnprocessableEntityObjectResult(systemError);
                 }
-                return new OkObjectResult("OK");
             }
+            return new OkObjectResult("OK");
+        
         }
     }
 }

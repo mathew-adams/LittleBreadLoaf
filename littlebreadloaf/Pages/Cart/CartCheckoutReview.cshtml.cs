@@ -8,6 +8,7 @@ using littlebreadloaf.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using littlebreadloaf.Services;
+using Microsoft.AspNetCore.Hosting;
 
 namespace littlebreadloaf.Pages.Cart
 {
@@ -16,14 +17,19 @@ namespace littlebreadloaf.Pages.Cart
         private readonly ProductContext _context;
         private readonly IConfiguration _config;
         private readonly RenderViewComponentService _renderer;
+        private readonly IHostingEnvironment _env;
 
         private const int Number_of_days_till_due = 14;
 
-        public CartCheckoutReviewModel(ProductContext context, IConfiguration config, RenderViewComponentService renderer)
+        public CartCheckoutReviewModel(ProductContext context, 
+                                        IConfiguration config, 
+                                        RenderViewComponentService renderer,
+                                        IHostingEnvironment env)
         {
             _context = context;
             _config = config;
             _renderer = renderer;
+            _env = env;
         }
 
         [BindProperty]
@@ -120,16 +126,18 @@ namespace littlebreadloaf.Pages.Cart
             _context.ProductOrder.Update(ProductOrder);
             await _context.SaveChangesAsync();
            
-            var rslt = await ConfirmationHelper.SendConfirmation(_renderer,
-                                                                 _config,
+            var rslt = await ConfirmationHelper.SendConfirmation(_config,
+                                                                 invoice,
+                                                                 invoiceTransactions,
+                                                                 ProductOrder,
                                                                  _context,
-                                                                 ProductOrder);
+                                                                 _env);
             
             // Clear cart cookies
             HttpContext.Response.Cookies.Delete(littlebreadloaf.CartHelper.CartCookieName);
             HttpContext.Response.Cookies.Delete(littlebreadloaf.CartHelper.PreOrderCookie);
 
-            return new RedirectToPageResult("/Cart/CartCheckoutConfirmation", new { ProductOrderID = ProductOrder.OrderID, ProductOrder.CartID });
+            return new RedirectToPageResult("/Cart/CartCheckoutConfirmation", new { ProductOrderID = ProductOrder.OrderID });
         }
 
         private string GenerateConfirmationNumber()

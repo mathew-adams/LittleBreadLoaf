@@ -9,7 +9,7 @@ using littlebreadloaf.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using littlebreadloaf.Services;
-
+using Microsoft.AspNetCore.Hosting;
 namespace littlebreadloaf.Pages.Orders
 {
 
@@ -20,14 +20,16 @@ namespace littlebreadloaf.Pages.Orders
         private readonly ProductContext _context;
         private readonly IConfiguration _config;
         private readonly RenderViewComponentService _renderer;
-
+        private readonly IHostingEnvironment _env;
         public OrderConfirmationResendModel(ProductContext context, 
                                             IConfiguration config,
-                                            RenderViewComponentService renderer)
+                                            RenderViewComponentService renderer, 
+                                            IHostingEnvironment env)
         {
             _context = context;
             _config = config;
             _renderer = renderer;
+            _env = env;
         }
 
         [BindProperty(SupportsGet = true)]
@@ -58,11 +60,19 @@ namespace littlebreadloaf.Pages.Orders
             {
                 return new RedirectResult("/Orders/OrdersList");
             }
+            var invoice = await _context.Invoice.FirstOrDefaultAsync(f => f.ProductOrderID == ProductOrder.OrderID);
+            var invoiceTransactions = await _context
+                                            .InvoiceTransaction
+                                            .AsNoTracking()
+                                            .Where(w => w.InvoiceID == invoice.InvoiceID)
+                                            .ToListAsync();
 
-            var rslt = await ConfirmationHelper.SendConfirmation(_renderer,
-                                                                 _config, 
-                                                                 _context, 
-                                                                 ProductOrder);
+            var rslt = await ConfirmationHelper.SendConfirmation(_config,
+                                                                invoice,
+                                                                invoiceTransactions,
+                                                                ProductOrder,
+                                                                _context,
+                                                                _env);
 
             return new RedirectToPageResult("/Orders/OrderView", new { ProductOrder.OrderID, ResendEmailSuccess = rslt.StatusCode==200 });
         }

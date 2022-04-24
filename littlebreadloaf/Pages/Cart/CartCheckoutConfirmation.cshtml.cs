@@ -6,12 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using littlebreadloaf.Data;
 using Microsoft.EntityFrameworkCore;
-using SelectPdf;
-using System.IO;
-using littlebreadloaf.Pages.Orders;
 using Microsoft.Extensions.Configuration;
 using littlebreadloaf.Services;
-using littlebreadloaf.ViewComponents;
+using QuestPDF.Fluent;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace littlebreadloaf.Pages.Cart
 {
@@ -20,13 +19,16 @@ namespace littlebreadloaf.Pages.Cart
         private readonly ProductContext _context;
         private readonly IConfiguration _config;
         private readonly RenderViewComponentService _renderer;
+        private readonly IHostingEnvironment _env;
         public CartCheckoutConfirmationModel(ProductContext context, 
                                              IConfiguration config,
-                                             RenderViewComponentService renderer)
+                                             RenderViewComponentService renderer,
+                                             IHostingEnvironment env)
         {
             _context = context;
             _config = config;
             _renderer = renderer;
+            _env = env;
         }
 
         [BindProperty]
@@ -78,7 +80,6 @@ namespace littlebreadloaf.Pages.Cart
             {
                 return new RedirectToPageResult("/Cart/CartView");
             }
-
             ViewData["HasAddress"] = ProductOrder.ContactAddress > 0;
 
             if (ProductOrder.ContactAddress > 0)
@@ -86,30 +87,36 @@ namespace littlebreadloaf.Pages.Cart
                 NzAddressDeliverable = await _context.NzAddressDeliverable.FirstOrDefaultAsync(f => f.address_id == ProductOrder.ContactAddress);
             }
 
-            var html = await _renderer.RenderViewComponentToStringAsync<InvoiceViewComponent>(ProductOrder.OrderID);
+            var invoiceView = new InvoiceModel();
 
-            HtmlToPdf converter = new SelectPdf.HtmlToPdf();
-
-            converter.Options.MarginBottom = 20;
-            converter.Options.MarginTop = 20;
-            converter.Options.MarginRight = 20;
-            converter.Options.MarginLeft = 20;
-
-            PdfDocument doc = converter.ConvertHtmlString(html);
-
-            using (var msInvoice = new System.IO.MemoryStream())
+            invoiceView.Name = _config["LittleBreadLoaf.Name"];
+            invoiceView.AddressLine1 = _config["LittleBreadLoaf.AddressLine1"];
+            invoiceView.AddressLine2 = _config["LittleBreadLoaf.AddressLine2"];
+            invoiceView.BankNumber = _config["LittleBreadLoaf.BankNumber"];
+            invoiceView.Phone = _config["LittleBreadLoaf.Phone"];
+            invoiceView.ProductOrder = await _context.ProductOrder.FirstOrDefaultAsync(p => p.OrderID == productOrderID);
+            invoiceView.HasAddress = false;
+            if (invoiceView.ProductOrder.ContactAddress > 0)
             {
-                doc.Save(msInvoice);
-                // close pdf document
+                invoiceView.NzAddressDeliverable = await _context.NzAddressDeliverable.FirstOrDefaultAsync(a => a.address_id == invoiceView.ProductOrder.ContactAddress);
+                invoiceView.HasAddress = true;
+            }
+            invoiceView.Invoice = await _context.Invoice.FirstOrDefaultAsync(f => f.ProductOrderID == productOrderID);
+            invoiceView.InvoiceTransactions = await _context
+                                                    .InvoiceTransaction
+                                                    .AsNoTracking()
+                                                    .Where(w => w.InvoiceID == invoiceView.Invoice.InvoiceID)
+                                                    .ToListAsync();
 
-                doc.Close();
-                msInvoice.Position = 0;
+            invoiceView.Balance = invoiceView.InvoiceTransactions.Sum(s => s.Quantity * s.Price);
+            invoiceView.Status = (invoiceView.Balance == 0) ? "PAID" : "DUE";
 
-                string contentType = "application/pdf";
-               // string fileName = "sample.pdf";
+            using(var msInvoice = new System.IO.MemoryStream())
+            {
+                var document = new InvoiceDocument(invoiceView, invoiceView.GetLogoUrl(_env));
 
-                var file = File(msInvoice.ToArray(), contentType);
-
+                document.GeneratePdf(msInvoice);
+                var file = File(msInvoice.ToArray(), "application/pdf");
                 return file;
             }
         }
