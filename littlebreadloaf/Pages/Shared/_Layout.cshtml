@@ -26,10 +26,7 @@
         <meta property="og:url" content="@ViewData["FullURL"]" />
     }
 
-    @if (ViewData["Title"] != null)
-    {
-        <meta property="og:title" content="Little Bread Loaf - @ViewData["Title"]" />
-    }
+    <meta property="og:title" content="Little Bread Loaf" />
 
     @if (ViewData["Description"] != null)
     {
@@ -37,7 +34,7 @@
     }
     else
     {
-        <meta name="Description" content="A Wellington/Lower Hutt based Polish style bread company">
+        <meta name="Description" content="A hole-in-the-wall artisan bakery based in Alicetown">
     }
 
     <title>Little Bread Loaf - @ViewData["Title"]</title>
